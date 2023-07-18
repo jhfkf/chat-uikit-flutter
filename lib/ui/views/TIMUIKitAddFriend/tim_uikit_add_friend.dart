@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tencent_cloud_chat_uikit/data_services/core/tim_uikit_wide_modal_operation_key.dart';
+import 'package:tencent_cloud_chat_uikit/extension/v2_tim_user_full_info_ext_entity.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/wide_popup.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
@@ -15,6 +16,9 @@ import 'package:tencent_cloud_chat_uikit/data_services/services_locatar.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitAddFriend/tim_uikit_send_application.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/avatar.dart';
 
+import '../../../api/api.dart';
+import '../../../api/utils_api.dart';
+
 class TIMUIKitAddFriend extends StatefulWidget {
   final bool? isShowDefaultGroup;
 
@@ -24,15 +28,14 @@ class TIMUIKitAddFriend extends StatefulWidget {
   /// The life cycle hooks for adding friends and contact business logic
   final AddFriendLifeCycle? lifeCycle;
 
-  /// The callback function to close the widget upon completion by the parent component.
   final VoidCallback? closeFunc;
 
   const TIMUIKitAddFriend(
       {Key? key,
-      this.isShowDefaultGroup = false,
-      this.lifeCycle,
-      required this.onTapAlreadyFriendsItem,
-      this.closeFunc})
+        this.isShowDefaultGroup = false,
+        this.lifeCycle,
+        required this.onTapAlreadyFriendsItem,
+        this.closeFunc})
       : super(key: key);
 
   @override
@@ -43,25 +46,27 @@ class _TIMUIKitAddFriendState extends TIMUIKitState<TIMUIKitAddFriend> {
   final TextEditingController _controller = TextEditingController();
   final CoreServicesImpl _coreServicesImpl = serviceLocator<CoreServicesImpl>();
   final FriendshipServices _friendshipServices =
-      serviceLocator<FriendshipServices>();
+  serviceLocator<FriendshipServices>();
   final TUISelfInfoViewModel _selfInfoViewModel =
-      serviceLocator<TUISelfInfoViewModel>();
+  serviceLocator<TUISelfInfoViewModel>();
   final FocusNode _focusNode = FocusNode();
   bool isFocused = false;
   bool showResult = false;
   List<V2TimUserFullInfo>? searchResult;
 
+  String resultMsg = "该用户不存在";
+
   Widget _searchResultItemBuilder(
       V2TimUserFullInfo friendInfo, TUITheme theme) {
-    final isDesktopScreen =
+    final isWideScreen =
         TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
 
     final faceUrl = friendInfo.faceUrl ?? "";
-    final userID = friendInfo.userID ?? "";
+    final userID = friendInfo.accid ?? "";
     final String showName =
         ((friendInfo.nickName != null && friendInfo.nickName!.isNotEmpty)
-                ? friendInfo.nickName
-                : userID) ??
+            ? friendInfo.nickName
+            : userID) ??
             "";
     return InkWell(
       onTap: () async {
@@ -85,7 +90,7 @@ class _TIMUIKitAddFriendState extends TIMUIKitState<TIMUIKitAddFriend> {
           return;
         }
 
-        if (isDesktopScreen) {
+        if (isWideScreen) {
           if (widget.closeFunc != null) {
             widget.closeFunc!();
           }
@@ -118,8 +123,8 @@ class _TIMUIKitAddFriendState extends TIMUIKitState<TIMUIKitAddFriend> {
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              width: isDesktopScreen ? 38 : 48,
-              height: isDesktopScreen ? 38 : 48,
+              width: isWideScreen ? 38 : 48,
+              height: isWideScreen ? 38 : 48,
               margin: const EdgeInsets.only(right: 16),
               child: Avatar(faceUrl: faceUrl, showName: showName),
             ),
@@ -130,7 +135,7 @@ class _TIMUIKitAddFriendState extends TIMUIKitState<TIMUIKitAddFriend> {
                   showName,
                   style: TextStyle(
                       color: theme.darkTextColor,
-                      fontSize: isDesktopScreen ? 16 : 18),
+                      fontSize: isWideScreen ? 16 : 18),
                 ),
                 const SizedBox(
                   height: 4,
@@ -155,13 +160,13 @@ class _TIMUIKitAddFriendState extends TIMUIKitState<TIMUIKitAddFriend> {
         Container(
           margin: const EdgeInsets.only(top: 20),
           child: Center(
-            child: Text(TIM_t("该用户不存在"),
+            child: Text(TIM_t(resultMsg),
                 style: TextStyle(color: theme.weakTextColor, fontSize: 14)),
           ),
         )
       ];
     }
-    return searchResult.map((e) => _searchResultItemBuilder(e, theme)).toList();
+    return searchResult.map((e) => _searchResultItemBuilder(e, theme)).toList() ?? [];
   }
 
   @override
@@ -179,17 +184,59 @@ class _TIMUIKitAddFriendState extends TIMUIKitState<TIMUIKitAddFriend> {
     super.dispose();
   }
 
-  searchFriend(String params) async {
-    final response = await _coreServicesImpl.getUsersInfo(userIDList: [params]);
-    if (response.code == 0) {
-      setState(() {
-        searchResult = response.data;
-      });
-    } else {
-      setState(() {
-        searchResult = null;
-      });
+  searchFriend(String name) async {
+    Map<String, String> params = {"name": name};
+    // 搜索好友
+    DataResult result = await UtilsApi.baseQueryPost(
+      url: Api.appUserQueryUsers,
+      params: params,
+      isUnpack: true,
+    );
+    if (!result.result) {
+      if (result.msg!=null) {
+        setState(() {
+          resultMsg = result.msg!;
+        });
+      }
+      onTIMCallback(TIMCallback(
+          type: TIMCallbackType.INFO,
+          infoRecommendText: result.msg,
+          infoCode: 6661203));
+      return false;
     }
+    if (result.data is List) {
+      List<String> ids = [];
+      for (var item in result.data) {
+        if ((item is Map) && item.keys.contains('accid')) {
+          ids.add(item['accid']);
+        }
+      }
+      if (ids.isNotEmpty) {
+        final response = await _coreServicesImpl.getUsersInfo(userIDList: ids);
+        if (response.code == 0) {
+          setState(() {
+            searchResult = response.data;
+          });
+        } else {
+          setState(() {
+            searchResult = null;
+          });
+        }
+      }
+    }
+    // print("xxxxxxxx");
+    // print(result.data);
+    // print(result.msg);
+    // final response = await _coreServicesImpl.getUsersInfo(userIDList: [params]);
+    // if (response.code == 0) {
+    //   setState(() {
+    //     searchResult = response.data;
+    //   });
+    // } else {
+    //   setState(() {
+    //     searchResult = null;
+    //   });
+    // }
   }
 
   @override
@@ -208,46 +255,46 @@ class _TIMUIKitAddFriendState extends TIMUIKitState<TIMUIKitAddFriend> {
                 children: [
                   Expanded(
                       child: TextField(
-                    autofocus: true,
-                    focusNode: _focusNode,
-                    controller: _controller,
-                    onChanged: (value) {
-                      if (value.trim().isEmpty) {
-                        setState(() {
-                          showResult = false;
-                        });
-                      }
-                    },
-                    textInputAction: TextInputAction.search,
-                    onSubmitted: (_) {
-                      final searchParams = _controller.text;
-                      if (searchParams.trim().isNotEmpty) {
-                        searchFriend(searchParams);
-                        showResult = true;
-                        _focusNode.requestFocus();
-                        setState(() {});
-                      }
-                    },
-                    decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.search_outlined,
-                          color: theme.weakTextColor,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        contentPadding: EdgeInsets.zero,
-                        hintStyle: TextStyle(
-                          color: theme.weakTextColor,
-                        ),
-                        fillColor: theme.inputFillColor,
-                        filled: true,
-                        hintText: TIM_t("搜索用户 ID")),
-                  )),
+                        autofocus: true,
+                        focusNode: _focusNode,
+                        controller: _controller,
+                        onChanged: (value) {
+                          if (value.trim().isEmpty) {
+                            setState(() {
+                              showResult = false;
+                            });
+                          }
+                        },
+                        textInputAction: TextInputAction.search,
+                        onSubmitted: (_) {
+                          final searchParams = _controller.text;
+                          if (searchParams.trim().isNotEmpty) {
+                            searchFriend(searchParams);
+                            showResult = true;
+                            _focusNode.requestFocus();
+                            setState(() {});
+                          }
+                        },
+                        decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.search_outlined,
+                              color: theme.weakTextColor,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                width: 0,
+                                style: BorderStyle.none,
+                              ),
+                            ),
+                            contentPadding: EdgeInsets.zero,
+                            hintStyle: TextStyle(
+                              color: theme.weakTextColor,
+                            ),
+                            fillColor: theme.inputFillColor,
+                            filled: true,
+                            hintText: TIM_t("搜索用户 ID")),
+                      )),
                 ],
               ),
             ),

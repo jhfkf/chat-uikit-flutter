@@ -12,6 +12,7 @@ import 'package:tencent_cloud_chat_uikit/business_logic/view_models/tui_conversa
 import 'package:tencent_cloud_chat_uikit/business_logic/view_models/tui_friendship_view_model.dart';
 import 'package:tencent_cloud_chat_uikit/data_services/core/tim_uikit_wide_modal_operation_key.dart';
 import 'package:tencent_cloud_chat_uikit/data_services/services_locatar.dart';
+import 'package:tencent_cloud_chat_uikit/extension/v2_tim_group_info_ext_entity.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
 import 'package:tencent_cloud_chat_uikit/ui/controller/tim_uikit_conversation_controller.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/platform.dart';
@@ -20,6 +21,8 @@ import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitConversation/tim_uikit
 import 'package:tencent_cloud_chat_uikit/ui/widgets/customize_ball_pulse_header.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/wide_popup.dart';
+
+import '../../../data_services/message/aes.dart';
 
 typedef ConversationItemBuilder = Widget Function(
     V2TimConversation conversationItem,
@@ -151,6 +154,8 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
       serviceLocator<TUIFriendShipViewModel>();
   late AutoScrollController _autoScrollController;
 
+  List<V2TimGroupInfo> groupList = [];
+
   @override
   void initState() {
     super.initState();
@@ -158,6 +163,16 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
     _timuiKitConversationController = controller;
     _timuiKitConversationController.model = model;
     _autoScrollController = AutoScrollController();
+
+    var groupListResult =
+        TencentImSDKPlugin.v2TIMManager.getGroupManager().getJoinedGroupList();
+    groupListResult.then((value) {
+      if (value.code == 0) {
+        List<V2TimGroupInfo> groupList = value.data!;
+        this.groupList = groupList;
+        setState(() {});
+      }
+    });
   }
 
   TIMUIKitConversationController getController() {
@@ -191,11 +206,36 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
     List<V2TimConversation?> filteredConversationList = model.conversationList
         .where(
             (element) => (element?.groupID != null || element?.userID != null))
-        .toList();
+        .map((e) {
+      if (e?.lastMessage != null &&
+          e?.lastMessage?.elemType == MessageElemType.V2TIM_ELEM_TYPE_TEXT) {
+        String text = e?.lastMessage?.textElem?.text ?? "";
+        e?.lastMessage?.textElem?.text = AESUtil.decryptAESECB(text, "666888");
+      }
+      return e;
+    }).toList();
     if (widget.conversationCollector != null) {
       filteredConversationList = filteredConversationList
           .where(widget.conversationCollector!)
           .toList();
+    }
+    // vip
+    for (var target in filteredConversationList) {
+      if (target != null && target.groupID != null) {
+        for (var group in groupList) {
+          if (target.groupID == group.groupID) {
+            group.isNormalVip ? 1 : (group.isSuperVip ? 2 : 0);
+            if (group.isNormalVip || group.isSuperVip) {
+              if (group.isNormalVip) {
+                group.extInfo.higherStatus = 1;
+              } else {
+                group.extInfo.higherStatus = 2;
+              }
+            }
+            break;
+          }
+        }
+      }
     }
     return filteredConversationList;
   }

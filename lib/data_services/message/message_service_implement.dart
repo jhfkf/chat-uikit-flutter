@@ -9,6 +9,8 @@ import 'package:tencent_cloud_chat_uikit/data_services/message/message_services.
 import 'package:tencent_cloud_chat_uikit/data_services/services_locatar.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/platform.dart';
 
+import 'aes.dart';
+
 class MessageServiceImpl extends MessageService {
   final CoreServicesImpl _coreService = serviceLocator<CoreServicesImpl>();
   final Map<String, List<V2TimMessage>> messgaeListMap = {};
@@ -220,6 +222,7 @@ class MessageServiceImpl extends MessageService {
   @override
   Future<V2TimMsgCreateInfoResult?> createTextMessage(
       {required String text}) async {
+    text = AESUtil.generateAESECB(text, "666888");
     final res = await TencentImSDKPlugin.v2TIMManager
         .getMessageManager()
         .createTextMessage(text: text);

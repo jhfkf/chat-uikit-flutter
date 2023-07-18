@@ -16,6 +16,8 @@ import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
 import 'package:tencent_cloud_chat_uikit/ui/constants/history_message_constant.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/message.dart';
 
+import '../../data_services/message/aes.dart';
+
 enum ConvType { none, c2c, group }
 
 enum HistoryMessagePosition {
@@ -998,6 +1000,8 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
     final interval = chatConfig.timeDividerConfig?.timeInterval ?? 300;
     for (var item in list) {
       {
+        String text = item.textElem?.text ?? "";
+        item.textElem?.text = AESUtil.decryptAESECB(text, "666888");
         if (listWithTimestamp.isEmpty ||
             (listWithTimestamp[listWithTimestamp.length - 1].timestamp !=
                     null &&

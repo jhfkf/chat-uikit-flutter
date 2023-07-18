@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b113e354-2ef8-4eec-ab66-9ad96e9ffb8f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/lib/api/api.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/api/http.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/api/interceptors.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/api/utils_api.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/data_services/message/aes.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/extension/request_result_entity.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/extension/v2_tim_group_info_ext_entity.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/extension/v2_tim_user_full_info_ext_entity.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/generated/json/base/json_convert_content.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/generated/json/base/json_field.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/generated/json/request_result_entity.g.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/generated/json/v2_tim_group_info_ext_entity.g.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/generated/json/v2_tim_user_full_info_ext_entity.g.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/util/time_utils.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/util/toast.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/TIMUIKitChatExample.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/TIMUIKitChatExample.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/test/widget_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/test/widget_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/business_logic/view_models/tui_chat_global_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/business_logic/view_models/tui_chat_global_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/data_services/message/message_service_implement.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data_services/message/message_service_implement.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/utils/permission.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/utils/permission.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitAddFriend/tim_uikit_add_friend.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitAddFriend/tim_uikit_add_friend.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitAddFriend/tim_uikit_send_application.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitAddFriend/tim_uikit_send_application.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitConversation/tim_uikit_conversation.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitConversation/tim_uikit_conversation.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2OuS2GObhuhQhQWYTtzJngon9IV" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "last_opened_file_path": "/Users/jihaifeng/flutter_workspace/flutter_tencent_im/plugins/chat-uikit-flutter",
+    "settings.editor.selected.configurable": "AndroidSdkUpdater",
+    "show.migrate.to.gradle.popup": "false"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
+      <option name="filePath" value="$PROJECT_DIR$/example/lib/main.dart" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b113e354-2ef8-4eec-ab66-9ad96e9ffb8f" name="Changes" comment="" />
+      <created>1682408764622</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1682408764622</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

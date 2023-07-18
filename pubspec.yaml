@@ -74,6 +74,11 @@ dependencies:
   cross_file: ^0.3.3+4
   csslib: 0.17.2
   diff_match_patch: ^0.4.1
+  markdown: ^7.1.0
+
+  encrypt: 5.0.1 # AES、RSA、Salsa20、Fernet 加密
+  dio: ^4.0.0
+  fluttertoast: ^8.2.1
 
 dev_dependencies:
   flutter_lints: ^1.0.0

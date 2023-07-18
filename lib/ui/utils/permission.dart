@@ -34,14 +34,14 @@ class _PermissionRequestInfo extends TIMUIKitState<PermissionRequestInfo>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance?.addObserver(this);
   }
 
   @override
   void dispose() {
     widget.removeOverLay();
     super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance?.removeObserver(this);
   }
 
   @override
@@ -278,7 +278,7 @@ class Permissions {
       );
     });
     _entry = entry;
-    Overlay.of(context).insert(entry);
+    Overlay.of(context)?.insert(entry);
   }
 
   static Future<bool?> showPermissionConfirmDialog(BuildContext context, value,

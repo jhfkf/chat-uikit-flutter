@@ -1,0 +1,70 @@
+import '../generated/json/base/json_field.dart';
+import '../generated/json/v2_tim_user_full_info_ext_entity.g.dart';
+import 'dart:convert';
+
+import '../tencent_cloud_chat_uikit.dart';
+
+@JsonSerializable()
+class V2TimUserFullInfoExtEntity {
+
+	@JSONField(name: "Tag_Profile_Custom_lock")
+	int? tagProfileCustomLock;
+	@JSONField(name: "Tag_Profile_Custom_sappid")
+	int? tagProfileCustomSappid;
+	@JSONField(name: "Tag_Profile_Custom_sphone")
+	int? tagProfileCustomSphone;
+	@JSONField(name: "Tag_Profile_Custom_userid")
+	String? tagProfileCustomUserid;
+	int? lock;
+	int? sappid;
+	int? sphone;
+	String? userid;
+  
+  V2TimUserFullInfoExtEntity();
+
+  factory V2TimUserFullInfoExtEntity.fromJson(Map<String, dynamic> json) => $V2TimUserFullInfoExtEntityFromJson(json);
+
+  Map<String, dynamic> toJson() => $V2TimUserFullInfoExtEntityToJson(this);
+
+  V2TimUserFullInfoExtEntity copyWith({int? tagProfileCustomLock, int? tagProfileCustomSappid, int? tagProfileCustomSphone, String? tagProfileCustomUserid, int? lock, int? sappid, int? sphone, String? userid}) {
+      return V2TimUserFullInfoExtEntity()..tagProfileCustomLock= tagProfileCustomLock ?? this.tagProfileCustomLock
+			..tagProfileCustomSappid= tagProfileCustomSappid ?? this.tagProfileCustomSappid
+			..tagProfileCustomSphone= tagProfileCustomSphone ?? this.tagProfileCustomSphone
+			..tagProfileCustomUserid= tagProfileCustomUserid ?? this.tagProfileCustomUserid
+			..lock= lock ?? this.lock
+			..sappid= sappid ?? this.sappid
+			..sphone= sphone ?? this.sphone
+			..userid= userid ?? this.userid;
+  }
+    
+  @override
+  String toString() {
+    return jsonEncode(this);
+  }
+}
+
+
+// {"Tag_Profile_Custom_lock": 0,"Tag_Profile_Custom_sappid": 1,"Tag_Profile_Custom_sphone": 0,"Tag_Profile_Custom_userid":"a6666678", "lock": 0,"sappid": 1,"sphone": 0,"userid":"a6666678"}
+extension V2TimUserFullInfoExt on V2TimUserFullInfo {
+	V2TimUserFullInfoExtEntity get extInfo =>
+			V2TimUserFullInfoExtEntity.fromJson(customInfo ?? {});
+
+	bool get isEnabledPhoneSearch =>
+			(extInfo.sphone == 1 || extInfo.tagProfileCustomSphone == 1);
+
+	bool get isEnabledAppIdSearch =>
+			(extInfo.sappid == 1 || extInfo.tagProfileCustomSappid == 1);
+
+	String get accid {
+		if (extInfo.userid != null && extInfo.userid!.isNotEmpty) {
+		  return extInfo.userid!;
+		}
+		if (extInfo.tagProfileCustomUserid != null && extInfo.tagProfileCustomUserid!.isNotEmpty) {
+			return extInfo.tagProfileCustomUserid!;
+		}
+		return "";
+	}
+
+	bool get isEnabledDeviceLock =>
+			(extInfo.lock == 1 || extInfo.tagProfileCustomLock == 1);
+}

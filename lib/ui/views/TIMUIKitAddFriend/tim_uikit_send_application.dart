@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tencent_cloud_chat_uikit/extension/v2_tim_user_full_info_ext_entity.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_state.dart';
@@ -18,10 +19,10 @@ class SendApplication extends StatefulWidget {
 
   const SendApplication(
       {Key? key,
-      this.lifeCycle,
-      required this.friendInfo,
-      required this.model,
-      this.isShowDefaultGroup = false})
+        this.lifeCycle,
+        required this.friendInfo,
+        required this.model,
+        this.isShowDefaultGroup = false})
       : super(key: key);
 
   @override
@@ -36,7 +37,7 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
   void initState() {
     super.initState();
     final showName =
-        widget.model.loginInfo?.nickName ?? widget.model.loginInfo?.userID;
+        widget.model.loginInfo?.nickName ?? widget.model.loginInfo?.accid;
     _verficationController.text = "我是: $showName";
   }
 
@@ -44,18 +45,18 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
     final TUITheme theme = value.theme;
     final FriendshipServices _friendshipServices =
-        serviceLocator<FriendshipServices>();
+    serviceLocator<FriendshipServices>();
 
     final faceUrl = widget.friendInfo.faceUrl ?? "";
-    final userID = widget.friendInfo.userID ?? "";
+    final userID = widget.friendInfo.accid ?? "";
     final String showName = ((widget.friendInfo.nickName != null &&
-                widget.friendInfo.nickName!.isNotEmpty)
-            ? widget.friendInfo.nickName
-            : userID) ??
+        widget.friendInfo.nickName!.isNotEmpty)
+        ? widget.friendInfo.nickName
+        : userID) ??
         "";
     final option2 = widget.friendInfo.selfSignature ?? "";
 
-    Widget sendApplicationBody() {
+    Widget sendApplicationBody(){
       return SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +80,7 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
                       Text(
                         showName,
                         style:
-                            TextStyle(color: theme.darkTextColor, fontSize: 18),
+                        TextStyle(color: theme.darkTextColor, fontSize: 18),
                       ),
                       const SizedBox(
                         height: 4,
@@ -87,18 +88,17 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
                       Text(
                         "ID: $userID",
                         style:
-                            TextStyle(fontSize: 13, color: theme.weakTextColor),
+                        TextStyle(fontSize: 13, color: theme.weakTextColor),
                       ),
                       const SizedBox(
                         height: 4,
                       ),
-                      if (TencentUtils.checkString(option2) != null)
-                        Text(
-                          TIM_t_para("个性签名: {{option2}}", "个性签名: $option2")(
-                              option2: option2),
-                          style: TextStyle(
-                              fontSize: 13, color: theme.weakTextColor),
-                        ),
+                      if(TencentUtils.checkString(option2) != null)Text(
+                        TIM_t_para("个性签名: {{option2}}", "个性签名: $option2")(
+                            option2: option2),
+                        style:
+                        TextStyle(fontSize: 13, color: theme.weakTextColor),
+                      ),
                     ],
                   )
                 ],
@@ -169,19 +169,19 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
               Container(
                 color: theme.white,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       TIM_t("分组"),
                       style:
-                          TextStyle(color: theme.darkTextColor, fontSize: 16),
+                      TextStyle(color: theme.darkTextColor, fontSize: 16),
                     ),
                     Text(
                       TIM_t("我的好友"),
                       style:
-                          TextStyle(color: theme.darkTextColor, fontSize: 16),
+                      TextStyle(color: theme.darkTextColor, fontSize: 16),
                     )
                   ],
                 ),
@@ -192,13 +192,14 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
               margin: const EdgeInsets.only(top: 10),
               child: TextButton(
                   onPressed: () async {
+                    String userID = widget.friendInfo.userID ?? "";
                     final remark = _nickNameController.text;
                     final addWording = _verficationController.text;
                     final friendGroup = TIM_t("我的好友");
 
                     if (widget.lifeCycle?.shouldAddFriend != null &&
                         await widget.lifeCycle!.shouldAddFriend(userID, remark,
-                                friendGroup, addWording, context) ==
+                            friendGroup, addWording, context) ==
                             false) {
                       return;
                     }
@@ -235,7 +236,6 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
     }
 
     return TUIKitScreenUtils.getDeviceWidget(
-        context: context,
         desktopWidget: Container(
           padding: const EdgeInsets.only(top: 10),
           color: theme.weakBackgroundColor,
@@ -248,7 +248,8 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
               style: TextStyle(color: theme.appbarTextColor, fontSize: 17),
             ),
             shadowColor: theme.white,
-            backgroundColor: theme.appbarBgColor ?? theme.primaryColor,
+            backgroundColor: theme.appbarBgColor ??
+                theme.primaryColor,
             iconTheme: IconThemeData(
               color: theme.appbarTextColor,
             ),

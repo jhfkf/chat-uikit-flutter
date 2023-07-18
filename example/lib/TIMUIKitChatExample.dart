@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
-import 'package:example/TIMUIKitGroupProfileExample.dart';
-import 'package:example/TIMUIKitProfileExample.dart';
+// import 'package:example/TIMUIKitGroupProfileExample.dart';
+// import 'package:example/TIMUIKitProfileExample.dart';
 import 'package:flutter/material.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
 
@@ -85,25 +85,25 @@ class TIMUIKitChatExample extends StatelessWidget {
 
                 if (conversationType == 1) {
                   final String? userID = selectedConversation?.userID;
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Scaffold(
-                          appBar: AppBar(title: Text(userID ?? "User Profile")),
-                            body: TIMUIKitProfileExample(userID: userID)),
-                      ));
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => Scaffold(
+                  //         appBar: AppBar(title: Text(userID ?? "User Profile")),
+                  //           body: TIMUIKitProfileExample(userID: userID)),
+                  //     ));
                 } else {
                   final String? groupID = selectedConversation?.groupID;
                   if (groupID != null) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Scaffold(
-                              appBar: AppBar(title: Text(groupID)),
-                              body: TIMUIKitGroupProfileExample(
-                            groupID: groupID,
-                          )),
-                        ));
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => Scaffold(
+                    //           appBar: AppBar(title: Text(groupID)),
+                    //           body: TIMUIKitGroupProfileExample(
+                    //         groupID: groupID,
+                    //       )),
+                    //     ));
                   }
                 }
               },
