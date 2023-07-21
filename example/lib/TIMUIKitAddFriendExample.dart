@@ -8,7 +8,7 @@ class TIMUIKitAddFriendExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TIMUIKitAddFriend(onTapAlreadyFriendsItem: (String userID) {
+    return TIMUIKitAddFriend( parentContext: context, onTapAlreadyFriendsItem: (String userID) {
     });
   }
 }

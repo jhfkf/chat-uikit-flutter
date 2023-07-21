@@ -207,83 +207,83 @@ class _MorePanelState extends TIMUIKitState<MorePanel> {
               child:
                   Icon(Icons.video_file, color: hexToColor("5c6168"), size: 26),
             )),
-      MorePanelItem(
-          id: "file",
-          title: TIM_t("文件"),
-          onTap: (c) {
-            _onFeatureTap(
-              "file",
-              c,
-              model,
-              theme,
-            );
-          },
-          icon: Container(
-            height: 64,
-            width: 64,
-            margin: const EdgeInsets.only(bottom: 4),
-            decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(5))),
-            child: SvgPicture.asset(
-              "images/file.svg",
-              package: 'tencent_cloud_chat_uikit',
-              height: 64,
-              width: 64,
-            ),
-          )),
-      if (isInstallCallkit && PlatformUtils().isMobile)
-        MorePanelItem(
-            id: "videoCall",
-            title: TIM_t("视频通话"),
-            onTap: (c) {
-              _onFeatureTap(
-                "videoCall",
-                c,
-                model,
-                theme,
-              );
-            },
-            icon: Container(
-              height: 64,
-              width: 64,
-              margin: const EdgeInsets.only(bottom: 4),
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
-              child: SvgPicture.asset(
-                "images/video-call.svg",
-                package: 'tencent_cloud_chat_uikit',
-                height: 64,
-                width: 64,
-              ),
-            )),
-      if (isInstallCallkit && PlatformUtils().isMobile)
-        MorePanelItem(
-            id: "voiceCall",
-            title: TIM_t("语音通话"),
-            onTap: (c) {
-              _onFeatureTap(
-                "voiceCall",
-                c,
-                model,
-                theme,
-              );
-            },
-            icon: Container(
-              height: 64,
-              width: 64,
-              margin: const EdgeInsets.only(bottom: 4),
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
-              child: SvgPicture.asset(
-                "images/voice-call.svg",
-                package: 'tencent_cloud_chat_uikit',
-                height: 64,
-                width: 64,
-              ),
-            )),
+      // MorePanelItem(
+      //     id: "file",
+      //     title: TIM_t("文件"),
+      //     onTap: (c) {
+      //       _onFeatureTap(
+      //         "file",
+      //         c,
+      //         model,
+      //         theme,
+      //       );
+      //     },
+      //     icon: Container(
+      //       height: 64,
+      //       width: 64,
+      //       margin: const EdgeInsets.only(bottom: 4),
+      //       decoration: const BoxDecoration(
+      //           color: Colors.white,
+      //           borderRadius: BorderRadius.all(Radius.circular(5))),
+      //       child: SvgPicture.asset(
+      //         "images/file.svg",
+      //         package: 'tencent_cloud_chat_uikit',
+      //         height: 64,
+      //         width: 64,
+      //       ),
+      //     )),
+      // if (isInstallCallkit && PlatformUtils().isMobile)
+      //   MorePanelItem(
+      //       id: "videoCall",
+      //       title: TIM_t("视频通话"),
+      //       onTap: (c) {
+      //         _onFeatureTap(
+      //           "videoCall",
+      //           c,
+      //           model,
+      //           theme,
+      //         );
+      //       },
+      //       icon: Container(
+      //         height: 64,
+      //         width: 64,
+      //         margin: const EdgeInsets.only(bottom: 4),
+      //         decoration: const BoxDecoration(
+      //             color: Colors.white,
+      //             borderRadius: BorderRadius.all(Radius.circular(5))),
+      //         child: SvgPicture.asset(
+      //           "images/video-call.svg",
+      //           package: 'tencent_cloud_chat_uikit',
+      //           height: 64,
+      //           width: 64,
+      //         ),
+      //       )),
+      // if (isInstallCallkit && PlatformUtils().isMobile)
+      //   MorePanelItem(
+      //       id: "voiceCall",
+      //       title: TIM_t("语音通话"),
+      //       onTap: (c) {
+      //         _onFeatureTap(
+      //           "voiceCall",
+      //           c,
+      //           model,
+      //           theme,
+      //         );
+      //       },
+      //       icon: Container(
+      //         height: 64,
+      //         width: 64,
+      //         margin: const EdgeInsets.only(bottom: 4),
+      //         decoration: const BoxDecoration(
+      //             color: Colors.white,
+      //             borderRadius: BorderRadius.all(Radius.circular(5))),
+      //         child: SvgPicture.asset(
+      //           "images/voice-call.svg",
+      //           package: 'tencent_cloud_chat_uikit',
+      //           height: 64,
+      //           width: 64,
+      //         ),
+      //       )),
       if (config.extraAction != null) ...?config.extraAction,
     ].where((element) {
       if (element.id == "screen") {
@@ -684,7 +684,8 @@ class _MorePanelState extends TIMUIKitState<MorePanel> {
         Provider.of<TUIChatSeparateViewModel>(context);
     final screenWidth = MediaQuery.of(context).size.width;
     return Container(
-      height: 248,
+      // height: 248,
+      height: 124,
       decoration: BoxDecoration(
         // color: hexToColor("EBF0F6"),
         border: Border(

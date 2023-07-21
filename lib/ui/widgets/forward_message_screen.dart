@@ -75,7 +75,7 @@ class _ForwardMessageScreenState extends TIMUIKitState<ForwardMessageScreen> {
     widget.model.updateMultiSelectStatus(false);
 
     if(widget.onClose != null){
-      widget.onClose!();
+      // widget.onClose!();
     }else{
       Navigator.pop(context);
     }

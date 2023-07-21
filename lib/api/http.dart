@@ -15,7 +15,7 @@ class HttpManager {
   // PackageInfo packageInfo = await PackageInfo.fromPlatform();
   // String version = packageInfo.version;
   final Map<String, dynamic> _requestHeaders = {
-    'loginRole': "3",
+    // 'loginRole': "3",
   };
 
   /// dio对象

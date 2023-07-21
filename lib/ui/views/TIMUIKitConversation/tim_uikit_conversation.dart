@@ -12,6 +12,7 @@ import 'package:tencent_cloud_chat_uikit/business_logic/view_models/tui_conversa
 import 'package:tencent_cloud_chat_uikit/business_logic/view_models/tui_friendship_view_model.dart';
 import 'package:tencent_cloud_chat_uikit/data_services/core/tim_uikit_wide_modal_operation_key.dart';
 import 'package:tencent_cloud_chat_uikit/data_services/services_locatar.dart';
+import 'package:tencent_cloud_chat_uikit/extension/v2_tim_conversation_ext.dart';
 import 'package:tencent_cloud_chat_uikit/extension/v2_tim_group_info_ext_entity.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
 import 'package:tencent_cloud_chat_uikit/ui/controller/tim_uikit_conversation_controller.dart';
@@ -224,12 +225,13 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
       if (target != null && target.groupID != null) {
         for (var group in groupList) {
           if (target.groupID == group.groupID) {
-            group.isNormalVip ? 1 : (group.isSuperVip ? 2 : 0);
+            target.higherStatus =
+                group.isNormalVip ? 1 : (group.isSuperVip ? 2 : 0);
             if (group.isNormalVip || group.isSuperVip) {
               if (group.isNormalVip) {
-                group.extInfo.higherStatus = 1;
+                target.higherStatus = 1;
               } else {
-                group.extInfo.higherStatus = 2;
+                target.higherStatus = 2;
               }
             }
             break;
@@ -415,25 +417,27 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
                                   : theme.conversationItemBgColor,
                           child: GestureDetector(
                             child: TIMUIKitConversationItem(
-                                isCurrent: isCurrent,
-                                isShowDraft: widget.isShowDraft,
-                                lastMessageBuilder: widget.lastMessageBuilder,
-                                faceUrl: conversationItem.faceUrl ?? "",
-                                nickName: conversationItem.showName ?? "",
-                                isDisturb: conversationItem.recvOpt != 0,
-                                lastMsg: conversationItem.lastMessage,
-                                isPined: isPined,
-                                groupAtInfoList:
-                                    conversationItem.groupAtInfoList ?? [],
-                                unreadCount: conversationItem.unreadCount ?? 0,
-                                draftText: conversationItem.draftText,
-                                onlineStatus: (widget.isShowOnlineStatus &&
-                                        conversationItem.userID != null &&
-                                        conversationItem.userID!.isNotEmpty)
-                                    ? onlineStatus
-                                    : null,
-                                draftTimestamp: conversationItem.draftTimestamp,
-                                convType: conversationItem.type),
+                              isCurrent: isCurrent,
+                              isShowDraft: widget.isShowDraft,
+                              lastMessageBuilder: widget.lastMessageBuilder,
+                              faceUrl: conversationItem.faceUrl ?? "",
+                              nickName: conversationItem.showName ?? "",
+                              isDisturb: conversationItem.recvOpt != 0,
+                              lastMsg: conversationItem.lastMessage,
+                              isPined: isPined,
+                              groupAtInfoList:
+                                  conversationItem.groupAtInfoList ?? [],
+                              unreadCount: conversationItem.unreadCount ?? 0,
+                              draftText: conversationItem.draftText,
+                              onlineStatus: (widget.isShowOnlineStatus &&
+                                      conversationItem.userID != null &&
+                                      conversationItem.userID!.isNotEmpty)
+                                  ? onlineStatus
+                                  : null,
+                              draftTimestamp: conversationItem.draftTimestamp,
+                              convType: conversationItem.type,
+                              conversation: conversationItem,
+                            ),
                             onTap: () => onTapConvItem(conversationItem),
                           ),
                         );

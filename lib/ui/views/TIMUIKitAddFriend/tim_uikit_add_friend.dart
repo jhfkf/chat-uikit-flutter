@@ -30,12 +30,15 @@ class TIMUIKitAddFriend extends StatefulWidget {
 
   final VoidCallback? closeFunc;
 
+  final BuildContext? parentContext;
+
   const TIMUIKitAddFriend(
       {Key? key,
         this.isShowDefaultGroup = false,
         this.lifeCycle,
         required this.onTapAlreadyFriendsItem,
-        this.closeFunc})
+        required this.parentContext,
+        this.closeFunc,})
       : super(key: key);
 
   @override
@@ -70,8 +73,10 @@ class _TIMUIKitAddFriendState extends TIMUIKitState<TIMUIKitAddFriend> {
             "";
     return InkWell(
       onTap: () async {
+        List<String> userIDList = [];
+        userIDList.add(userID);
         final checkFriend = await _friendshipServices.checkFriend(
-            userIDList: [userID],
+            userIDList: userIDList,
             checkType: FriendTypeEnum.V2TIM_FRIEND_TYPE_SINGLE);
         if (checkFriend != null) {
           final res = checkFriend.first;
@@ -94,18 +99,20 @@ class _TIMUIKitAddFriendState extends TIMUIKitState<TIMUIKitAddFriend> {
           if (widget.closeFunc != null) {
             widget.closeFunc!();
           }
-          TUIKitWidePopup.showPopupWindow(
-            operationKey: TUIKitWideModalOperationKey.addFriend,
-            context: context,
-            width: MediaQuery.of(context).size.width * 0.3,
-            height: MediaQuery.of(context).size.width * 0.4,
-            title: TIM_t("添加好友"),
-            child: (closeFuncSendApplication) => SendApplication(
-                lifeCycle: widget.lifeCycle,
-                isShowDefaultGroup: widget.isShowDefaultGroup ?? false,
-                friendInfo: friendInfo,
-                model: _selfInfoViewModel),
-          );
+          Future.delayed(const Duration(microseconds: 500), () {
+            TUIKitWidePopup.showPopupWindow(
+              operationKey: TUIKitWideModalOperationKey.addFriend,
+              context: widget.parentContext!,
+              width: MediaQuery.of(context).size.width * 0.3,
+              height: MediaQuery.of(context).size.width * 0.4,
+              title: TIM_t("添加好友"),
+              child: (closeFuncSendApplication) => SendApplication(
+                  lifeCycle: widget.lifeCycle,
+                  isShowDefaultGroup: widget.isShowDefaultGroup ?? false,
+                  friendInfo: friendInfo,
+                  model: _selfInfoViewModel),
+            );
+          });
         } else {
           Navigator.pushReplacement(
               context,

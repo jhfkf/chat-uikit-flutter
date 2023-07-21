@@ -257,6 +257,9 @@ class _TIMUIKitTextFieldLayoutNarrowState
       final height = originHeight != 0 ? originHeight : currentKeyboardHeight;
       return height;
     } else if (showMore || showEmojiPanel) {
+      if (showMore) {
+        return 124.0 + (bottomPadding ?? 0.0);
+      }
       return 248.0 + (bottomPadding ?? 0.0);
     } else if (widget.textEditingController.text.length >= 46 &&
         showKeyboard == false) {

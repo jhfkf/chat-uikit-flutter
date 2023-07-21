@@ -832,14 +832,14 @@ class _TIMUIKitTextFieldLayoutWideState
               _sendScreenShot();
             },
             svgPath: "images/svg/send_screenshot.svg"),
-      if (config.showSendFileButton)
-        DesktopControlBarItem(
-            item: "file",
-            showName: TIM_t("文件"),
-            onClick: (offset) {
-              _sendFile(widget.model, widget.theme);
-            },
-            svgPath: "images/svg/send_file.svg"),
+      // if (config.showSendFileButton)
+      //   DesktopControlBarItem(
+      //       item: "file",
+      //       showName: TIM_t("文件"),
+      //       onClick: (offset) {
+      //         _sendFile(widget.model, widget.theme);
+      //       },
+      //       svgPath: "images/svg/send_file.svg"),
       if (config.showSendImageButton)
         DesktopControlBarItem(
             item: "photo",
@@ -874,6 +874,7 @@ class _TIMUIKitTextFieldLayoutWideState
                   context: context,
                   width: MediaQuery.of(context).size.width * 0.5,
                   height: MediaQuery.of(context).size.width * 0.5,
+                  title: TIM_t("消息历史"),
                   child: (onClose) => TIMUIKitSearchMsgDetail(
                         currentConversation: widget.currentConversation,
                         keyword: '',

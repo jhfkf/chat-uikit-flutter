@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
@@ -63,24 +62,33 @@ class V2TimGroupInfoExtEntity {
 //// 禁止私聊（参数：0或1）（权限：可读/可写）
 //@property (nonatomic, copy) NSString *private_mode;
 extension V2TimUserFullInfoExt on V2TimGroupInfo {
-
   V2TimGroupInfoExtEntity get extInfo =>
       V2TimGroupInfoExtEntity.fromJson(customInfo ?? {});
 
-	// 是否开启通知
+  // 是否开启通知
   bool get isEnabledNoticeMode => extInfo.noticeMode == 1;
 
-	// 是否禁止撤回
+  // 是否禁止撤回
   bool get isEnabledForbidBack => extInfo.forbidBack == 1;
 
-	// 是否 vip
+  // 是否 vip
   bool get isNormalVip =>
       extInfo.higherStatus == 1 || extInfo.higherStatus == 2;
 
-	// 是否 svip
+  // 是否 svip
   bool get isSuperVip => extInfo.higherStatus == 3;
 
-	// 已经过期
+  String? get showIconImageStr {
+    if (isNormalVip || isSuperVip) {
+      if (isNormalVip) {
+        return "assets/group_icon_vip.png";
+      }
+      return "assets/group_icon_svip.png";
+    }
+    return null;
+  }
+
+  // 已经过期
   bool get isExpireDate => (extInfo.expireDate != null &&
       extInfo.expireDate!.isNotEmpty &&
       (DateTime.now().millisecondsSinceEpoch -
@@ -88,7 +96,7 @@ extension V2TimUserFullInfoExt on V2TimGroupInfo {
                   .millisecondsSinceEpoch <
           0));
 
-	// 已经过期超过七天
+  // 已经过期超过七天
   bool get isExpireDateAfterSeven => (extInfo.expireDate != null &&
       extInfo.expireDate!.isNotEmpty &&
       (DateTime.now().millisecondsSinceEpoch -

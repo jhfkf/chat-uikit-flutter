@@ -2,6 +2,7 @@ import 'package:azlistview_all_platforms/azlistview_all_platforms.dart';
 import 'package:flutter/material.dart';
 import 'package:lpinyin/lpinyin.dart';
 import 'package:provider/provider.dart';
+import 'package:tencent_cloud_chat_uikit/extension/v2_tim_group_info_ext_entity.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_state.dart';
@@ -122,10 +123,26 @@ class _TIMUIKitGroupState extends TIMUIKitState<TIMUIKitGroup> {
                     child: Container(
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.only(top: 10, bottom: 20),
-                  child: Text(
-                    showName,
-                    style: TextStyle(
-                        color: Colors.black, fontSize: isDesktopScreen ? 14 : 18),
+                  child: Row(
+                    children: [
+                      Text(
+                        showName,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: isDesktopScreen ? 14 : 18),
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      (groupInfo.showIconImageStr?.isNotEmpty ?? false)
+                          ? Image.asset(
+                              groupInfo.showIconImageStr!,
+                              fit: BoxFit.fitWidth,
+                              height: 20,
+                              width: 42,
+                            )
+                          : Container(),
+                    ],
                   ),
                 ))
               ],

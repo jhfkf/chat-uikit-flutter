@@ -1,6 +1,7 @@
 // ignore_for_file: empty_catches
 
 import 'package:flutter/material.dart';
+import 'package:tencent_cloud_chat_uikit/extension/v2_tim_conversation_ext.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_statelesswidget.dart';
@@ -30,6 +31,7 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
   final V2TimUserStatus? onlineStatus;
   final int? convType;
   final bool isCurrent;
+  final V2TimConversation? conversation;
 
   /// Control if shows the identifier that the conversation has a draft text, inputted in previous.
   /// Also, you'd better specifying the `draftText` field for `TIMUIKitChat`, from the `draftText` in `V2TimConversation`,
@@ -52,10 +54,12 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
     this.draftTimestamp,
     this.lastMessageBuilder,
     this.convType,
+    this.conversation,
   }) : super(key: key);
 
   Widget _getShowMsgWidget(BuildContext context) {
-    final isDesktopScreen = TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
+    final isDesktopScreen =
+        TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
     if (isShowDraft && draftText != null && draftText != "") {
       return TIMUIKitDraftText(
         context: context,
@@ -108,7 +112,8 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
   @override
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
     final TUITheme theme = value.theme;
-    final isDesktopScreen = TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
+    final isDesktopScreen =
+        TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
     return Container(
       padding: const EdgeInsets.only(top: 6, bottom: 6, left: 16, right: 16),
       decoration: BoxDecoration(
@@ -164,18 +169,33 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                        child: Text(
-                      nickName,
-                      softWrap: true,
-                      textAlign: TextAlign.left,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: TextStyle(
-                        height: 1,
-                        color: theme.conversationItemTitleTextColor,
-                        fontSize: isDesktopScreen ? 14 : 18,
-                        fontWeight: FontWeight.w400,
-                      ),
+                        child: Row(
+                      children: [
+                        Text(
+                          nickName,
+                          softWrap: true,
+                          textAlign: TextAlign.left,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(
+                            height: 1,
+                            color: theme.conversationItemTitleTextColor,
+                            fontSize: isDesktopScreen ? 14 : 18,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 6,
+                        ),
+                        (conversation?.showIconImageStr?.isNotEmpty ?? false)
+                            ? Image.asset(
+                                conversation!.showIconImageStr!,
+                                fit: BoxFit.fitWidth,
+                                height: 20,
+                                width: 42,
+                              )
+                            : Container(),
+                      ],
                     )),
                     _getTimeStringForChatWidget(context, theme),
                   ],
