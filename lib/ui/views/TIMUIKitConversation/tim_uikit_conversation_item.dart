@@ -171,19 +171,21 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
                     Expanded(
                         child: Row(
                       children: [
-                        Text(
-                          nickName,
-                          softWrap: true,
-                          textAlign: TextAlign.left,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: TextStyle(
-                            height: 1,
-                            color: theme.conversationItemTitleTextColor,
-                            fontSize: isDesktopScreen ? 14 : 18,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
+                        Container(
+                            constraints: const BoxConstraints(maxWidth: 116),
+                            child: Text(
+                              nickName,
+                              softWrap: true,
+                              textAlign: TextAlign.left,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                height: 1,
+                                color: theme.conversationItemTitleTextColor,
+                                fontSize: isDesktopScreen ? 14 : 18,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            )),
                         const SizedBox(
                           width: 6,
                         ),
@@ -195,6 +197,7 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
                                 width: 42,
                               )
                             : Container(),
+                        Spacer(),
                       ],
                     )),
                     _getTimeStringForChatWidget(context, theme),
