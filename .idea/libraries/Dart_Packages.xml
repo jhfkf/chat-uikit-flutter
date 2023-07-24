@@ -1252,7 +1252,7 @@
         <entry key="tencent_chat_i18n_tool">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_chat_i18n_tool-2.1.3+1/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_chat_i18n_tool-2.1.3+2/lib" />
             </list>
           </value>
         </entry>
@@ -1267,15 +1267,13 @@
           <value>
             <list>
               <option value="$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_cloud_uikit_core-1.0.8/lib" />
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_cloud_uikit_core-1.0.4/lib" />
             </list>
           </value>
         </entry>
         <entry key="tencent_im_base">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_im_base-1.1.0/lib" />
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_im_base-1.0.57/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_im_base-2.0.1/lib" />
             </list>
           </value>
         </entry>
@@ -1340,8 +1338,7 @@
         <entry key="tim_ui_kit_sticker_plugin">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tim_ui_kit_sticker_plugin-2.1.0/lib" />
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tim_ui_kit_sticker_plugin-2.0.1/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tim_ui_kit_sticker_plugin-2.2.1/lib" />
             </list>
           </value>
         </entry>
@@ -1488,7 +1485,6 @@
           <value>
             <list>
               <option value="$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/video_player-2.7.0/lib" />
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/video_player-2.6.1/lib" />
             </list>
           </value>
         </entry>
@@ -1803,12 +1799,10 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/string_scanner-1.2.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/synchronized-3.1.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/system_info2-2.0.4/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_chat_i18n_tool-2.1.3+1/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_chat_i18n_tool-2.1.3+2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_cloud_chat_sdk-5.1.7/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_cloud_uikit_core-1.0.4/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_cloud_uikit_core-1.0.8/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_im_base-1.0.57/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_im_base-1.1.0/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_im_base-2.0.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_im_sdk_plugin_desktop-0.1.19/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_im_sdk_plugin_platform_interface-0.3.21/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_im_sdk_plugin_web-0.3.11/lib" />
@@ -1819,8 +1813,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/term_glyph-1.2.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/test_api-0.5.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/test_api-0.6.0/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tim_ui_kit_sticker_plugin-2.0.1/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tim_ui_kit_sticker_plugin-2.1.0/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tim_ui_kit_sticker_plugin-2.2.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/timing-1.0.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/transparent_image-2.0.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tuple-2.0.2/lib" />
@@ -1846,7 +1839,6 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/vector_graphics_codec-1.1.7/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/vector_graphics_compiler-1.1.7/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/vector_math-2.1.4/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/video_player-2.6.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/video_player-2.7.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/video_player_android-2.4.9/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/video_player_avfoundation-2.4.6/lib" />

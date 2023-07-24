@@ -1243,14 +1243,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.4"
-  shell:
-    dependency: transitive
-    description:
-      name: shell
-      sha256: fd3b7b97e5e7f734138543d5815c6cb6cdd2a1645a0def8ac8e05577cddfbe03
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.0.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -1320,6 +1312,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.1.0"
+  tencent_chat_i18n_tool:
+    dependency: transitive
+    description:
+      name: tencent_chat_i18n_tool
+      sha256: ac8171d2574ed18babedd0cb67e937e255bf02fcb72f55408d033f74d4b11949
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.1.3+2"
   tencent_cloud_chat_sdk:
     dependency: transitive
     description:
@@ -1332,18 +1332,18 @@ packages:
     dependency: "direct main"
     description:
       name: tencent_cloud_uikit_core
-      sha256: "0131874c7b15e181001c94f8a668f0ccae3006dea6e70d4e42e5531b63313a27"
+      sha256: "0a0f43e4c4241b25d12a9e9f0ee91922ac800a42229d97e3d21d16041ace3104"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.8"
   tencent_im_base:
     dependency: "direct main"
     description:
       name: tencent_im_base
-      sha256: "9b8e712bf27ffae9b686ec532ee8417b8263eba8bab04f105e28a95de1807322"
+      sha256: "0db83050452486571ee4ac07280a2fb4bbc07d297a54235b5cf12e46e79267d0"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.57"
+    version: "2.0.1"
   tencent_im_sdk_plugin_platform_interface:
     dependency: transitive
     description:
@@ -1396,10 +1396,10 @@ packages:
     dependency: "direct main"
     description:
       name: tim_ui_kit_sticker_plugin
-      sha256: "2a825d33076f319f6c1c87d58e2b0d650c9284ae4afd8efdc206f3e6f3582e64"
+      sha256: c9b0c1261bb51a5dee54bb50c6a106061b1bb10731b9c815fc5175afa60175e2
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.1"
+    version: "2.2.1"
   timing:
     dependency: transitive
     description:
@@ -1556,10 +1556,10 @@ packages:
     dependency: "direct main"
     description:
       name: video_player
-      sha256: de95f0e9405f29b5582573d4166132e71f83b3158aac14e8ee5767a54f4f1fbd
+      sha256: "3fd106c74da32f336dc7feb65021da9b0207cb3124392935f1552834f7cce822"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.6.1"
+    version: "2.7.0"
   video_player_android:
     dependency: transitive
     description:

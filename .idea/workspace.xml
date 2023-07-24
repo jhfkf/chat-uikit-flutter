@@ -8,28 +8,51 @@
       <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/business_logic/life_cycle/base_life_cycle.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/business_logic/life_cycle/base_life_cycle.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/business_logic/life_cycle/block_list_life_cycle.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/business_logic/life_cycle/block_list_life_cycle.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/business_logic/life_cycle/chat_life_cycle.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/business_logic/life_cycle/chat_life_cycle.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/business_logic/life_cycle/conversation_life_cycle.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/business_logic/life_cycle/conversation_life_cycle.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/business_logic/life_cycle/new_contact_life_cycle.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/business_logic/life_cycle/new_contact_life_cycle.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/business_logic/life_cycle/profile_life_cycle.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/business_logic/life_cycle/profile_life_cycle.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/business_logic/separate_models/tui_chat_model_tools.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/business_logic/separate_models/tui_chat_model_tools.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/business_logic/separate_models/tui_chat_separate_view_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/business_logic/separate_models/tui_chat_separate_view_model.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/business_logic/view_models/tui_chat_global_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/business_logic/view_models/tui_chat_global_model.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/business_logic/view_models/tui_conversation_view_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/business_logic/view_models/tui_conversation_view_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/data_services/core/core_services_implements.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data_services/core/core_services_implements.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/data_services/group/group_services_implement.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data_services/group/group_services_implement.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/i18n/strings.i18n.json" beforeDir="false" afterPath="$PROJECT_DIR$/lib/i18n/strings.i18n.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/i18n/strings_zh-Hans.i18n.json" beforeDir="false" afterPath="$PROJECT_DIR$/lib/i18n/strings_zh-Hans.i18n.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/i18n/strings_zh-Hant.i18n.json" beforeDir="false" afterPath="$PROJECT_DIR$/lib/i18n/strings_zh-Hant.i18n.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/controller/tim_uikit_chat_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/controller/tim_uikit_chat_controller.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/utils/screen_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/utils/screen_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/utils/time_ago.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/utils/time_ago.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_chat_history_message_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_chat_history_message_list.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_chat_history_message_list_item.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_chat_history_message_list_item.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_chat_message_tooltip.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_chat_message_tooltip.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_history_message_list_container.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_history_message_list_container.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitAppBar/tim_uikit_appbar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitAppBar/tim_uikit_appbar.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitAppBar/tim_uikit_appbar_title.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitAppBar/tim_uikit_appbar_title.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_file_elem.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_file_elem.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_image_elem.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_image_elem.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_reply_elem.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_reply_elem.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_video_elem.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_video_elem.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_more_panel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_more_panel.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_text_field.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_text_field.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_text_field_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_text_field_controller.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_text_field_layout/narrow.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_text_field_layout/narrow.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_text_field_layout/wide.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_text_field_layout/wide.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/tim_uikit_chat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/tim_uikit_chat.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/tim_uikit_chat_config.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/tim_uikit_chat_config.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/tim_uikit_send_file.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/tim_uikit_send_file.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitConversation/tim_uikit_conversation_last_msg.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitConversation/tim_uikit_conversation_last_msg.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitProfile/tim_uikit_profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitProfile/tim_uikit_profile.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitSearch/tim_uikit_search_msg_detail.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitSearch/tim_uikit_search_msg_detail.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/widgets/forward_message_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/widgets/forward_message_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/widgets/image_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/widgets/image_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/widgets/merger_message_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/widgets/merger_message_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/widgets/video_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/widgets/video_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/widgets/wide_popup.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/widgets/wide_popup.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,7 +124,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/business_logic/view_models/tui_chat_global_model.dart</url>
-          <line>1084</line>
+          <line>1141</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

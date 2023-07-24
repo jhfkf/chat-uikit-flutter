@@ -1225,10 +1225,10 @@ packages:
     dependency: transitive
     description:
       name: tencent_chat_i18n_tool
-      sha256: "733f616f2dc810e593ae5bc8d913072caa3b20affd7cb2dc49a6d9681e820a51"
+      sha256: ac8171d2574ed18babedd0cb67e937e255bf02fcb72f55408d033f74d4b11949
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.3+1"
+    version: "2.1.3+2"
   tencent_cloud_chat_sdk:
     dependency: transitive
     description:
@@ -1256,10 +1256,10 @@ packages:
     dependency: transitive
     description:
       name: tencent_im_base
-      sha256: "64234588401fb49609f73169df560f147ff19ec679314eee3bc91ad4762ae14b"
+      sha256: "0db83050452486571ee4ac07280a2fb4bbc07d297a54235b5cf12e46e79267d0"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.1.0"
+    version: "2.0.1"
   tencent_im_sdk_plugin_desktop:
     dependency: "direct main"
     description:
@@ -1328,10 +1328,10 @@ packages:
     dependency: transitive
     description:
       name: tim_ui_kit_sticker_plugin
-      sha256: "624dd9873618921f532ff7067bdbaf36161bdcef9a7f48b98fe14d24eeedbc51"
+      sha256: c9b0c1261bb51a5dee54bb50c6a106061b1bb10731b9c815fc5175afa60175e2
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.0"
+    version: "2.2.1"
   transparent_image:
     dependency: transitive
     description:
