@@ -85,7 +85,7 @@ class AESUtil {
       final str = encrypt.decrypt(encrypted, iv: iv);
       return str;
     } catch (e) {
-      print(e);
+      // print("decryptAESECB --->  $e");
       return data;
     }
     // }, (error, stack) {

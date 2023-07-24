@@ -231,7 +231,6 @@ class _TIMUIKitAddFriendState extends TIMUIKitState<TIMUIKitAddFriend> {
         }
       }
     }
-    // print("xxxxxxxx");
     // print(result.data);
     // print(result.msg);
     // final response = await _coreServicesImpl.getUsersInfo(userIDList: [params]);

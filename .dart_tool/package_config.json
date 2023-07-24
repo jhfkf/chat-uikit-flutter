@@ -405,7 +405,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///Users/jihaifeng/fvm/versions/stable/packages/flutter",
+      "rootUri": "file:///Users/jihaifeng/fvm/versions/3.10.0/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -471,7 +471,7 @@
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///Users/jihaifeng/fvm/versions/stable/packages/flutter_web_plugins",
+      "rootUri": "file:///Users/jihaifeng/fvm/versions/3.10.0/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -939,7 +939,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///Users/jihaifeng/fvm/versions/stable/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///Users/jihaifeng/fvm/versions/3.10.0/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -1274,7 +1274,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-07-24T08:25:13.467474Z",
+  "generated": "2023-07-24T09:02:30.312502Z",
   "generator": "pub",
-  "generatorVersion": "3.0.5"
+  "generatorVersion": "3.0.0"
 }
