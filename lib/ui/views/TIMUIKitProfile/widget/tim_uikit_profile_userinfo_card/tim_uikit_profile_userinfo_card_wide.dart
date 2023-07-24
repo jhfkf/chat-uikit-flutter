@@ -4,6 +4,8 @@ import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_statelesswidget.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/avatar.dart';
 
+import 'package:tencent_cloud_chat_uikit/extension/v2_tim_user_full_info_ext_entity.dart';
+
 class TIMUIKitProfileUserInfoCardWide extends TIMUIKitStatelessWidget {
   /// User info
   final V2TimUserFullInfo? userInfo;
@@ -28,7 +30,8 @@ class TIMUIKitProfileUserInfoCardWide extends TIMUIKitStatelessWidget {
     final faceUrl = userInfo?.faceUrl ?? "";
     final nickName = userInfo?.nickName ?? "";
     final signature = userInfo?.selfSignature;
-    final showName = nickName != "" ? nickName : userInfo?.userID;
+
+    final showName = nickName != "" ? nickName : userInfo?.accid;
 
     return Container(
       padding: const EdgeInsets.only(bottom: 10, left: 16, right: 16),
@@ -57,7 +60,7 @@ class TIMUIKitProfileUserInfoCardWide extends TIMUIKitStatelessWidget {
                           TextStyle(fontSize: 12, color: theme.weakTextColor),
                     ),
                     Expanded(child: SelectableText(
-                      userInfo?.userID ?? "",
+                      userInfo?.accid ?? "",
                       style:
                       TextStyle(fontSize: 12, color: theme.weakTextColor),
                     )),

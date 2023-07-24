@@ -4,6 +4,7 @@ import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_statelesswidget.dart';
 
 import 'package:tencent_cloud_chat_uikit/ui/widgets/avatar.dart';
+import 'package:tencent_cloud_chat_uikit/extension/v2_tim_user_full_info_ext_entity.dart';
 
 class TIMUIKitProfileUserInfoCardNarrow extends TIMUIKitStatelessWidget {
   /// User info
@@ -29,7 +30,7 @@ class TIMUIKitProfileUserInfoCardNarrow extends TIMUIKitStatelessWidget {
     final faceUrl = userInfo?.faceUrl ?? "";
     final nickName = userInfo?.nickName ?? "";
     final signature = userInfo?.selfSignature;
-    final showName = nickName != "" ? nickName : userInfo?.userID;
+    final showName = nickName != "" ? nickName : userInfo?.accid;
     final option1 = signature;
     final signatureText = option1 != null
         ? TIM_t_para("个性签名: {{option1}}", "个性签名: $option1")(option1: option1)

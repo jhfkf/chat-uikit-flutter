@@ -41,5 +41,6 @@ enum TUIKitWideModalOperationKey{
   confirmGeneral,
   unableToSendDueToFolders,
   modifyPhone,
+  verifyPhone,
   showGroupNotice,
 }
