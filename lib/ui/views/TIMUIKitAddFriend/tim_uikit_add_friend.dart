@@ -197,6 +197,7 @@ class _TIMUIKitAddFriendState extends TIMUIKitState<TIMUIKitAddFriend> {
     DataResult result = await UtilsApi.baseQueryPost(
       url: Api.appUserQueryUsers,
       params: params,
+      isLongAwaitShow: true,
       isUnpack: true,
     );
     if (!result.result) {

@@ -28,6 +28,12 @@ class HttpManager {
     setDioBaseOptions(baseUrl: 'http://xkqapi.e92.cc/', headers: {});
     // 添加请求拦截器
     dio.interceptors.add(TBRInterceptors());
+    SharedPreferences.getInstance().then((prefs) {
+      String? baseUrl = prefs.getString('SuBaseUrl');
+      if (baseUrl != null) {
+        setDioBaseOptions(baseUrl: baseUrl, headers: {});
+      }
+    });
   }
 
   /// 设置请求头
@@ -102,8 +108,8 @@ class AESUtil {
     //使用密钥进行解密
     final key = encrypt.Key.fromUtf8(keyStr);
     final iv = encrypt.IV.fromUtf8(ivStr);
-    final encrypter = encrypt.Encrypter(
-        encrypt.AES(key, mode: encrypt.AESMode.cbc /*指定使用CBC模式(AES/CBC/PKCS5PADDING)*/));
+    final encrypter = encrypt.Encrypter(encrypt.AES(key,
+        mode: encrypt.AESMode.cbc /*指定使用CBC模式(AES/CBC/PKCS5PADDING)*/));
 
     final str = encrypter.decrypt(encrypted, iv: iv);
     return str;

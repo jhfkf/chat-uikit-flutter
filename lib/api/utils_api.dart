@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../util/toast.dart';
 import 'http.dart';
+import 'tbr_toast.dart';
 
 ///接口返回数据模型
 class DataResult {
@@ -76,13 +77,13 @@ class UtilsApi {
   }) async {
     //此Api请求是否需要等待弹窗
     if (isShowLoading) {
-      // TBRToast.loading(loadingText);
+      TBRToast.loading(loadingText);
     } else {
       //如果接口不需要加载动画 接口超过1000ms没有返回将会出现加载等待动画
       isShowLoading = true;
       Future.delayed(const Duration(milliseconds: 1000)).then((value) {
         if (isShowLoading && isLongAwaitShow) {
-          // TBRToast.loading(loadingText);
+          TBRToast.loading(loadingText);
         }
       });
     }
@@ -153,7 +154,7 @@ class UtilsApi {
       return DataResult(e, false);
     }).whenComplete(() {
       if (dismissToast) {
-        // TBRToast.cancel();
+        TBRToast.cancel();
         isShowLoading = false;
       }
     });
@@ -208,13 +209,13 @@ class UtilsApi {
   }) async {
     //此Api请求是否需要等待弹窗
     if (isShowLoading) {
-      // TBRToast.loading(loadingText);
+      TBRToast.loading(loadingText);
     } else {
       //如果接口不需要加载动画 接口超过1000ms没有返回将会出现加载等待动画
       isShowLoading = true;
       Future.delayed(const Duration(milliseconds: 1000)).then((value) {
         if (isShowLoading && isLongAwaitShow) {
-          // TBRToast.loading(loadingText);
+          TBRToast.loading(loadingText);
         }
       });
     }
@@ -285,7 +286,7 @@ class UtilsApi {
       return DataResult(e, false, msg: log);
     }).whenComplete(() {
       if (dismissToast) {
-        // TBRToast.cancel();
+        TBRToast.cancel();
         isShowLoading = false;
       }
     });
@@ -338,12 +339,12 @@ class UtilsApi {
   }) async {
     //此Api请求是否需要等待弹窗
     if (isShowLoading) {
-      // TBRToast.loading(loadingText);
+      TBRToast.loading(loadingText);
     } else {
       //如果接口不需要加载动画 接口超过1000ms没有返回将会出现加载等待动画
       isShowLoading = true;
       if (isShowLoading) {
-        // TBRToast.loading(loadingText);
+        TBRToast.loading(loadingText);
       }
     }
     //拼接最终请求参数
@@ -416,7 +417,7 @@ class UtilsApi {
       return DataResult(e, false);
     }).whenComplete(() {
       if (dismissToast) {
-        // TBRToast.cancel();
+        TBRToast.cancel();
         isShowLoading = false;
       }
     });

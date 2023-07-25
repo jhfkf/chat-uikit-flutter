@@ -422,6 +422,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_easyloading",
+      "rootUri": "file:///Users/jihaifeng/.pub-cache/hosted/pub.flutter-io.cn/flutter_easyloading-3.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_easyrefresh",
       "rootUri": "file:///Users/jihaifeng/.pub-cache/hosted/pub.flutter-io.cn/flutter_easyrefresh-2.2.2",
       "packageUri": "lib/",
@@ -458,8 +464,20 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "flutter_screenutil",
+      "rootUri": "file:///Users/jihaifeng/.pub-cache/hosted/pub.flutter-io.cn/flutter_screenutil-5.8.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_slidable_for_tencent_im",
       "rootUri": "file:///Users/jihaifeng/.pub-cache/hosted/pub.flutter-io.cn/flutter_slidable_for_tencent_im-1.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_spinkit",
+      "rootUri": "file:///Users/jihaifeng/.pub-cache/hosted/pub.flutter-io.cn/flutter_spinkit-5.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -1274,7 +1292,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-07-24T09:02:30.312502Z",
+  "generated": "2023-07-25T03:21:28.126047Z",
   "generator": "pub",
   "generatorVersion": "3.0.0"
 }
