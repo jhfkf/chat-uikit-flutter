@@ -11,6 +11,7 @@ import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_statelesswidget.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/separate_models/tui_chat_separate_view_model.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/view_models/tui_chat_global_model.dart';
+
 // ignore: unused_import
 import 'package:tencent_cloud_chat_uikit/ui/utils/optimize_utils.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_chat_history_message_list_config.dart';
@@ -374,7 +375,8 @@ class _TIMUIKitHistoryMessageListState
               // padding: widget.mainHistoryListConfig?.padding ?? EdgeInsets.zero,
               // itemExtent: widget.mainHistoryListConfig?.itemExtent,
               // prototypeItem: widget.mainHistoryListConfig?.prototypeItem,
-              cacheExtent: widget.mainHistoryListConfig?.cacheExtent ?? 1500,
+              cacheExtent: widget.mainHistoryListConfig?.cacheExtent ?? 250,
+              // cacheExtent: widget.mainHistoryListConfig?.cacheExtent ?? 1500,
               semanticChildCount:
                   widget.mainHistoryListConfig?.semanticChildCount,
               dragStartBehavior:
@@ -514,6 +516,8 @@ class _TIMUIKitHistoryMessageListState
                 ),
               ],
             )),
+
+
         TIMUIKitHistoryMessageListTongueContainer(
           conversation: widget.conversation,
           model: widget.model,
