@@ -387,6 +387,7 @@ class _TIMUIKitImageElem extends TIMUIKitState<TIMUIKitImageElem> {
           child: PlatformUtils().isWeb
               ? Image.network(path ?? smallImg?.url ?? originalImg!.url!,
                   fit: BoxFit.contain)
+              // :Container());
               : CachedNetworkImage(
                   alignment: Alignment.topCenter,
                   imageUrl: path ?? smallImg?.url ?? originalImg!.url!,
@@ -454,11 +455,11 @@ class _TIMUIKitImageElem extends TIMUIKitState<TIMUIKitImageElem> {
     }
   }
 
+  /// 获取本地图片
   Widget _renderLocalImage(String smallImage, dynamic heroTag,
       double? positionRadio, TUITheme? theme, String? originImage) {
     double? currentPositionRadio = positionRadio;
     File imgF = File(smallImage);
-
     bool isExist = imgF.existsSync();
     if (!isExist) {
       return errorDisplay(context, theme);
@@ -484,6 +485,9 @@ class _TIMUIKitImageElem extends TIMUIKitState<TIMUIKitImageElem> {
     final isDesktopScreen =
         TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
 
+    print("preloadImage  --->  $preloadImage");
+
+    // PaintingBinding.instance.imageCache.evict();
     final imageWidget = Hero(
       tag: heroTag,
       child: preloadImage != null

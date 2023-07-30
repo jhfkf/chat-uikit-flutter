@@ -171,6 +171,7 @@ class _TIMUIKitHistoryMessageListContainerState
           groupAtInfoList: widget.groupAtInfoList,
           mainHistoryListConfig: widget.mainHistoryListConfig,
           itemBuilder: (context, message) {
+            /// 消息item生成
             return TIMUIKitHistoryMessageListItem(
                 customMessageHoverBarOnDesktop:
                     widget.customMessageHoverBarOnDesktop,

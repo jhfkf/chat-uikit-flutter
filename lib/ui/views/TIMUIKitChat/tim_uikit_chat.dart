@@ -234,6 +234,7 @@ class _TUIChatState extends TIMUIKitState<TIMUIKitChat> {
 
   @override
   void initState() {
+    print("TIMUIKitChat  -->  initState");
     super.initState();
     if (kProfileMode) {
       Frame.init();
@@ -259,6 +260,7 @@ class _TUIChatState extends TIMUIKitState<TIMUIKitChat> {
       Frame.destroy();
     }
     model.dispose();
+    print("TIMUIKitChat  -->  dispose");
   }
 
   @override

@@ -890,6 +890,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "screen_capturer",
+      "rootUri": "file:///Users/jihaifeng/.pub-cache/hosted/pub.flutter-io.cn/screen_capturer-0.1.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "scroll_to_index",
       "rootUri": "file:///Users/jihaifeng/.pub-cache/hosted/pub.flutter-io.cn/scroll_to_index-2.1.1",
       "packageUri": "lib/",
@@ -956,6 +962,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "shell_executor",
+      "rootUri": "file:///Users/jihaifeng/.pub-cache/hosted/pub.flutter-io.cn/shell_executor-0.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
       "name": "sky_engine",
       "rootUri": "file:///Users/jihaifeng/fvm/versions/3.10.0/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -1008,6 +1020,12 @@
       "rootUri": "file:///Users/jihaifeng/.pub-cache/hosted/pub.flutter-io.cn/synchronized-3.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
+    },
+    {
+      "name": "system_tray",
+      "rootUri": "file:///Users/jihaifeng/.pub-cache/hosted/pub.flutter-io.cn/system_tray-2.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "tencent_chat_i18n_tool",
@@ -1292,7 +1310,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-07-25T03:21:28.126047Z",
+  "generated": "2023-07-27T10:07:47.311987Z",
   "generator": "pub",
   "generatorVersion": "3.0.0"
 }

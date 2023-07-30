@@ -33,9 +33,13 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:screen_capturer/screen_capturer.dart';
 
 // ignore: unnecessary_import
 import 'dart:typed_data';
+
+import '../../../../../util/event_bus.dart';
+import '../../../../controller/tim_uikit_conversation_controller.dart';
 
 class DesktopControlBarItem {
   final String item;
@@ -68,14 +72,16 @@ class DesktopControlBarConfig {
   final bool showSendImageButton;
   final bool showSendVideoButton;
   final bool showMessageHistoryButton;
+  final bool showClearMessageHistoryButton;
 
   DesktopControlBarConfig({
     this.showStickerPanel = true,
     this.showScreenshotButton = true,
-    this.showSendFileButton = true,
+    this.showSendFileButton = false,
     this.showSendImageButton = true,
-    this.showSendVideoButton = true,
+    this.showSendVideoButton = false,
     this.showMessageHistoryButton = true,
+    this.showClearMessageHistoryButton = true,
   });
 }
 
@@ -232,7 +238,7 @@ class _TIMUIKitTextFieldLayoutWideState
       // ignore: avoid_print
       print(e);
     }
-    generateDefaultControlBarItems();
+    // generateDefaultControlBarItems();
   }
 
   Future<void> _handlePaste(html.ClipboardEvent event) async {
@@ -807,13 +813,32 @@ class _TIMUIKitTextFieldLayoutWideState
   }
 
   _sendScreenShot() async {
-    final file = await ScreenshotHelper.captureScreen();
-    if (file != null) {
-      _sendImageWithConfirmation(filePath: file);
-    } else {}
+    Directory directory = await getApplicationDocumentsDirectory();
+    String imageName =
+        'Screenshot-${DateTime.now().millisecondsSinceEpoch}.png';
+    String imagePath =
+        '${directory.path}/screen_capturer_example/Screenshots/$imageName';
+    CapturedData? lastCapturedData = await screenCapturer.capture(
+      imagePath: imagePath,
+      // copyToClipboard: true,
+      silent: true,
+    );
+    if (lastCapturedData != null && lastCapturedData.imagePath != null) {
+      // ignore: avoid_print
+      // print(_lastCapturedData!.toJson());
+      _sendImageWithConfirmation(filePath: lastCapturedData.imagePath!);
+    } else {
+      // ignore: avoid_print
+      print('User canceled capture');
+    }
+
+    // final file = await ScreenshotHelper.captureScreen();
+    // if (file != null) {
+    //   _sendImageWithConfirmation(filePath: file);
+    // } else {}
   }
 
-  generateDefaultControlBarItems() {
+  generateDefaultControlBarItems(BuildContext context, TUIKitBuildValue value) {
     final DesktopControlBarConfig config =
         widget.chatConfig.desktopControlBarConfig ?? DesktopControlBarConfig();
     final List<DesktopControlBarItem> itemsList = [
@@ -891,6 +916,23 @@ class _TIMUIKitTextFieldLayoutWideState
                   theme: widget.theme);
             },
             svgPath: "images/svg/message_history.svg"),
+      if (config.showClearMessageHistoryButton)
+        DesktopControlBarItem(
+            item: "clear",
+            showName: TIM_t("清除消息"),
+            onClick: (offset) {
+              TUIKitWidePopup.showSecondaryConfirmDialog(
+                  operationKey:
+                      TUIKitWideModalOperationKey.confirmDeleteMessages,
+                  context: context,
+                  text: TIM_t("确定删除会话所有消息？"),
+                  theme: value.theme,
+                  onCancel: () {},
+                  onConfirm: () async {
+                    bus.emit("ClearHistoryEvent", widget.currentConversation);
+                  });
+            },
+            svgPath: "images/svg/message_clear.svg"),
     ];
     defaultControlBarItems = itemsList;
   }
@@ -955,6 +997,8 @@ class _TIMUIKitTextFieldLayoutWideState
   @override
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
     final theme = value.theme;
+
+    generateDefaultControlBarItems(context, value);
 
     setKeyboardHeight ??= OptimizeUtils.debounce((height) {
       settingModel.keyboardHeight = height;

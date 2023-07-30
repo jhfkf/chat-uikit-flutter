@@ -574,7 +574,7 @@ class _TIMUIKItHistoryMessageListItemState
                   )
                 : null;
         return customWidget ?? Text(TIM_t("[群系统消息]"));
-      case MessageElemType.V2TIM_ELEM_TYPE_IMAGE:
+      case MessageElemType.V2TIM_ELEM_TYPE_IMAGE:  /// 创建图文消息
         final customWidget = messageItemBuilder?.imageMessageItemBuilder != null
             ? messageItemBuilder!.imageMessageItemBuilder!(
                 messageItem,

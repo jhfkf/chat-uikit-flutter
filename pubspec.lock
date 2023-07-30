@@ -1179,6 +1179,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.27.7"
+  screen_capturer:
+    dependency: "direct main"
+    description:
+      name: screen_capturer
+      sha256: "39001271f34eca330a1a59b735da0a0f546fc6f9f38b68554d6d2478baeb4025"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.6"
   scroll_to_index:
     dependency: "direct main"
     description:
@@ -1267,6 +1275,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.4"
+  shell_executor:
+    dependency: transitive
+    description:
+      name: shell_executor
+      sha256: f89eb17bb2660568a255bb5612f2773ba9295792d7bb6b96e3ef87985a9457fa
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.4"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -1336,6 +1352,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.1.0"
+  system_tray:
+    dependency: "direct main"
+    description:
+      name: system_tray
+      sha256: "40444e5de8ed907822a98694fd031b8accc3cb3c0baa547634ce76189cf3d9cf"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.3"
   tencent_chat_i18n_tool:
     dependency: transitive
     description:
