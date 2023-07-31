@@ -6,6 +6,7 @@ import 'package:tencent_cloud_chat_uikit/business_logic/view_models/tui_chat_glo
 
 import 'package:tencent_cloud_chat_uikit/data_services/group/group_services.dart';
 import 'package:tencent_cloud_chat_uikit/data_services/services_locatar.dart';
+import 'package:tencent_cloud_chat_uikit/extension/v2_tim_user_full_info_ext_entity.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
 
 
@@ -13,6 +14,8 @@ import 'package:tencent_cloud_chat_uikit/ui/widgets/avatar.dart';
 
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
+
+import '../../../tencent_cloud_chat_uikit.dart';
 
 typedef GroupApplicationItemBuilder = Widget Function(
     BuildContext context, V2TimGroupApplication applicationInfo, int index);
@@ -45,25 +48,41 @@ class TIMUIKitGroupApplicationListState
   List<V2TimGroupApplication> groupApplicationList = [];
   List<ApplicationStatus> applicationStatusList = [];
 
+  Map<String, V2TimUserFullInfo>? userMap;
+
   @override
   void initState() {
     super.initState();
     groupApplicationList = model.groupApplicationList
         .where((item) => (item.groupID == widget.groupID))
         .toList();
+
     applicationStatusList =
         groupApplicationList.map((item) => ApplicationStatus.none).toList();
+
+    var userIds = groupApplicationList.where((item) => item.fromUser != null).map((e) => e.fromUser!).toList();
+    final userResult =  TIMUIKitCore.getSDKInstance().getUsersInfo(userIDList: userIds);
+    Map<String, V2TimUserFullInfo> tmpMap = {};
+    userResult.then((value) {
+      value.data?.forEach((user) {
+        tmpMap[user.userID ?? ""] = user;
+      });
+      userMap = tmpMap;
+      setState(() {
+
+      });
+    });
   }
 
   GroupApplicationItemBuilder _getItemBuilder() {
     return widget.itemBuilder ?? _defaultItemBuilder;
   }
 
-  Widget _defaultItemBuilder(
+  Widget _defaultItemBuilder (
       BuildContext context, V2TimGroupApplication applicationInfo, int index) {
     final theme = Provider.of<TUIThemeViewModel>(context).theme;
     final ApplicationStatus currentStatus = applicationStatusList[index];
-
+    applicationInfo.fromUser;
     String _getUserName() {
       if (applicationInfo.fromUserNickName != null &&
           applicationInfo.fromUserNickName!.isNotEmpty &&
@@ -79,7 +98,11 @@ class TIMUIKitGroupApplicationListState
       return TIM_t_para("验证消息: {{option2}}", "验证消息: $option2")(
           option2: option2);
     }
-
+    String fromUser = applicationInfo.fromUser ?? "";
+    V2TimUserFullInfo? userFullInfo;
+    if (userMap?.keys.contains(fromUser) ?? false) {
+      userFullInfo = userMap?[fromUser];
+    }
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -97,10 +120,8 @@ class TIMUIKitGroupApplicationListState
               height: 40,
               width: 40,
               child: Avatar(
-                  faceUrl: applicationInfo.fromUserFaceUrl ?? "",
-                  showName: applicationInfo.fromUserNickName ??
-                      applicationInfo.fromUser ??
-                      ""),
+                  faceUrl: userFullInfo != null ? (userFullInfo.faceUrl ?? "") : (applicationInfo.fromUserFaceUrl ?? ""),
+                  showName: userFullInfo != null ? (userFullInfo.nickName ?? "") : (applicationInfo.fromUserNickName ?? "")),
             ),
           ),
           Expanded(

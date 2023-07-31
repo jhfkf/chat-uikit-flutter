@@ -5,6 +5,8 @@ import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/avatar.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 
+import '../../../data_services/message/aes.dart';
+
 class TIMUIKitSearchWideItem extends TIMUIKitStatelessWidget {
   final String faceUrl;
   final String showName;
@@ -40,7 +42,7 @@ class TIMUIKitSearchWideItem extends TIMUIKitStatelessWidget {
         ? Container(
             margin: const EdgeInsets.only(top: 0),
             child: SelectableText(
-              text,
+              AESUtil.decryptAESECB(text, "666888"),
               style: TextStyle(
                   color: theme.weakTextColor, height: 1.5, fontSize: 12),
             ),
