@@ -1,5 +1,6 @@
 // ignore_for_file: unused_element
 
+import 'package:collection/collection.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -124,7 +125,9 @@ class GroupMemberTile extends TIMUIKitStatelessWidget {
     final model = Provider.of<TUIGroupProfileModel>(context);
     final memberAmount = model.groupInfo?.memberCount ?? 0;
     final option1 = memberAmount.toString();
-    final memberList = model.groupMemberList;
+    final memberList = model.groupMemberList.sorted((a, b) => (b?.role ?? 0) - (a?.role ?? 0) );
+
+
     final isCanInviteMember = model.canInviteMember();
     final isCanKickOffMember = model.canKickOffMember();
 

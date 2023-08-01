@@ -154,6 +154,7 @@ class TIMUIKitSearchMsgDetailState
         keywordState = keyword!;
       });
     }
+    print("keyword  --> $keyword");
     model.getMsgForConversation(keyword ?? keywordState,
         widget.currentConversation.conversationID, currentPage);
     setState(() {

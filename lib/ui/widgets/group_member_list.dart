@@ -79,7 +79,11 @@ class _GroupProfileMemberListState
       final showName = _getShowName(item);
       if (item?.role == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_OWNER ||
           item?.role == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_ADMIN) {
-        showList.add(ISuspensionBeanImpl(memberInfo: item, tagIndex: "@"));
+        if (item?.role == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_OWNER) {
+          showList.insert(0, ISuspensionBeanImpl(memberInfo: item, tagIndex: "@"));
+        }else {
+          showList.add(ISuspensionBeanImpl(memberInfo: item, tagIndex: "@"));
+        }
       } else {
         String pinyin = PinyinHelper.getPinyinE(showName);
         String tag = pinyin.substring(0, 1).toUpperCase();
