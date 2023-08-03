@@ -132,6 +132,129 @@ class _GroupProfileMemberListState
     final isGroupMember =
         memberInfo.role == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_MEMBER;
 
+    if (isDesktopScreen) {
+      return Container(
+        color: Colors.white,
+          child: Column(children: [
+            ListTile(
+              tileColor: Colors.black,
+              title: Row(
+                children: [
+                  if (widget.canSelectMember)
+                    Container(
+                      margin: const EdgeInsets.only(right: 10),
+                      child: CheckBoxButton(
+                          onChanged: (isChecked) {
+                            if (isChecked) {
+                              if (widget.maxSelectNum != null &&
+                                  selectedMember.length >=
+                                      widget.maxSelectNum!) {
+                                return;
+                              }
+                              selectedMember.add(memberInfo);
+                            } else {
+                              selectedMember.remove(memberInfo);
+                            }
+                            if (widget.onSelectedMemberChange != null) {
+                              widget.onSelectedMemberChange!(selectedMember);
+                            }
+                            setState(() {});
+                          },
+                          isChecked: selectedMember.contains(memberInfo)),
+                    ),
+                  Container(
+                    width: isDesktopScreen ? 30 : 36,
+                    height: isDesktopScreen ? 30 : 36,
+                    margin: const EdgeInsets.only(right: 10),
+                    child: Avatar(
+                      faceUrl: memberInfo.faceUrl ?? "",
+                      showName: _getShowName(memberInfo),
+                      type: 1,
+                    ),
+                  ),
+                  Text(_getShowName(memberInfo),
+                      style: TextStyle(fontSize: isDesktopScreen ? 14 : 16)),
+                  memberInfo.role ==
+                      GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_OWNER
+                      ? Container(
+                    margin: const EdgeInsets.only(left: 5),
+                    child: Text(TIM_t("群主"),
+                        style: TextStyle(
+                          color: theme.ownerColor,
+                          fontSize: isDesktopScreen ? 10 : 12,
+                        )),
+                    padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          color: theme.ownerColor ??
+                              CommonColor.ownerColor,
+                          width: 1),
+                      borderRadius:
+                      const BorderRadius.all(Radius.circular(4.0)),
+                    ),
+                  )
+                      : memberInfo.role ==
+                      GroupMemberRoleType
+                          .V2TIM_GROUP_MEMBER_ROLE_ADMIN
+                      ? Container(
+                    margin: const EdgeInsets.only(left: 5),
+                    child: Text(TIM_t("管理员"),
+                        style: TextStyle(
+                          color: theme.adminColor,
+                          fontSize: 12,
+                        )),
+                    padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          color: theme.adminColor ??
+                              CommonColor.adminColor,
+                          width: 1),
+                      borderRadius: const BorderRadius.all(
+                          Radius.circular(4.0)),
+                    ),
+                  )
+                      : Container()
+                ],
+              ),
+              onTap: () async {
+                print("group member tap");
+                print(widget.groupInfo);
+                if (widget.onTapMemberItem != null) {
+                  bool isCanCheck = await GroupUtils.canCheckAuthToFriendInfo(
+                      widget.groupInfo, memberInfo.userID);
+                  if (!isCanCheck) {
+                    SnackBarUtils.showNoPrivateChat();
+                    return;
+                  }
+                  widget.onTapMemberItem!(memberInfo, null);
+                }
+                if (widget.canSelectMember) {
+                  final isChecked = selectedMember.contains(memberInfo);
+                  if (isChecked) {
+                    selectedMember.remove(memberInfo);
+                  } else {
+                    if (widget.maxSelectNum != null &&
+                        selectedMember.length >= widget.maxSelectNum!) {
+                      return;
+                    }
+                    selectedMember.add(memberInfo);
+                  }
+                  if (widget.onSelectedMemberChange != null) {
+                    widget.onSelectedMemberChange!(selectedMember);
+                  }
+                  setState(() {});
+                }
+              },
+            ),
+            Divider(
+                thickness: 1,
+                indent: 74,
+                endIndent: 0,
+                color: theme.weakBackgroundColor,
+                height: 0)
+          ])
+      );
+    }
     return Container(
         color: Colors.white,
         child: Slidable(
