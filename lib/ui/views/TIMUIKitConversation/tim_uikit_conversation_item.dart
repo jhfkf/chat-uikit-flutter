@@ -172,7 +172,7 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
                         child: Row(
                       children: [
                         Container(
-                            constraints: const BoxConstraints(maxWidth: 100),
+                            constraints: const BoxConstraints(maxWidth: 90),
                             child: Text(
                               nickName,
                               softWrap: true,

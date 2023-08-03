@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:tencent_cloud_chat_uikit/ui/constants/history_message_constant.dart';
 import 'package:tencent_cloud_chat_uikit/ui/constants/time.dart';
@@ -151,7 +152,8 @@ class MessageUtils {
                 changedInfoString;
         break;
       case GroupTipsElemType.V2TIM_GROUP_TIPS_TYPE_QUIT:
-        final String? option6 = opUserNickName ?? "";
+        // final String? option6 = opUserNickName ?? "";
+        final String option6 = memberList?.map((e) => e?.nickName ?? "").toList().join("、") ?? "";
         displayMessage =
             TIM_t_para("{{option6}}退出群聊", "$option6退出群聊")(option6: option6);
         break;
