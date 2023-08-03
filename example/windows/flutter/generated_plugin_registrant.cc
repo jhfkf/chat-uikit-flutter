@@ -12,6 +12,8 @@
 #include <file_selector_windows/file_selector_windows.h>
 #include <pasteboard/pasteboard_plugin.h>
 #include <permission_handler_windows/permission_handler_windows_plugin.h>
+#include <screen_capturer/screen_capturer_plugin.h>
+#include <system_tray/system_tray_plugin.h>
 #include <url_launcher_windows/url_launcher_windows.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
@@ -27,6 +29,10 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
       registry->GetRegistrarForPlugin("PasteboardPlugin"));
   PermissionHandlerWindowsPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("PermissionHandlerWindowsPlugin"));
+  ScreenCapturerPluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("ScreenCapturerPlugin"));
+  SystemTrayPluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("SystemTrayPlugin"));
   UrlLauncherWindowsRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("UrlLauncherWindows"));
 }

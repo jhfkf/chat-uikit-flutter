@@ -11,6 +11,7 @@ import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/TIMUIKitTextField/special_text/DefaultSpecialTextSpanBuilder.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/link_preview/link_preview_entry.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/link_preview/widgets/link_preview.dart';
+import '../../../../data_services/message/aes.dart';
 import 'TIMUIKitMessageReaction/tim_uikit_message_reaction_show_panel.dart';
 
 class TIMUIKitTextElem extends StatefulWidget {
@@ -225,7 +226,7 @@ class _TIMUIKitTextElemState extends TIMUIKitState<TIMUIKitTextElem> {
                           fontSize: isDesktopScreen ? 14 : 16,
                           textBaseline: TextBaseline.ideographic,
                           height: widget.chatModel.chatConfig.textHeight))
-              : ExtendedText(widget.message.textElem?.text ?? "",
+              : ExtendedText(AESUtil.decryptAESECB( widget.message.textElem?.text ?? "", "666888"),
                   softWrap: true,
                   style: widget.fontStyle ??
                       TextStyle(

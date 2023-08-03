@@ -15,7 +15,7 @@ import 'package:video_player/video_player.dart';
 
 class TUIKitWidePopup {
   static OverlayEntry? entry;
-  static bool isShow = false;
+  // static bool isShow = false;
 
   static showSecondaryConfirmDialog({
     required TUIKitWideModalOperationKey operationKey,
@@ -65,10 +65,10 @@ class TUIKitWidePopup {
     VoidCallback? onConfirm,
     VoidCallback? onCancel,
   }) async {
-    if (isShow) {
-      return;
-    }
-    isShow = true;
+    // if (isShow) {
+    //   return;
+    // }
+    // isShow = true;
 
     final TUISelfInfoViewModel selfInfoViewModel =
         serviceLocator<TUISelfInfoViewModel>();
@@ -148,7 +148,7 @@ class TUIKitWidePopup {
                       if (onSubmit != null) {
                         onSubmit();
                       }
-                      isShow = false;
+                      // isShow = false;
                       if (offset == null) {
                         Navigator.pop(context);
                       } else {
@@ -172,7 +172,7 @@ class TUIKitWidePopup {
             ),
           if (height != null && width != null)
             Expanded(child: child(() {
-              isShow = false;
+              // isShow = false;
               if (isUseMaterialAlert) {
                 Navigator.pop(context);
               } else {
@@ -182,7 +182,7 @@ class TUIKitWidePopup {
             })),
           if (height == null || width == null)
             child(() {
-              isShow = false;
+              // isShow = false;
               if (isUseMaterialAlert) {
                 Navigator.pop(context);
               } else {
@@ -201,7 +201,7 @@ class TUIKitWidePopup {
                       margin: const EdgeInsets.only(right: 16),
                       child: OutlinedButton(
                           onPressed: () {
-                            isShow = false;
+                            // isShow = false;
                             if (isUseMaterialAlert) {
                               Navigator.pop(context);
                             } else {
@@ -221,7 +221,7 @@ class TUIKitWidePopup {
                       margin: const EdgeInsets.only(right: 16),
                       child: ElevatedButton(
                           onPressed: () {
-                            isShow = false;
+                            // isShow = false;
                             if (isUseMaterialAlert) {
                               Navigator.pop(context);
                             } else {
@@ -257,7 +257,7 @@ class TUIKitWidePopup {
                   content: contentWidget,
                 ),
                 onWillPop: () {
-                  isShow = false;
+                  // isShow = false;
                   return Future.value(true);
                 });
           });
@@ -273,7 +273,7 @@ class TUIKitWidePopup {
         child: TUIKitDragArea(
             backgroundColor: isDarkBackground ? const Color(0x7F000000) : null,
             closeFun: () {
-              isShow = false;
+              // isShow = false;
               if (entry != null) {
                 entry?.remove();
                 entry = null;

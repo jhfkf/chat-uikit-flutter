@@ -14,6 +14,9 @@ import 'package:tencent_cloud_chat_uikit/ui/widgets/az_list_view.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/radio_button.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 
+import '../../util/group_utils.dart';
+import '../../util/snackbar.dart';
+
 class GroupProfileMemberList extends StatefulWidget {
   final List<V2TimGroupMemberFullInfo?> memberList;
   final Function(String userID)? removeMember;
@@ -25,12 +28,18 @@ class GroupProfileMemberList extends StatefulWidget {
   final String? groupType;
   final Function(List<V2TimGroupMemberFullInfo> selectedMember)?
       onSelectedMemberChange;
+
   // notice: onTapMemberItem and onSelectedMemberChange use together will triger together
-  final Function(V2TimGroupMemberFullInfo memberInfo, TapDownDetails? tapDetails)? onTapMemberItem;
+  final Function(
+          V2TimGroupMemberFullInfo memberInfo, TapDownDetails? tapDetails)?
+      onTapMemberItem;
+
   // When sliding to the bottom bar callBack
   final Function()? touchBottomCallBack;
 
   final int? maxSelectNum;
+
+  V2TimGroupInfo? groupInfo;
 
   Widget? customTopArea;
 
@@ -47,6 +56,7 @@ class GroupProfileMemberList extends StatefulWidget {
     this.customTopArea,
     this.touchBottomCallBack,
     this.maxSelectNum,
+    this.groupInfo,
   }) : super(key: key);
 
   @override
@@ -80,8 +90,9 @@ class _GroupProfileMemberListState
       if (item?.role == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_OWNER ||
           item?.role == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_ADMIN) {
         if (item?.role == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_OWNER) {
-          showList.insert(0, ISuspensionBeanImpl(memberInfo: item, tagIndex: "@"));
-        }else {
+          showList.insert(
+              0, ISuspensionBeanImpl(memberInfo: item, tagIndex: "@"));
+        } else {
           showList.add(ISuspensionBeanImpl(memberInfo: item, tagIndex: "@"));
         }
       } else {
@@ -120,6 +131,7 @@ class _GroupProfileMemberListState
         TUIKitScreenUtils.getFormFactor() == DeviceType.Desktop;
     final isGroupMember =
         memberInfo.role == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_MEMBER;
+
     return Container(
         color: Colors.white,
         child: Slidable(
@@ -177,7 +189,7 @@ class _GroupProfileMemberListState
                       ),
                     ),
                     Text(_getShowName(memberInfo),
-                        style:  TextStyle(fontSize: isDesktopScreen ? 14 : 16)),
+                        style: TextStyle(fontSize: isDesktopScreen ? 14 : 16)),
                     memberInfo.role ==
                             GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_OWNER
                         ? Container(
@@ -185,7 +197,7 @@ class _GroupProfileMemberListState
                             child: Text(TIM_t("群主"),
                                 style: TextStyle(
                                   color: theme.ownerColor,
-                                  fontSize: isDesktopScreen ? 10 :12,
+                                  fontSize: isDesktopScreen ? 10 : 12,
                                 )),
                             padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
                             decoration: BoxDecoration(
@@ -220,8 +232,16 @@ class _GroupProfileMemberListState
                             : Container()
                   ],
                 ),
-                onTap: () {
+                onTap: () async {
+                  print("group member tap");
+                  print(widget.groupInfo);
                   if (widget.onTapMemberItem != null) {
+                    bool isCanCheck = await GroupUtils.canCheckAuthToFriendInfo(
+                        widget.groupInfo, memberInfo.userID);
+                    if (!isCanCheck) {
+                      SnackBarUtils.showNoPrivateChat();
+                      return;
+                    }
                     widget.onTapMemberItem!(memberInfo, null);
                   }
                   if (widget.canSelectMember) {
@@ -309,21 +329,23 @@ class _GroupProfileMemberListState
                     child: Text(TIM_t("暂无群成员")),
                   )
                 : Container(
-              padding: isDesktopScreen ? const EdgeInsets.symmetric( horizontal: 16) : null,
-              child: AZListViewContainer(
-                  memberList: showList,
-                  susItemBuilder: (context, index) {
-                    final model = showList[index];
-                    return getSusItem(
-                        context, theme, model.getSuspensionTag());
-                  },
-                  itemBuilder: (context, index) {
-                    final memberInfo = showList[index].memberInfo
-                    as V2TimGroupMemberFullInfo;
-
-                    return _buildListItem(context, memberInfo);
-                  }),
-            ),
+                    color: Colors.white,
+                    padding: isDesktopScreen
+                        ? const EdgeInsets.symmetric(horizontal: 16)
+                        : null,
+                    child: AZListViewContainer(
+                        memberList: showList,
+                        susItemBuilder: (context, index) {
+                          final model = showList[index];
+                          return getSusItem(
+                              context, theme, model.getSuspensionTag());
+                        },
+                        itemBuilder: (context, index) {
+                          final memberInfo = showList[index].memberInfo
+                              as V2TimGroupMemberFullInfo;
+                          return _buildListItem(context, memberInfo);
+                        }),
+                  ),
           ))
         ],
       )),

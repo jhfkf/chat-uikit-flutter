@@ -101,6 +101,7 @@ class GroupProfileMemberListPageState
               onTextChange: (text) =>
                   handleSearchGroupMembers(text, context),
             ),
+            groupInfo: groupProfileModel.groupInfo,
             memberList: searchMemberList ?? groupProfileModel.groupMemberList,
             removeMember: _kickedOffMember,
             touchBottomCallBack: () {},

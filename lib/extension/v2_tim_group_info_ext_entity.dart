@@ -78,6 +78,9 @@ extension V2TimUserFullInfoExt on V2TimGroupInfo {
   // 是否 svip
   bool get isSuperVip => extInfo.higherStatus == 3;
 
+  // 是否禁止私聊
+  bool get isPrivate => extInfo.privateMode == 1;
+
   String? get showIconImageStr {
     if (isNormalVip || isSuperVip) {
       if (isNormalVip) {

@@ -32,6 +32,14 @@ class SoundPlayer {
     await _audioPlayer.play(UrlSource(url));
   }
 
+  static Future<void> playAssets(String path) async {
+    _audioPlayer.stop();
+    if (_soundInterruptListener != null) {
+      _soundInterruptListener!();
+    }
+    await _audioPlayer.play(AssetSource(path));
+  }
+
   static stop() {
     _audioPlayer.stop();
   }

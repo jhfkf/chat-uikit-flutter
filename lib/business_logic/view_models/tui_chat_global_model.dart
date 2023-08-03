@@ -15,8 +15,10 @@ import 'package:tencent_cloud_chat_uikit/data_services/services_locatar.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
 import 'package:tencent_cloud_chat_uikit/ui/constants/history_message_constant.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/message.dart';
+import 'package:tencent_cloud_chat_uikit/util/event_bus.dart';
 
 import '../../data_services/message/aes.dart';
+import '../../ui/utils/sound_record.dart';
 
 enum ConvType { none, c2c, group }
 
@@ -71,6 +73,9 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
   final Map<String, Timer> _c2cMessageStatusShowTimer = Map.from({});
   Map<String, List> loadingMessage = {};
 
+
+  bool needAudioNotice = false;
+
   TUIChatGlobalModel() {
     advancedMsgListener = V2TimAdvancedMsgListener(
       onRecvC2CReadReceipt: (List<V2TimMessageReceipt> receiptList) {
@@ -80,7 +85,11 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
         onMessageRevoked(msgID);
       },
       onRecvNewMessage: (V2TimMessage newMsg) {
-        _onReceiveNewMsg(newMsg);
+        print("xxx`");
+        if (needAudioNotice) {
+          SoundPlayer.playAssets('audio/news_message.mp3');
+          _onReceiveNewMsg(newMsg);
+        }
       },
       onSendMessageProgress: (V2TimMessage messagae, int progress) {
         _onSendMessageProgress(messagae, progress);
@@ -96,6 +105,10 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
         onMessageDownloadProgressCallback(messageProgress);
       },
     );
+
+    bus.on("NewMessageNeedAudioNotice", (arg) {
+      needAudioNotice = arg;
+    });
   }
 
   bool get isDownloading => _isDownloading;
