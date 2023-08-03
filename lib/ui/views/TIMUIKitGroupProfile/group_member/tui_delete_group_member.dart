@@ -73,7 +73,13 @@ class _DeleteGroupMemberPageState extends TIMUIKitState<DeleteGroupMemberPage> {
     if (selectedGroupMember.isNotEmpty) {
       final userIDs = selectedGroupMember.map((e) => e.userID).toList();
       widget.model.kickOffMember(userIDs);
-      Navigator.pop(context);
+      final isWideScreen =
+          TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
+      if (isWideScreen) {
+
+      } else {
+        Navigator.pop(context);
+      }
     }
   }
 

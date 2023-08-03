@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_text_field_controller.dart';
+import 'package:tencent_cloud_chat_uikit/util/group_utils.dart';
+import 'package:tencent_cloud_chat_uikit/util/snackbar.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_state.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/separate_models/tui_chat_separate_view_model.dart';
@@ -16,6 +18,9 @@ import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/TIMUIKItMessageLi
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_chat_history_message_list.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/tim_uikit_chat_config.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
+
+import '../../../../data_services/group/group_services.dart';
+import '../../../../data_services/services_locatar.dart';
 
 enum LoadingPlace {
   none,
@@ -98,9 +103,8 @@ class TIMUIKitHistoryMessageListContainer extends StatefulWidget {
     this.extraTipsActionItemBuilder,
     this.isAllowScroll = true,
     this.onTapAvatar,
-    @Deprecated(
-        "Nickname will not show in one-to-one chat, if you tend to control it in group chat, please use `isShowSelfNameInGroup` and `isShowOthersNameInGroup` from `config: TIMUIKitChatConfig` instead")
-    this.showNickName = true,
+    @Deprecated("Nickname will not show in one-to-one chat, if you tend to control it in group chat, please use `isShowSelfNameInGroup` and `isShowOthersNameInGroup` from `config: TIMUIKitChatConfig` instead")
+        this.showNickName = true,
     this.initFindingMsg,
     this.mainHistoryListConfig,
     this.toolTipsConfig,
@@ -123,6 +127,8 @@ class _TIMUIKitHistoryMessageListContainerState
   late TIMUIKitHistoryMessageListController _historyMessageListController;
 
   List<V2TimMessage?> historyMessageList = [];
+
+  final GroupServices _groupServices = serviceLocator<GroupServices>();
 
   Future<void> requestForData(String? lastMsgID, LoadDirection direction,
       TUIChatSeparateViewModel model,
@@ -154,6 +160,47 @@ class _TIMUIKitHistoryMessageListContainerState
         scrollController: widget.scrollController);
   }
 
+  void _showPopupMenu(
+      BuildContext context, Offset offset, bool isMute, String targetUser) {
+    final RenderBox? overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox?;
+    showMenu(
+      context: context,
+      position: RelativeRect.fromRect(
+        Rect.fromPoints(offset, offset),
+        Offset.zero & overlay!.size,
+      ),
+      items: <PopupMenuEntry>[
+        const PopupMenuItem(child: Text('移除群成员'), value: '移除群成员'),
+        PopupMenuItem(
+            child: Text(isMute ? '解除禁言' : '禁言成员'),
+            value: isMute ? '解除禁言' : '禁言成员'),
+      ],
+    ).then((value) async {
+      if (value == null) {
+        return;
+      }
+      print('You selected: $value');
+      if (value == '解除禁言' || value == '禁言成员') {
+        const muteTime = 315360000;
+        final res = await _groupServices.muteGroupMember(
+            groupID: widget.conversation.groupID!,
+            userID: targetUser,
+            seconds: isMute ? 0 : muteTime);
+        if (res.code == 0) {
+          SnackBarUtils.showMsg("$value成功");
+        }
+      }
+      if (value == '移除群成员') {
+        final res = await _groupServices.kickGroupMember(
+            groupID: widget.conversation.groupID!, memberList: [targetUser]);
+        if (res.code == 0) {
+          SnackBarUtils.showMsg("移除成功");
+        }
+      }
+    });
+  }
+
   @override
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
     final chatConfig = Provider.of<TIMUIKitChatConfig>(context);
@@ -173,32 +220,43 @@ class _TIMUIKitHistoryMessageListContainerState
           itemBuilder: (context, message) {
             /// 消息item生成
             return TIMUIKitHistoryMessageListItem(
-                customMessageHoverBarOnDesktop:
-                    widget.customMessageHoverBarOnDesktop,
-                groupMemberInfo: widget.groupMemberInfo,
-                textFieldController: widget.textFieldController,
-                userAvatarBuilder: widget.userAvatarBuilder,
-                customEmojiStickerList: widget.customEmojiStickerList,
-                isUseDefaultEmoji: widget.isUseDefaultEmoji,
-                topRowBuilder: _getTopRowBuilder(model),
-                onScrollToIndex: _historyMessageListController.scrollToIndex,
-                onScrollToIndexBegin:
-                    _historyMessageListController.scrollToIndexBegin,
-                toolTipsConfig: widget.toolTipsConfig ??
-                    ToolTipsConfig(
-                        additionalItemBuilder:
-                            widget.extraTipsActionItemBuilder),
-                message: message!,
-                showAvatar: chatConfig.isShowAvatar,
-                onSecondaryTapForOthersPortrait: widget.onSecondaryTapAvatar,
-                onTapForOthersPortrait: widget.onTapAvatar,
-                messageItemBuilder: widget.messageItemBuilder,
-                onLongPressForOthersHeadPortrait:
-                    widget.onLongPressForOthersHeadPortrait,
-                allowAtUserWhenReply: chatConfig.isAtWhenReply,
-                allowAvatarTap: chatConfig.isAllowClickAvatar,
-                allowLongPress: chatConfig.isAllowLongPressMessage,
-                isUseMessageReaction: chatConfig.isUseMessageReaction);
+              customMessageHoverBarOnDesktop:
+                  widget.customMessageHoverBarOnDesktop,
+              groupMemberInfo: widget.groupMemberInfo,
+              textFieldController: widget.textFieldController,
+              userAvatarBuilder: widget.userAvatarBuilder,
+              customEmojiStickerList: widget.customEmojiStickerList,
+              isUseDefaultEmoji: widget.isUseDefaultEmoji,
+              topRowBuilder: _getTopRowBuilder(model),
+              onScrollToIndex: _historyMessageListController.scrollToIndex,
+              onScrollToIndexBegin:
+                  _historyMessageListController.scrollToIndexBegin,
+              toolTipsConfig: widget.toolTipsConfig ??
+                  ToolTipsConfig(
+                      additionalItemBuilder: widget.extraTipsActionItemBuilder),
+              message: message!,
+              showAvatar: chatConfig.isShowAvatar,
+              onSecondaryTapForOthersPortrait: widget.onSecondaryTapAvatar,
+              onTapForOthersPortrait: widget.onTapAvatar,
+              messageItemBuilder: widget.messageItemBuilder,
+              onLongPressForOthersHeadPortrait:
+                  widget.onLongPressForOthersHeadPortrait,
+              allowAtUserWhenReply: chatConfig.isAtWhenReply,
+              allowAvatarTap: chatConfig.isAllowClickAvatar,
+              allowLongPress: chatConfig.isAllowLongPressMessage,
+              isUseMessageReaction: chatConfig.isUseMessageReaction,
+              avatarPointerDown: (PointerDownEvent offset) async {
+                V2TimGroupMemberFullInfo? memberFullInfo =
+                    await GroupUtils.canCheckAuthToManager(
+                        model.groupInfo, message.sender!);
+                if (memberFullInfo != null) {
+                  bool isMute = memberFullInfo.muteUntil != null &&
+                      memberFullInfo.muteUntil! > 0;
+                  _showPopupMenu(
+                      context, offset.position, isMute, message.sender!);
+                }
+              },
+            );
           },
           tongueItemBuilder: widget.tongueItemBuilder,
           initFindingMsg: widget.initFindingMsg,

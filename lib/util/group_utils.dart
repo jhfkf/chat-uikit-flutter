@@ -24,7 +24,7 @@ class GroupUtils {
         final res = await TencentImSDKPlugin.v2TIMManager
             .getGroupManager()
             .getGroupMembersInfo(
-            groupID: groupInfo!.groupID, memberList: [targetUser]);
+                groupID: groupInfo!.groupID, memberList: [targetUser]);
         if (res.code == 0 && (res.data?.isNotEmpty ?? false)) {
           V2TimGroupMemberFullInfo info = res.data!.first;
           final isGroupOwner =
@@ -44,4 +44,32 @@ class GroupUtils {
     return true;
   }
 
+  static Future<V2TimGroupMemberFullInfo?> canCheckAuthToManager(
+      V2TimGroupInfo? groupInfo, String targetUser) async {
+    if (groupInfo == null) {
+      return null;
+    }
+    final currentUserResult =
+        await TIMUIKitCore.getSDKInstance().getLoginUser();
+    if (currentUserResult.code != 0) {
+      return null;
+    }
+    if (groupInfo.role == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_MEMBER) {
+      return null;
+    }
+    final res = await TencentImSDKPlugin.v2TIMManager
+        .getGroupManager()
+        .getGroupMembersInfo(
+            groupID: groupInfo.groupID, memberList: [targetUser]);
+    if (res.code == 0 && (res.data?.isNotEmpty ?? false)) {
+      V2TimGroupMemberFullInfo info = res.data!.first;
+      final isMember =
+          info.role == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_MEMBER;
+      if (isMember) {
+        // 对方是群主或者管理员
+        return info;
+      }
+    }
+    return null;
+  }
 }

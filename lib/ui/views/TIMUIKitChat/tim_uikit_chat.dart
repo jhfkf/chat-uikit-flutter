@@ -475,6 +475,10 @@ class _TUIChatState extends TIMUIKitState<TIMUIKitChat> {
                                 alignment: Alignment.topCenter,
                                 child: Listener(
                                   onPointerMove: closePanel,
+                                  // onPointerDown: (PointerDownEvent event) {
+                                  //   print(model.groupInfo);
+                                  //   print("xxx");
+                                  // },
                                   child: TIMUIKitHistoryMessageListContainer(
                                     customMessageHoverBarOnDesktop:
                                         widget.customMessageHoverBarOnDesktop,

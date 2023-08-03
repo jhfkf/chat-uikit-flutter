@@ -10,6 +10,10 @@ import 'package:tencent_cloud_chat_uikit/data_services/group/group_services.dart
 import 'package:tencent_cloud_chat_uikit/data_services/message/message_services.dart';
 import 'package:tencent_cloud_chat_uikit/data_services/services_locatar.dart';
 
+import '../../api/api.dart';
+import '../../api/utils_api.dart';
+import '../../util/toast.dart';
+
 class TUIGroupProfileModel extends ChangeNotifier {
   final CoreServicesImpl _coreServices = serviceLocator<CoreServicesImpl>();
   final GroupServices _groupServices = serviceLocator<GroupServices>();
@@ -284,8 +288,16 @@ class TUIGroupProfileModel extends ChangeNotifier {
   }
 
   bool canInviteMember() {
-    final groupType = _groupInfo?.groupType;
-    return groupType == GroupType.Work;
+    // final groupType = _groupInfo?.groupType;
+    // return groupType == GroupType.Work;
+    final isGroupOwner =
+        _groupInfo?.role == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_OWNER;
+    final isAdmin =
+        _groupInfo?.role == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_ADMIN;
+    if (isGroupOwner || isAdmin) {
+      return true;
+    }
+    return false;
   }
 
   bool canKickOffMember() {
@@ -293,18 +305,27 @@ class TUIGroupProfileModel extends ChangeNotifier {
         _groupInfo?.role == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_OWNER;
     final isAdmin =
         _groupInfo?.role == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_ADMIN;
-    if (_groupInfo?.groupType == GroupType.Work) {
-      /// work 群主才能踢人
-      return isGroupOwner;
+    if (isGroupOwner || isAdmin) {
+      return true;
     }
-
-    if (_groupInfo?.groupType == GroupType.Public ||
-        _groupInfo?.groupType == GroupType.Meeting) {
-      /// public || meeting 群主和管理员可以踢人
-      return isGroupOwner || isAdmin;
-    }
-
     return false;
+
+    // final isGroupOwner =
+    //     _groupInfo?.role == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_OWNER;
+    // final isAdmin =
+    //     _groupInfo?.role == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_ADMIN;
+    // if (_groupInfo?.groupType == GroupType.Work) {
+    //   /// work 群主才能踢人
+    //   return isGroupOwner;
+    // }
+    //
+    // if (_groupInfo?.groupType == GroupType.Public ||
+    //     _groupInfo?.groupType == GroupType.Meeting) {
+    //   /// public || meeting 群主和管理员可以踢人
+    //   return isGroupOwner || isAdmin;
+    // }
+    //
+    // return false;
   }
 
   Future<V2TimCallback?> setMuteAll(bool muteAll) async {
@@ -351,8 +372,27 @@ class TUIGroupProfileModel extends ChangeNotifier {
 
   Future<V2TimValueCallback<List<V2TimGroupMemberOperationResult>>>
       inviteUserToGroup(List<String> userIDS) async {
-    final res = await _groupServices.inviteUserToGroup(
-        groupID: _groupID, userList: userIDS);
-    return res;
+    if (userIDS.length > 10) {
+      ToastUtils.toast("最大选择10个");
+      return V2TimValueCallback(code: 10007, desc: "最大选择10个");
+    }
+    Map<String, dynamic> params = {"tid": _groupID, "userIds": userIDS};
+    // 添加用户到群
+    DataResult result = await UtilsApi.baseUniversalPost(
+      url: Api.appInviteNewUser,
+      params: params,
+      isLongAwaitShow: true,
+      isUnpack: true,
+    );
+    if (!result.result) {
+      if (result.msg != null) {
+        return V2TimValueCallback(code: 10007, desc: result.msg!);
+      }
+      return V2TimValueCallback(code: 10007, desc: "未知错误");
+    }
+    return V2TimValueCallback(code: 0, desc: "邀请成功");
+    // final res = await _groupServices.inviteUserToGroup(
+    //     groupID: _groupID, userList: userIDS);
+    // return res;
   }
 }

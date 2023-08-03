@@ -2,6 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SnackBarUtils {
+
+  static showMsg(String msg) {
+    Get.snackbar(
+      "",
+      "",
+      titleText: const Text(
+        "温馨提示",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontWeight: FontWeight.w800,
+          fontSize: 16,
+        ),
+      ),
+      messageText: Text(
+        msg,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          fontWeight: FontWeight.w300,
+          fontSize: 14,
+        ),
+      ),
+    );
+  }
+
   static showNoPrivateChat() {
     Get.snackbar(
       "",

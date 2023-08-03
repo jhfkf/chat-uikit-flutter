@@ -186,9 +186,8 @@ class ToolTipsConfig {
       this.showCopyMessage = true,
       this.showForwardMessage = true,
       this.additionalMessageToolTips,
-      @Deprecated(
-          "Please use `additionalMessageToolTips` instead. You are now only expected to specify the data, rather than providing a whole widget. This makes usage easier, as you no longer need to worry about the UI display.")
-      this.additionalItemBuilder});
+      @Deprecated("Please use `additionalMessageToolTips` instead. You are now only expected to specify the data, rather than providing a whole widget. This makes usage easier, as you no longer need to worry about the UI display.")
+          this.additionalItemBuilder});
 }
 
 class TIMUIKitHistoryMessageListItem extends StatefulWidget {
@@ -283,46 +282,48 @@ class TIMUIKitHistoryMessageListItem extends StatefulWidget {
 
   final V2TimGroupMemberFullInfo? groupMemberInfo;
 
+  final Function(PointerDownEvent offset)? avatarPointerDown;
+
   /// This parameter accepts a custom widget to be displayed when the mouse hovers over a message,
   /// replacing the default message hover action bar.
   /// Applicable only on desktop platforms.
   /// If provided, the default message action functionality will appear in the right-click context menu instead.
   final Widget Function(V2TimMessage message)? customMessageHoverBarOnDesktop;
 
-  const TIMUIKitHistoryMessageListItem(
-      {Key? key,
-      required this.message,
-      @Deprecated(
-          "Nickname will not show in one-to-one chat, if you tend to control it in group chat, please use `isShowSelfNameInGroup` and `isShowOthersNameInGroup` from `config: TIMUIKitChatConfig` instead")
-      this.showNickName = false,
-      this.onScrollToIndex,
-      this.onScrollToIndexBegin,
-      this.onTapForOthersPortrait,
-      this.messageItemBuilder,
-      this.onLongPressForOthersHeadPortrait,
-      this.showAvatar = true,
-      this.showMessageSending = true,
-      this.showMessageReadRecipt = true,
-      this.allowLongPress = true,
-      this.toolTipsConfig,
-      this.onLongPress,
-      this.showGroupMessageReadRecipt = false,
-      this.allowAtUserWhenReply = true,
-      this.allowAvatarTap = true,
-      this.userAvatarBuilder,
-      this.themeData,
-      this.padding,
-      this.textPadding,
-      this.topRowBuilder,
-      this.isUseMessageReaction,
-      this.bottomRowBuilder,
-      this.isUseDefaultEmoji = false,
-      this.customEmojiStickerList = const [],
-      this.textFieldController,
-      this.onSecondaryTapForOthersPortrait,
-      this.groupMemberInfo,
-      this.customMessageHoverBarOnDesktop})
-      : super(key: key);
+  const TIMUIKitHistoryMessageListItem({
+    Key? key,
+    required this.message,
+    @Deprecated("Nickname will not show in one-to-one chat, if you tend to control it in group chat, please use `isShowSelfNameInGroup` and `isShowOthersNameInGroup` from `config: TIMUIKitChatConfig` instead")
+        this.showNickName = false,
+    this.onScrollToIndex,
+    this.onScrollToIndexBegin,
+    this.onTapForOthersPortrait,
+    this.messageItemBuilder,
+    this.onLongPressForOthersHeadPortrait,
+    this.showAvatar = true,
+    this.showMessageSending = true,
+    this.showMessageReadRecipt = true,
+    this.allowLongPress = true,
+    this.toolTipsConfig,
+    this.onLongPress,
+    this.showGroupMessageReadRecipt = false,
+    this.allowAtUserWhenReply = true,
+    this.allowAvatarTap = true,
+    this.userAvatarBuilder,
+    this.themeData,
+    this.padding,
+    this.textPadding,
+    this.topRowBuilder,
+    this.isUseMessageReaction,
+    this.bottomRowBuilder,
+    this.isUseDefaultEmoji = false,
+    this.customEmojiStickerList = const [],
+    this.textFieldController,
+    this.onSecondaryTapForOthersPortrait,
+    this.groupMemberInfo,
+    this.customMessageHoverBarOnDesktop,
+    this.avatarPointerDown,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _TIMUIKItHistoryMessageListItemState();
@@ -574,7 +575,9 @@ class _TIMUIKItHistoryMessageListItemState
                   )
                 : null;
         return customWidget ?? Text(TIM_t("[群系统消息]"));
-      case MessageElemType.V2TIM_ELEM_TYPE_IMAGE:  /// 创建图文消息
+      case MessageElemType.V2TIM_ELEM_TYPE_IMAGE:
+
+        /// 创建图文消息
         final customWidget = messageItemBuilder?.imageMessageItemBuilder != null
             ? messageItemBuilder!.imageMessageItemBuilder!(
                 messageItem,
@@ -1344,70 +1347,92 @@ class _TIMUIKItHistoryMessageListItemState
                         : MainAxisAlignment.start,
                     children: [
                       if (!isSelf && widget.showAvatar)
-                        GestureDetector(
-                          onLongPress: () {
-                            if (widget.onLongPressForOthersHeadPortrait !=
-                                null) {}
-                            if (model.chatConfig.isAllowLongPressAvatarToAt) {
-                              widget.onLongPressForOthersHeadPortrait!(
-                                  message.sender, message.nickName);
+                        Listener(
+                          onPointerDown: (PointerDownEvent event) {
+                            if (event.kind == PointerDeviceKind.mouse &&
+                                event.buttons == kPrimaryMouseButton) {
+                              // 鼠标左键
+                            } else if (event.kind == PointerDeviceKind.mouse &&
+                                event.buttons == kSecondaryMouseButton) {
+                              // 鼠标右键
+                              widget.avatarPointerDown!(event);
                             }
+                            // if (widget.avatarPointerDown != null) {
+                            //   widget.avatarPointerDown!(event);
+                            // }
+                            // if (event.kind == PointerDeviceKind.mouse &&
+                            //     event.buttons == kSecondaryMouseButton) {
+                            //   _showPopupMenu(context, event.position);
+                            // }
                           },
-                          onTapDown: isDesktopScreen
-                              ? (details) {
-                                  if (widget.onTapForOthersPortrait != null &&
-                                      widget.allowAvatarTap) {
-                                    widget.onTapForOthersPortrait!(
-                                        message.sender ?? "", details);
+                          child: GestureDetector(
+                            // 头像的点击事件
+                            onLongPress: () {
+                              if (widget.onLongPressForOthersHeadPortrait !=
+                                  null) {}
+                              if (model.chatConfig.isAllowLongPressAvatarToAt) {
+                                widget.onLongPressForOthersHeadPortrait!(
+                                    message.sender, message.nickName);
+                              }
+                            },
+                            onTapDown: isDesktopScreen
+                                ? (details) {
+                                    if (widget.onTapForOthersPortrait != null &&
+                                        widget.allowAvatarTap) {
+                                      widget.onTapForOthersPortrait!(
+                                          message.sender ?? "", details);
+                                    }
                                   }
-                                }
-                              : null,
-                          onTap: isDesktopScreen
-                              ? null
-                              : () {
-                                  if (widget.onTapForOthersPortrait != null &&
-                                      widget.allowAvatarTap) {
-                                    widget.onTapForOthersPortrait!(
-                                        message.sender ?? "", TapDownDetails());
+                                : null,
+                            onTap: isDesktopScreen
+                                ? null
+                                : () {
+                                    if (widget.onTapForOthersPortrait != null &&
+                                        widget.allowAvatarTap) {
+                                      widget.onTapForOthersPortrait!(
+                                          message.sender ?? "",
+                                          TapDownDetails());
+                                    }
+                                  },
+                            onSecondaryTap: isDesktopScreen
+                                ? null
+                                : () {
+                                    if (widget.onSecondaryTapForOthersPortrait !=
+                                            null &&
+                                        widget.allowAvatarTap) {
+                                      widget.onSecondaryTapForOthersPortrait!(
+                                          message.sender ?? "",
+                                          TapDownDetails());
+                                    }
+                                  },
+                            onSecondaryTapDown: isDesktopScreen
+                                ? (details) {
+                                    if (widget.onSecondaryTapForOthersPortrait !=
+                                            null &&
+                                        widget.allowAvatarTap) {
+                                      widget.onSecondaryTapForOthersPortrait!(
+                                          message.sender ?? "", details);
+                                    }
                                   }
-                                },
-                          onSecondaryTap: isDesktopScreen
-                              ? null
-                              : () {
-                                  if (widget.onSecondaryTapForOthersPortrait !=
-                                          null &&
-                                      widget.allowAvatarTap) {
-                                    widget.onSecondaryTapForOthersPortrait!(
-                                        message.sender ?? "", TapDownDetails());
-                                  }
-                                },
-                          onSecondaryTapDown: isDesktopScreen
-                              ? (details) {
-                                  if (widget.onSecondaryTapForOthersPortrait !=
-                                          null &&
-                                      widget.allowAvatarTap) {
-                                    widget.onSecondaryTapForOthersPortrait!(
-                                        message.sender ?? "", details);
-                                  }
-                                }
-                              : null,
-                          child: widget.userAvatarBuilder != null
-                              ? widget.userAvatarBuilder!(context, message)
-                              : Container(
-                                  margin: (isSelf && isShowNickNameForSelf) ||
-                                          (!isSelf && isShowNickNameForOthers)
-                                      ? const EdgeInsets.only(top: 2)
-                                      : null,
-                                  child: SizedBox(
-                                    width: 40,
-                                    height: 40,
-                                    child: Avatar(
-                                      faceUrl: message.faceUrl ?? "",
-                                      showName:
-                                          MessageUtils.getDisplayName(message),
+                                : null,
+                            child: widget.userAvatarBuilder != null
+                                ? widget.userAvatarBuilder!(context, message)
+                                : Container(
+                                    margin: (isSelf && isShowNickNameForSelf) ||
+                                            (!isSelf && isShowNickNameForOthers)
+                                        ? const EdgeInsets.only(top: 2)
+                                        : null,
+                                    child: SizedBox(
+                                      width: 40,
+                                      height: 40,
+                                      child: Avatar(
+                                        faceUrl: message.faceUrl ?? "",
+                                        showName: MessageUtils.getDisplayName(
+                                            message),
+                                      ),
                                     ),
                                   ),
-                                ),
+                          ),
                         ),
                       if (isSelf &&
                           widget.message.elemType == 6 &&

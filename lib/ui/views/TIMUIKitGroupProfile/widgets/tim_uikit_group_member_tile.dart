@@ -21,12 +21,15 @@ import 'package:tencent_cloud_chat_uikit/ui/widgets/wide_popup.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
 
 import '../../../../api/tbr_toast.dart';
+import '../../../../data_services/group/group_services.dart';
+import '../../../../data_services/services_locatar.dart';
 import '../../../../tencent_cloud_chat_uikit.dart';
 import '../../../../util/group_utils.dart';
 import '../../../../util/snackbar.dart';
 import '../../../../util/toast.dart';
 
 class GroupMemberTile extends TIMUIKitStatelessWidget {
+
   GroupMemberTile({
     Key? key,
   }) : super(key: key);

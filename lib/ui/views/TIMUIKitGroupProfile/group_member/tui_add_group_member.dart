@@ -25,7 +25,13 @@ class _AddGroupMemberPageState extends TIMUIKitState<AddGroupMemberPage> {
     if (selectedContacts.isNotEmpty) {
       final userIDs = selectedContacts.map((e) => e.userID).toList();
       await widget.model.inviteUserToGroup(userIDs);
-      Navigator.pop(context);
+      final isWideScreen =
+          TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
+      if (isWideScreen) {
+
+      }else {
+        Navigator.pop(context);
+      }
     }
   }
 

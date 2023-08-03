@@ -15,4 +15,7 @@ class Api {
   /// 搜索好好友
   static const appUserQueryUsers = "app/user/queryUsers";
 
+  /// 邀请通讯录进入群
+  static const appInviteNewUser = "app/wahuhighgroup/inviteNewUser";
+
 }
