@@ -85,11 +85,10 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
         onMessageRevoked(msgID);
       },
       onRecvNewMessage: (V2TimMessage newMsg) {
-        print("xxx`");
         if (needAudioNotice) {
           SoundPlayer.playAssets('audio/news_message.mp3');
-          _onReceiveNewMsg(newMsg);
         }
+        _onReceiveNewMsg(newMsg);
       },
       onSendMessageProgress: (V2TimMessage messagae, int progress) {
         _onSendMessageProgress(messagae, progress);

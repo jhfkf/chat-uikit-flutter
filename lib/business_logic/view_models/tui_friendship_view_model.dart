@@ -158,7 +158,10 @@ class TUIFriendShipViewModel extends ChangeNotifier {
             FriendApplicationTypeEnum.V2TIM_FRIEND_APPLICATION_COME_IN.index)
         .toList();
     _friendApplicationAmount = _friendApplicationList?.length ?? 0;
-    notifyListeners();
+    // print("xxxxx");
+    Future.delayed(const Duration(milliseconds: 500), () {
+      notifyListeners();
+    });
   }
 
   Future<void> loadContactListData() async {
