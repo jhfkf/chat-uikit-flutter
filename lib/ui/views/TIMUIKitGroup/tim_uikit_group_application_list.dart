@@ -83,14 +83,15 @@ class TIMUIKitGroupApplicationListState
     final theme = Provider.of<TUIThemeViewModel>(context).theme;
     final ApplicationStatus currentStatus = applicationStatusList[index];
     applicationInfo.fromUser;
-    String _getUserName() {
-      if (applicationInfo.fromUserNickName != null &&
-          applicationInfo.fromUserNickName!.isNotEmpty &&
-          applicationInfo.fromUserNickName != applicationInfo.fromUser) {
-        return "${applicationInfo.fromUserNickName} (${applicationInfo.fromUser})";
-      } else {
-        return "${applicationInfo.fromUser}";
-      }
+    String _getUserName(V2TimUserFullInfo? userFullInfo) {
+      return userFullInfo?.nickName ?? "";
+      // if (applicationInfo.fromUserNickName != null &&
+      //     applicationInfo.fromUserNickName!.isNotEmpty &&
+      //     applicationInfo.fromUserNickName != applicationInfo.fromUser) {
+      //   return "${applicationInfo.fromUserNickName} (${applicationInfo.fromUser})";
+      // } else {
+      //   return "${applicationInfo.fromUser}";
+      // }
     }
 
     String _getRequestMessage() {
@@ -121,7 +122,7 @@ class TIMUIKitGroupApplicationListState
               width: 40,
               child: Avatar(
                   faceUrl: userFullInfo != null ? (userFullInfo.faceUrl ?? "") : (applicationInfo.fromUserFaceUrl ?? ""),
-                  showName: userFullInfo != null ? (userFullInfo.nickName ?? "") : (applicationInfo.fromUserNickName ?? "")),
+                  showName: userFullInfo?.nickName ?? "")
             ),
           ),
           Expanded(
@@ -129,7 +130,7 @@ class TIMUIKitGroupApplicationListState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                _getUserName(),
+                _getUserName(userFullInfo),
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
