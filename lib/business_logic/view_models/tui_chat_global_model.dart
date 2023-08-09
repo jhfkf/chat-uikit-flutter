@@ -110,7 +110,7 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
     });
 
     SharedPreferences.getInstance().then((prefer) {
-      String? accid =prefer.getString("accid");
+      String? accid = prefer.getString("accid");
       if (accid == null) {
         return;
       }
@@ -553,8 +553,7 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
             });
           }
         }
-      } catch (err) {
-      }
+      } catch (err) {}
     }
   }
 
@@ -1195,5 +1194,19 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
       String conversationID, HistoryMessagePosition position) {
     _historyMessagePositionMap[conversationID] = position;
     notifyListeners();
+  }
+
+  /// 发送名片消息
+  sendUserCardMessage(
+      Map messageInfo, String messageTo, ConvType convType) async {
+    V2TimMsgCreateInfoResult? res = await _messageService.createCustomMessage(
+        data: json.encode(messageInfo));
+    if (res != null) {
+      _sendMessage(
+        id: res.id!,
+        convID: messageTo,
+        convType: convType,
+      );
+    }
   }
 }

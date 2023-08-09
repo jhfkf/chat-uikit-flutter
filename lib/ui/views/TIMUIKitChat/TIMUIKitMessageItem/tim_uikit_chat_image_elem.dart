@@ -373,6 +373,7 @@ class _TIMUIKitImageElem extends TIMUIKitState<TIMUIKitImageElem> {
     }
   }
 
+  /// 会话网络图片
   Widget _renderNetworkImage(
       dynamic heroTag, double? positionRadio, TUITheme? theme,
       {String? path, V2TimImage? originalImg, V2TimImage? smallImg}) {
@@ -387,7 +388,7 @@ class _TIMUIKitImageElem extends TIMUIKitState<TIMUIKitImageElem> {
           child: PlatformUtils().isWeb
               ? Image.network(path ?? smallImg?.url ?? originalImg!.url!,
                   fit: BoxFit.contain)
-              // :Container());
+              // : Container());
               : CachedNetworkImage(
                   alignment: Alignment.topCenter,
                   imageUrl: path ?? smallImg?.url ?? originalImg!.url!,
@@ -455,7 +456,7 @@ class _TIMUIKitImageElem extends TIMUIKitState<TIMUIKitImageElem> {
     }
   }
 
-  /// 获取本地图片
+  /// 会话获取本地图片
   Widget _renderLocalImage(String smallImage, dynamic heroTag,
       double? positionRadio, TUITheme? theme, String? originImage) {
     double? currentPositionRadio = positionRadio;

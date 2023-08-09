@@ -4,10 +4,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/separate_models/tui_chat_model_tools.dart';
+import 'package:tencent_cloud_chat_uikit/extension/custom_message_ext_entity.dart';
+import 'package:tencent_cloud_chat_uikit/extension/custom_message_ext_entity_extension.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/common_utils.dart';
+import 'package:tencent_cloud_chat_uikit/ui/utils/message.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/TIMUIKitTextField/special_text/DefaultSpecialTextSpanBuilder.dart';
 import 'package:extended_text/extended_text.dart';
+import 'package:tencent_cloud_chat_uikit/util/custom_message_utils.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_state.dart';
@@ -195,6 +199,10 @@ class _TIMUIKitReplyElemState extends TIMUIKitState<TIMUIKitReplyElem> {
     }
     switch (messageType) {
       case MessageElemType.V2TIM_ELEM_TYPE_CUSTOM:
+        CustomMessageExtEntity? extEntity = CustomMessageUtils.messageCustomExt(message);
+        if (extEntity != null) {
+          return  _defaultRawMessageText(extEntity.customLastMsgShow(), theme);
+        }
         return _defaultRawMessageText(TIM_t("[自定义]"), theme);
       case MessageElemType.V2TIM_ELEM_TYPE_SOUND:
         return _defaultRawMessageText(TIM_t("[语音消息]"), theme);

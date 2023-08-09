@@ -990,19 +990,19 @@ class _TIMUIKItHistoryMessageListItemState
   List<MessageHoverControlItem> getMessageHoverControlBar(
       TUIChatSeparateViewModel model, TUITheme theme) {
     return [
-      if (widget.isUseMessageReaction ?? false)
-        MessageHoverControlItem(
-          name: TIM_t("表情回应"),
-          icon: Icon(
-            Icons.emoji_emotions,
-            size: 13,
-            color: hexToColor("8f959e"),
-          ),
-          onClick: (details) {
-            _onOpenToolTip(
-                context, widget.message, model, theme, details, true, true);
-          },
-        ),
+      // if (widget.isUseMessageReaction ?? false)
+      //   MessageHoverControlItem(
+      //     name: TIM_t("表情回应"),
+      //     icon: Icon(
+      //       Icons.emoji_emotions,
+      //       size: 13,
+      //       color: hexToColor("8f959e"),
+      //     ),
+      //     onClick: (details) {
+      //       _onOpenToolTip(
+      //           context, widget.message, model, theme, details, true, true);
+      //     },
+      //   ),
       if (widget.toolTipsConfig?.showReplyMessage ?? true)
         MessageHoverControlItem(
           name: TIM_t("回复"),

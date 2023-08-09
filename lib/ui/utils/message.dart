@@ -3,11 +3,15 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tencent_cloud_chat_uikit/extension/custom_message_ext_entity_extension.dart';
+import 'package:tencent_cloud_chat_uikit/util/custom_message_utils.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:tencent_cloud_chat_uikit/ui/constants/history_message_constant.dart';
 import 'package:tencent_cloud_chat_uikit/ui/constants/time.dart';
 import 'package:collection/collection.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/common_utils.dart';
+
+import '../../extension/custom_message_ext_entity.dart';
 
 class MessageUtils {
   // 判断CallingData的方式和Trtc的方法一致
@@ -254,6 +258,10 @@ class MessageUtils {
     final msgType = message.elemType;
     switch (msgType) {
       case MessageElemType.V2TIM_ELEM_TYPE_CUSTOM:
+        CustomMessageExtEntity? extEntity = CustomMessageUtils.messageCustomExt(message);
+        if (extEntity != null) {
+          return extEntity.replyHintMsg;
+        }
         return handleCustomMessageString(message);
       case MessageElemType.V2TIM_ELEM_TYPE_SOUND:
         return TIM_t("[语音]");

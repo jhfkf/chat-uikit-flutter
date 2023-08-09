@@ -224,7 +224,7 @@ class TIMUIKitChatConfig {
     this.isUseMessageHoverBarOnDesktop = true,
     this.isSupportMarkdownForTextMessage = false,
     this.notificationExt,
-    this.isUseMessageReaction = true,
+    this.isUseMessageReaction = false,
     this.isShowAvatar = true,
     this.isShowSelfNameInGroup = false,
     this.offlinePushInfo,

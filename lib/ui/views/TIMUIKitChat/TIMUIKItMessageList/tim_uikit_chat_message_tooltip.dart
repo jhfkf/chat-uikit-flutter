@@ -59,7 +59,7 @@ class TIMUIKitMessageTooltip extends StatefulWidget {
   const TIMUIKitMessageTooltip(
       {Key? key,
       this.toolTipsConfig,
-      this.isUseMessageReaction = true,
+      this.isUseMessageReaction = false,
       required this.model,
       required this.message,
       required this.allowAtUserWhenReply,

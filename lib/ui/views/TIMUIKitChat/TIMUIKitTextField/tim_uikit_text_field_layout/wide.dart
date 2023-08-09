@@ -22,6 +22,7 @@ import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/message.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/optimize_utils.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/screen_shot.dart';
+import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/wide_popup.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/platform.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/TIMUIKitTextField/special_text/DefaultSpecialTextSpanBuilder.dart';
@@ -933,9 +934,19 @@ class _TIMUIKitTextFieldLayoutWideState
                   });
             },
             svgPath: "images/svg/message_clear.svg"),
+
+      // if (config.showClearMessageHistoryButton)
+      //   DesktopControlBarItem(
+      //       item: "userCard",
+      //       showName: TIM_t("名片"),
+      //       onClick: (offset) {
+      //
+      //       },
+      //       svgPath: "images/svg/message_clear.svg"),
     ];
     defaultControlBarItems = itemsList;
   }
+
 
   List<Widget> generateControlBar(
       TUIChatSeparateViewModel model, TUITheme theme) {

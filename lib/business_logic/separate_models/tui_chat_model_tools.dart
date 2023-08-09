@@ -1,11 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:tencent_cloud_chat_uikit/extension/custom_message_ext_entity_extension.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/tim_uikit_cloud_custom_data.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/view_models/tui_chat_global_model.dart';
 import 'package:tencent_cloud_chat_uikit/data_services/core/core_services_implements.dart';
 import 'package:tencent_cloud_chat_uikit/data_services/services_locatar.dart';
+
+import '../../extension/custom_message_ext_entity.dart';
+import '../../util/custom_message_utils.dart';
 
 class TUIChatModelTools {
   final TUIChatGlobalModel globalModel = serviceLocator<TUIChatGlobalModel>();
@@ -42,6 +46,10 @@ class TUIChatModelTools {
     switch (message.elemType) {
       case MessageElemType.V2TIM_ELEM_TYPE_CUSTOM:
         messageSummary = TIM_t("自定义消息");
+        CustomMessageExtEntity? extEntity = CustomMessageUtils.messageCustomExt(message);
+        if (extEntity != null) {
+          messageSummary = extEntity.customLastMsgShow();
+        }
         break;
       case MessageElemType.V2TIM_ELEM_TYPE_FACE:
         messageSummary = TIM_t("表情消息");
@@ -147,6 +155,7 @@ class TUIChatModelTools {
 
   String getMessageAbstract(V2TimMessage message,
       String? Function(V2TimMessage message)? abstractMessageBuilder) {
+    return TIM_t(getMessageSummary(message, abstractMessageBuilder));
     final messageAbstract = RepliedMessageAbstract(
         summary: TIM_t(getMessageSummary(message, abstractMessageBuilder)),
         elemType: message.elemType,
