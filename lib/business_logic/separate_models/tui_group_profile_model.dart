@@ -123,8 +123,10 @@ class TUIGroupProfileModel extends ChangeNotifier {
   }
 
   _loadConversation() async {
-    conversation = await _conversationService.getConversation(
-        conversationID: "group_$_groupID");
+    // conversation = await _conversationService.getConversation(
+    //     conversationID: "group_$_groupID");
+    conversation = await _conversationService
+        .getConversationListByConversationId(convID: "group_$groupID");
   }
 
   _loadContactList() async {
@@ -150,6 +152,8 @@ class TUIGroupProfileModel extends ChangeNotifier {
               ? ReceiveMsgOptEnum.V2TIM_RECEIVE_NOT_NOTIFY_MESSAGE
               : ReceiveMsgOptEnum.V2TIM_RECEIVE_MESSAGE)
           .index;
+      print("conversation?.recvOpt setter later");
+      print(conversation?.recvOpt);
     }
     notifyListeners();
   }
