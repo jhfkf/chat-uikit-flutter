@@ -1,19 +1,31 @@
 import '../tencent_cloud_chat_uikit.dart';
 
 extension V2TimConversationExt on V2TimConversation {
+
   static int _higherStatus = 0;
 
-  int get higherStatus => _higherStatus;
+  static Map conversationVipMap = {};
 
-  set higherStatus(int value) => _higherStatus = value;
+  int get higherStatus {
+    if (conversationVipMap.keys.contains(groupID)) {
+      return conversationVipMap[groupID];
+    }
+    return _higherStatus;
+  }
 
+  set higherStatus(int value) {
+    _higherStatus = value;
+    if (groupID != null) {
+      conversationVipMap[groupID] = value;
+    }
+  }
 
   String? get showIconImageStr {
     if (groupID == null || userID != null) {
       return null;
     }
-    if (_higherStatus == 1 ||  _higherStatus == 2) {
-      if (_higherStatus == 1) {
+    if (higherStatus == 1 ||  higherStatus == 2) {
+      if (higherStatus == 1) {
         return "assets/group_icon_vip.png";
       }
       return "assets/group_icon_svip.png";

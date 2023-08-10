@@ -231,15 +231,24 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
       if (target != null && target.groupID != null) {
         for (var group in groupList) {
           if (target.groupID == group.groupID) {
-            target.higherStatus =
-            group.isNormalVip ? 1 : (group.isSuperVip ? 2 : 0);
-            if (group.isNormalVip || group.isSuperVip) {
-              if (group.isNormalVip) {
-                target.higherStatus = 1;
-              } else {
-                target.higherStatus = 2;
-              }
+            if (group.isSuperVip) {
+              target.higherStatus = 2;
+            }else if (group.isNormalVip) {
+              target.higherStatus = 1;
+            }else {
+              target.higherStatus = 0;
             }
+            print("target.higherStatus ==> ${target.higherStatus}");
+
+            // target.higherStatus =
+            // group.isSuperVip ? 2 : (group.isSuperVip ? 1 : 0);
+            // if (group.isNormalVip || group.isSuperVip) {
+            //   if (group.isNormalVip) {
+            //     target.higherStatus = 1;
+            //   } else {
+            //     target.higherStatus = 2;
+            //   }
+            // }
             break;
           }
         }
