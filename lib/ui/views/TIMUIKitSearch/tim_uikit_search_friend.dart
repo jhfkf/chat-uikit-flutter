@@ -48,6 +48,26 @@ class TIMUIKitSearchFriendState extends TIMUIKitState<TIMUIKitSearchFriend> {
     List<V2TimConversation?> _conversationList =
         Provider.of<TUISearchViewModel>(context).conversationList;
 
+    for (var infoResult in widget.friendResultList) {
+        String userID = infoResult.friendInfo?.userProfile?.userID ?? "";
+        String nickName = infoResult.friendInfo?.userProfile?.nickName ?? "";
+        if (userID.isNotEmpty && infoResult.relation == 3) {
+          String conversationID = "c2c_$userID";
+          _conversationList.add(V2TimConversation(
+              conversationID: conversationID, userID: userID, type: 1, showName: nickName));
+        }
+    }
+
+    // for (var infoResult in widget.friendResultList) {
+    //   String userID = infoResult.friendInfo?.userProfile?.userID ?? "";
+    //   String nickName = infoResult.friendInfo?.userProfile?.nickName ?? "";
+    //   if (userID.isNotEmpty) {
+    //     String conversationID = "c2c_$userID";
+    //     _conversationList.add(V2TimConversation(
+    //         conversationID: conversationID, userID: userID, type: 1, showName: nickName));
+    //   }
+    // }
+
     List<V2TimFriendInfoResult> filteredFriendResultList =
         widget.friendResultList.where((friend) {
       int index = _conversationList

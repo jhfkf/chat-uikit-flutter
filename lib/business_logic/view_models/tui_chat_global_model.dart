@@ -20,6 +20,7 @@ import 'package:tencent_cloud_chat_uikit/util/user_utils.dart';
 
 import '../../data_services/message/aes.dart';
 import '../../ui/utils/sound_record.dart';
+import '../../util/disturb_check_helper.dart';
 
 enum ConvType { none, c2c, group }
 
@@ -84,11 +85,19 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
       onRecvMessageRevoked: (String msgID) {
         onMessageRevoked(msgID);
       },
-      onRecvNewMessage: (V2TimMessage newMsg) {
-        if (needAudioNotice) {
+      onRecvNewMessage: (V2TimMessage newMsg) async {
+        _onReceiveNewMsg(newMsg);
+        if (newMsg.isSelf ?? false) {
+          return;
+        }
+        if (!needAudioNotice){
+          return;
+        }
+        String key = (newMsg.groupID != null  && newMsg.groupID!.isNotEmpty) ? newMsg.groupID! : newMsg.userID!;
+        var disturb = await DisturbCheckHelper.check(key, (newMsg.userID != null && newMsg.userID!.isNotEmpty));
+        if (!disturb) {
           SoundPlayer.playAssets('audio/news_message.mp3');
         }
-        _onReceiveNewMsg(newMsg);
       },
       onSendMessageProgress: (V2TimMessage messagae, int progress) {
         _onSendMessageProgress(messagae, progress);

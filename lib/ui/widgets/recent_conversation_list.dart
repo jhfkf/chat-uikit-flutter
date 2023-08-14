@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_state.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/view_models/tui_conversation_view_model.dart';
@@ -11,6 +13,8 @@ import 'package:tencent_cloud_chat_uikit/ui/widgets/radio_button.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
 
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
+
+import '../../util/utils_Input.dart';
 
 class RecentForwardList extends StatefulWidget {
   final bool isMultiSelect;
@@ -37,9 +41,30 @@ class _RecentForwardListState extends TIMUIKitState<RecentForwardList> {
         List.empty(growable: true);
     for (var i = 0; i < conversationList.length; i++) {
       final item = conversationList[i];
-      showList.add(ISuspensionBeanImpl(memberInfo: item, tagIndex: "#"));
+      if (searchValue.isNotEmpty) {
+        if (item?.showName?.contains(searchValue) ?? false) {
+          showList.add(ISuspensionBeanImpl(memberInfo: item, tagIndex: "#"));
+        }
+      } else {
+        showList.add(ISuspensionBeanImpl(memberInfo: item, tagIndex: "#"));
+      }
     }
     return showList;
+  }
+
+  var searchValue = "".obs;
+
+  FocusNode searchFocusNode = FocusNode();
+
+  startSearch(String value) {
+    searchValue.value = value;
+  }
+
+  confirmSearch() {
+    searchFocusNode.unfocus();
+    setState(() {
+
+    });
   }
 
   Widget _buildItem(V2TimConversation conversation) {
@@ -54,7 +79,9 @@ class _RecentForwardListState extends TIMUIKitState<RecentForwardList> {
       children: [
         if (widget.isMultiSelect)
           Container(
-            padding: EdgeInsets.only(left: isDesktopScreen ? 8 : 16.0, top: isDesktopScreen ? 10 : 0),
+            padding: EdgeInsets.only(
+                left: isDesktopScreen ? 8 : 16.0,
+                top: isDesktopScreen ? 10 : 0),
             child: CheckBoxButton(
               isChecked: _selectedConversation.contains(conversation),
               onChanged: (value) {
@@ -107,15 +134,19 @@ class _RecentForwardListState extends TIMUIKitState<RecentForwardList> {
                 Expanded(
                     child: Container(
                   alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(top: 10, bottom: isDesktopScreen ? 12 : 19),
-                  decoration: isDesktopScreen ? null : const BoxDecoration(
-                      border:
-                          Border(bottom: BorderSide(color: Color(0xFFDBDBDB)))),
+                  padding: EdgeInsets.only(
+                      top: 10, bottom: isDesktopScreen ? 12 : 19),
+                  decoration: isDesktopScreen
+                      ? null
+                      : const BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(color: Color(0xFFDBDBDB)))),
                   child: Text(
                     showName,
                     // textAlign: TextAlign.center,
-                    style:
-                    TextStyle(color: const Color(0xFF111111), fontSize: isDesktopScreen ? 16 : 18),
+                    style: TextStyle(
+                        color: const Color(0xFF111111),
+                        fontSize: isDesktopScreen ? 16 : 18),
                   ),
                 ))
               ],
@@ -125,7 +156,6 @@ class _RecentForwardListState extends TIMUIKitState<RecentForwardList> {
       ],
     );
   }
-
 
   @override
   void dispose() {
@@ -150,34 +180,108 @@ class _RecentForwardListState extends TIMUIKitState<RecentForwardList> {
         final isDesktopScreen =
             TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
 
-        return AZListViewContainer(
-          memberList: showList,
-          isShowIndexBar: false,
-          susItemBuilder: (context, index) {
-            return isDesktopScreen ? Container() : Container(
-              height: 40,
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.only(left: 16.0),
-              color: theme.weakDividerColor,
-              alignment: Alignment.centerLeft,
-              child: Text(
-                TIM_t("最近联系人"),
-                softWrap: true,
-                style: TextStyle(
-                  fontSize: 14.0,
-                  color: theme.weakTextColor,
-                ),
+        return Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(top: 12),
+              decoration: const BoxDecoration(
+                // color: Colors.red,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.white,
+                    offset: Offset(0.0, 2.0),
+                  )
+                ],
               ),
-            );
-          },
-          itemBuilder: (context, index) {
-            final conversation = showList[index].memberInfo;
-            if (conversation != null) {
-              return _buildItem(conversation);
-            } else {
-              return Container();
-            }
-          },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Icon(
+                  //   Icons.search,
+                  //   color: hexToColor("979797"),
+                  //   size: 16,
+                  // ),
+                  Expanded(
+                      child: Container(
+                        height: 32,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: hexToColor("E5E5E5"))
+                          )
+                        ),
+                    child: TbrInput(
+                      textAlign: TextAlign.left,
+                      controller: TextEditingController()
+                        ..text = searchValue.value,
+                      hintText: "请输入",
+                      onChanged: (value) {
+                        startSearch(value);
+                      },
+                      maxLength: 11,
+                      maxLines: 1,
+                      keyboardType: TextInputType.name,
+                      textInputAction: TextInputAction.search,
+                      onEditingComplete: confirmSearch,
+                      focusNode: searchFocusNode,
+                    ),
+                  )),
+                  InkWell(
+                    onTap: () {
+                      confirmSearch();
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(width: 1, color: hexToColor("E5E5E5")),
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                          // border: Border(
+                          //     bottom: BorderSide(color: hexToColor("E5E5E5")))
+                      ),
+                      child: Text(
+                        TIM_t("搜索"),
+                        style: TextStyle(color: Colors.black, fontSize: 14),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              child: AZListViewContainer(
+                memberList: showList,
+                isShowIndexBar: false,
+                susItemBuilder: (context, index) {
+                  return isDesktopScreen
+                      ? Container()
+                      : Container(
+                          height: 40,
+                          width: MediaQuery.of(context).size.width,
+                          padding: const EdgeInsets.only(left: 16.0),
+                          color: theme.weakDividerColor,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            TIM_t("最近联系人"),
+                            softWrap: true,
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              color: theme.weakTextColor,
+                            ),
+                          ),
+                        );
+                },
+                itemBuilder: (context, index) {
+                  final conversation = showList[index].memberInfo;
+                  if (conversation != null) {
+                    return _buildItem(conversation);
+                  } else {
+                    return Container();
+                  }
+                },
+              ),
+            ),
+          ],
         );
       },
     );

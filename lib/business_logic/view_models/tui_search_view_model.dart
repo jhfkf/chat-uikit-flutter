@@ -55,7 +55,7 @@ class TUISearchViewModel extends ChangeNotifier {
 
   void searchFriendByKey(String searchKey) async {
     final searchResult = await _friendshipServices.searchFriends(
-        searchParam: V2TimFriendSearchParam(keywordList: [searchKey]));
+        searchParam: V2TimFriendSearchParam(keywordList: [searchKey], isSearchNickName: true));
     friendList = searchResult;
     notifyListeners();
   }

@@ -18,18 +18,17 @@ import 'TIMUIKitMessageItem/tim_uikit_chat_file_icon.dart';
 
 String _getConvID(V2TimConversation conversation) {
   return (conversation.type == 1
-          ? conversation.userID
-          : conversation.groupID) ??
+      ? conversation.userID
+      : conversation.groupID) ??
       "";
 }
 
-sendFileWithConfirmation(
-    {required List<XFile> files,
-    required V2TimConversation conversation,
-    required ConvType conversationType,
-    required TUIChatSeparateViewModel model,
-    required TUITheme theme,
-    required BuildContext context}) async {
+sendFileWithConfirmation({required List<XFile> files,
+  required V2TimConversation conversation,
+  required ConvType conversationType,
+  required TUIChatSeparateViewModel model,
+  required TUITheme theme,
+  required BuildContext context}) async {
   bool isCanSend = true;
 
   if (!PlatformUtils().isWeb) {
@@ -72,8 +71,10 @@ sendFileWithConfirmation(
       isDarkBackground: false,
       width: 600,
       height: files.length < 4 ? 300 : 500,
-      title: TIM_t_para("发送给{{option1}}", "发送给$option1")(option1: option1),
-      child: (closeFunc) => Container(
+      title: TIM_t_para("发送给{{option1}}", "发送给$option1")(
+          option1: option1),
+      child: (closeFunc) =>
+          Container(
             padding: const EdgeInsets.only(bottom: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,7 +102,9 @@ sendFileWithConfirmation(
                                   TIMUIKitFileIcon(
                                     size: 44,
                                     fileFormat: fileName.split(
-                                        ".")[fileName.split(".").length - 1],
+                                        ".")[fileName
+                                        .split(".")
+                                        .length - 1],
                                   ),
                                   const SizedBox(width: 16),
                                   Expanded(
@@ -158,8 +161,7 @@ sendFileWithConfirmation(
           ));
 }
 
-Future<void> sendFiles(
-    List<XFile> files,
+Future<void> sendFiles(List<XFile> files,
     TUIChatSeparateViewModel model,
     V2TimConversation conversation,
     ConvType conversationType,
@@ -167,14 +169,33 @@ Future<void> sendFiles(
   for (final file in files) {
     final fileName = file.name;
     final filePath = file.path;
-    await MessageUtils.handleMessageError(
-        model.sendFileMessage(
-            fileName: fileName,
-            filePath: filePath,
-            convID: _getConvID(conversation),
-            convType: conversationType),
-        context);
-    await Future.delayed(const Duration(microseconds: 300));
+    String extension = path.extension(file.path).toLowerCase();
+    if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".gif") {
+      await MessageUtils.handleMessageError(
+          model.sendImageMessage(
+              imagePath: filePath,
+              convID: _getConvID(conversation),
+              convType: conversationType),
+          context);
+      await Future.delayed(const Duration(seconds: 1));
+    } else if (extension == ".mp4" || extension == ".avi" || extension == ".mov" || extension == ".flv") {
+      await MessageUtils.handleMessageError(
+          model.sendVideoMessage(
+              videoPath: filePath,
+              convID: _getConvID(conversation),
+              convType: conversationType),
+          context);
+      await Future.delayed(const Duration(seconds: 1));
+    } else {
+      await MessageUtils.handleMessageError(
+          model.sendFileMessage(
+              fileName: fileName,
+              filePath: filePath,
+              convID: _getConvID(conversation),
+              convType: conversationType),
+          context);
+      await Future.delayed(const Duration(microseconds: 500));
+    }
   }
 }
 
@@ -195,46 +216,47 @@ class TIMUIKitSendFile extends TIMUIKitStatelessWidget {
       children: [
         Expanded(
             child: Opacity(
-          opacity: 0.85,
-          child: Container(
-            color: theme.wideBackgroundColor,
-            padding: const EdgeInsets.all(40),
-            child: DottedBorder(
-              borderType: BorderType.RRect,
-              radius: const Radius.circular(20),
-              color: theme.primaryColor ?? theme.weakTextColor!,
-              dashPattern: const [6, 3],
-              child: Row(
-                children: [
-                  Expanded(
-                      child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+              opacity: 0.85,
+              child: Container(
+                color: theme.wideBackgroundColor,
+                padding: const EdgeInsets.all(40),
+                child: DottedBorder(
+                  borderType: BorderType.RRect,
+                  radius: const Radius.circular(20),
+                  color: theme.primaryColor ?? theme.weakTextColor!,
+                  dashPattern: const [6, 3],
+                  child: Row(
                     children: [
-                      Icon(
-                        Icons.file_copy_outlined,
-                        size: 60,
-                        color: theme.primaryColor,
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      Text(
-                        TIM_t_para("发送给{{option1}}", "发送给$option1")(
-                            option1: option1),
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: theme.darkTextColor),
-                      )
+                      Expanded(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.file_copy_outlined,
+                                size: 60,
+                                color: theme.primaryColor,
+                              ),
+                              const SizedBox(
+                                height: 40,
+                              ),
+                              Text(
+                                TIM_t_para(
+                                    "发送给{{option1}}", "发送给$option1")(
+                                    option1: option1),
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: theme.darkTextColor),
+                              )
+                            ],
+                          ))
                     ],
-                  ))
-                ],
+                  ),
+                ),
               ),
-            ),
-          ),
-        ))
+            ))
       ],
     );
   }

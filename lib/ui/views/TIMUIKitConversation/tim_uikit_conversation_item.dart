@@ -172,7 +172,7 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
                         child: Row(
                       children: [
                         Container(
-                            constraints: const BoxConstraints(maxWidth: 90),
+                            constraints: const BoxConstraints(maxWidth: 70),
                             child: Text(
                               nickName,
                               softWrap: true,
@@ -181,7 +181,11 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
                               maxLines: 1,
                               style: TextStyle(
                                 height: 1,
-                                color: theme.conversationItemTitleTextColor,
+                                color: (conversation
+                                            ?.showGoodImageStr?.isNotEmpty ??
+                                        false)
+                                    ? Colors.red
+                                    : theme.conversationItemTitleTextColor,
                                 fontSize: isDesktopScreen ? 14 : 18,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -189,14 +193,23 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
                         const SizedBox(
                           width: 6,
                         ),
-                        (conversation?.showIconImageStr?.isNotEmpty ?? false)
-                            ? Image.asset(
-                                conversation!.showIconImageStr!,
-                                fit: BoxFit.fitWidth,
-                                height: 20,
-                                width: 42,
-                              )
-                            : Container(),
+                        if (conversation?.showGoodImageStr?.isNotEmpty ?? false)
+                          Image.asset(
+                            conversation!.showGoodImageStr!,
+                            fit: BoxFit.fitWidth,
+                            height: 20,
+                            width: 20,
+                          ),
+                        const SizedBox(
+                          width: 6,
+                        ),
+                        if (conversation?.showIconImageStr?.isNotEmpty ?? false)
+                          Image.asset(
+                            conversation!.showIconImageStr!,
+                            fit: BoxFit.fitWidth,
+                            height: 20,
+                            width: 42,
+                          ),
                         Spacer(),
                       ],
                     )),

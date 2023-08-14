@@ -14,6 +14,8 @@ import 'package:tencent_cloud_chat_uikit/data_services/services_locatar.dart';
 
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 
+import '../../../business_logic/view_models/tui_friendship_view_model.dart';
+
 class TIMUIKitSearchMsg extends TIMUIKitStatelessWidget {
   List<V2TimMessageSearchResultItem?> msgList;
   int totalMsgCount;
@@ -44,7 +46,10 @@ class TIMUIKitSearchMsg extends TIMUIKitStatelessWidget {
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
     List<V2TimConversation?> _conversationList =
         Provider.of<TUISearchViewModel>(context).conversationList;
-
+    // List<V2TimFriendInfoResult>? friendList = Provider.of<TUISearchViewModel>(context).friendList;
+    // List<V2TimGroupInfo>? groupList = Provider.of<TUISearchViewModel>(context).groupList;
+    // print(friendList);
+    // print(groupList);
     if (msgList.isNotEmpty) {
       return TIMUIKitSearchFolder(folderName: TIM_t("聊天记录"), children: [
         ...msgList.map((conv) {

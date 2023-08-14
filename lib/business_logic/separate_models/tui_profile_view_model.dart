@@ -11,6 +11,8 @@ import 'package:tencent_cloud_chat_uikit/data_services/friendShip/friendship_ser
 import 'package:tencent_cloud_chat_uikit/data_services/message/message_services.dart';
 import 'package:tencent_cloud_chat_uikit/data_services/services_locatar.dart';
 
+import '../../util/disturb_check_helper.dart';
+
 class TUIProfileViewModel extends ChangeNotifier {
   final ConversationService _conversationService =
       serviceLocator<ConversationService>();
@@ -247,6 +249,7 @@ class TUIProfileViewModel extends ChangeNotifier {
             : ReceiveMsgOptEnum.V2TIM_RECEIVE_MESSAGE);
     if (res.code == 0) {
       _isDisturb = isDisturb;
+      DisturbCheckHelper.update(userID, isDisturb);
     }
     notifyListeners();
     return res;

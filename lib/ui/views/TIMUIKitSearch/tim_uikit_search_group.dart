@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_state.dart';
+import 'package:tencent_cloud_chat_uikit/extension/v2_tim_conversation_ext.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitSearch/pureUI/tim_uikit_search_item.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitSearch/pureUI/tim_uikit_search_folder.dart';
@@ -46,6 +47,16 @@ class TIMUIKitSearchGroupState extends TIMUIKitState<TIMUIKitSearchGroup> {
     List<V2TimConversation?> _conversationList =
         Provider.of<TUISearchViewModel>(context).conversationList;
 
+    for (var infoResult in widget.groupList) {
+      String groupID = infoResult.groupID;
+      String groupName = infoResult.groupName ?? "";
+      if (groupID.isNotEmpty) {
+        String conversationID = "group_$groupID";
+        _conversationList.add(V2TimConversation(
+            conversationID: conversationID, groupID: groupID, type: 2, showName: groupName));
+      }
+    }
+
     List<V2TimGroupInfo> filteredGroupResultList =
         widget.groupList.where((group) {
       int index = _conversationList
@@ -74,6 +85,8 @@ class TIMUIKitSearchGroupState extends TIMUIKitState<TIMUIKitSearchGroup> {
                 group.groupName ??
                 conversation.groupID ??
                 "",
+            vipStr: conversation.showIconImageStr,
+            goodStr: conversation.showGoodImageStr,
           );
         }).toList(),
         _renderShowALl(filteredGroupResultList.length),

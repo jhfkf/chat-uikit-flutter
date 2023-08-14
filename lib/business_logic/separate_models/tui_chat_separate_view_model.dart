@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:path/path.dart' as path;
 
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
@@ -629,7 +630,7 @@ class TUIChatSeparateViewModel extends ChangeNotifier {
       globalModel.updateMessage(
           sendMsgRes, convID, id, convType, groupType, setInputField);
     }
-    if(lifeCycle?.messageDidSend != null){
+    if (lifeCycle?.messageDidSend != null) {
       lifeCycle!.messageDidSend(sendMsgRes);
     }
 
@@ -883,7 +884,7 @@ class TUIChatSeparateViewModel extends ChangeNotifier {
         notifyListeners();
         globalModel.updateMessage(sendMsgRes, convID,
             messageInfoWithSender.id ?? "", convType, groupType, setInputField);
-        if(lifeCycle?.messageDidSend != null){
+        if (lifeCycle?.messageDidSend != null) {
           lifeCycle!.messageDidSend(sendMsgRes);
         }
         return sendMsgRes;
@@ -1036,16 +1037,39 @@ class TUIChatSeparateViewModel extends ChangeNotifier {
           infoCode: 6660417));
       return null;
     }
-    final fileMessageInfo = await _messageService.createFileMessage(
-        inputElement: inputElement,
-        fileName: fileName ?? filePath?.split('/').last ?? "",
-        filePath: filePath);
+    V2TimMsgCreateInfoResult? fileMessageInfo;
+    // if (filePath != null) {
+    //   String extension = path.extension(filePath).toLowerCase();
+    //   if (extension == ".jpg" ||
+    //       extension == ".jpeg" ||
+    //       extension == ".png" ||
+    //       extension == ".gif") {
+    //     fileMessageInfo = await _messageService.createImageMessage(
+    //         inputElement: inputElement,
+    //         imageName: fileName ?? filePath.split('/').last ?? "",
+    //         imagePath: filePath);
+    //   } else if (extension == ".mp4" ||
+    //       extension == ".avi" ||
+    //       extension == ".mov" ||
+    //       extension == ".flv") {
+    //     fileMessageInfo = await _messageService.createVideoMessage(
+    //         inputElement: inputElement, videoPath: filePath);
+    //   }
+    // }
+    // if (fileMessageInfo == null) {
+      fileMessageInfo = await _messageService.createFileMessage(
+          inputElement: inputElement,
+          fileName: fileName ?? filePath?.split('/').last ?? "",
+          filePath: filePath);
+    // }
     List<V2TimMessage> currentHistoryMsgList = getOriginMessageList();
     final messageInfo = fileMessageInfo!.messageInfo;
     if (messageInfo != null) {
       final messageInfoWithSender =
           tools.setUserInfoForMessage(messageInfo, fileMessageInfo.id);
-      messageInfoWithSender.fileElem!.fileSize = size;
+      if (messageInfoWithSender.fileElem != null) {
+        messageInfoWithSender.fileElem!.fileSize = size;
+      }
       V2TimMessage? lifeCycleMsg;
       if (lifeCycle?.messageWillSend != null) {
         lifeCycleMsg = await lifeCycle?.messageWillSend(messageInfoWithSender);

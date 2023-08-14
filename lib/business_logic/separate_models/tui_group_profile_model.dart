@@ -12,6 +12,7 @@ import 'package:tencent_cloud_chat_uikit/data_services/services_locatar.dart';
 
 import '../../api/api.dart';
 import '../../api/utils_api.dart';
+import '../../util/disturb_check_helper.dart';
 import '../../util/toast.dart';
 
 class TUIGroupProfileModel extends ChangeNotifier {
@@ -152,8 +153,7 @@ class TUIGroupProfileModel extends ChangeNotifier {
               ? ReceiveMsgOptEnum.V2TIM_RECEIVE_NOT_NOTIFY_MESSAGE
               : ReceiveMsgOptEnum.V2TIM_RECEIVE_MESSAGE)
           .index;
-      print("conversation?.recvOpt setter later");
-      print(conversation?.recvOpt);
+      DisturbCheckHelper.update(_groupID, value);
     }
     notifyListeners();
   }

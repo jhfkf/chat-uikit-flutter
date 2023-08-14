@@ -15,6 +15,9 @@ class TIMUIKitSearchWideItem extends TIMUIKitStatelessWidget {
   final String? lineTwo;
   final VoidCallback? onClick;
 
+  final String? goodStr;
+  final String? vipStr;
+
   TIMUIKitSearchWideItem(
       {Key? key,
       required this.faceUrl,
@@ -22,7 +25,9 @@ class TIMUIKitSearchWideItem extends TIMUIKitStatelessWidget {
       required this.lineOne,
       this.lineTwo,
       this.lineOneRight,
-      this.onClick})
+      this.onClick,
+      this.goodStr,
+      this.vipStr})
       : super(key: key);
 
   _renderLineOneRight(String? text, TUITheme theme) {
@@ -71,37 +76,63 @@ class TIMUIKitSearchWideItem extends TIMUIKitStatelessWidget {
               SizedBox(
                 width: 30,
                 height: 30,
-                child: Avatar(faceUrl: faceUrl, showName: showName, isShowBigWhenClick: false,),
+                child: Avatar(
+                  faceUrl: faceUrl,
+                  showName: showName,
+                  isShowBigWhenClick: false,
+                ),
               ),
               Expanded(
                   child: Container(
-                    margin: const EdgeInsets.only(left: 12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          // height: 24,
-                          padding: const EdgeInsets.symmetric(vertical: 2),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(child: Text(
+                margin: const EdgeInsets.only(left: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      // height: 24,
+                      padding: const EdgeInsets.symmetric(vertical: 2),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                              constraints: const BoxConstraints(maxWidth: 70),
+                              child: Text(
                                 lineOne,
                                 style: TextStyle(
                                     color: theme.darkTextColor,
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.w400),
                               )),
-                              _renderLineOneRight(lineOneRight, theme),
-                            ],
+                          const SizedBox(
+                            width: 6,
                           ),
-                        ),
-                        _renderLineTwo(lineTwo, theme),
-                      ],
+                          if (goodStr != null)
+                            Image.asset(
+                              goodStr!,
+                              fit: BoxFit.fitWidth,
+                              height: 20,
+                              width: 20,
+                            ),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                          if (vipStr != null)
+                            Image.asset(
+                              vipStr!,
+                              fit: BoxFit.fitWidth,
+                              height: 20,
+                              width: 42,
+                            ),
+                          _renderLineOneRight(lineOneRight, theme),
+                        ],
+                      ),
                     ),
-                  ))
+                    _renderLineTwo(lineTwo, theme),
+                  ],
+                ),
+              )),
             ],
           ),
         ),

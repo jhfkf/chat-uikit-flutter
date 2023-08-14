@@ -25,6 +25,10 @@ V2TimGroupInfoExtEntity $V2TimGroupInfoExtEntityFromJson(Map<String, dynamic> js
 	if (privateMode != null) {
 		v2TimGroupInfoExtEntity.privateMode = privateMode;
 	}
+	final int? goodNumber = jsonConvert.convert<int>(json['good_number']);
+	if (goodNumber != null) {
+		v2TimGroupInfoExtEntity.goodNumber = goodNumber;
+	}
 	return v2TimGroupInfoExtEntity;
 }
 
@@ -35,5 +39,6 @@ Map<String, dynamic> $V2TimGroupInfoExtEntityToJson(V2TimGroupInfoExtEntity enti
 	data['higher_status'] = entity.higherStatus;
 	data['notice_mode'] = entity.noticeMode;
 	data['private_mode'] = entity.privateMode;
+	data['good_number'] = entity.goodNumber;
 	return data;
 }

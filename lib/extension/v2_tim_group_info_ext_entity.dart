@@ -18,6 +18,8 @@ class V2TimGroupInfoExtEntity {
   int? noticeMode;
   @JSONField(name: "private_mode")
   int? privateMode;
+  @JSONField(name: "good_number")
+  int? goodNumber;
 
   V2TimGroupInfoExtEntity();
 
@@ -31,13 +33,15 @@ class V2TimGroupInfoExtEntity {
       int? forbidBack,
       int? higherStatus,
       int? noticeMode,
-      int? privateMode}) {
+      int? privateMode,
+      int? goodNumber}) {
     return V2TimGroupInfoExtEntity()
       ..expireDate = expireDate ?? this.expireDate
       ..forbidBack = forbidBack ?? this.forbidBack
       ..higherStatus = higherStatus ?? this.higherStatus
       ..noticeMode = noticeMode ?? this.noticeMode
-      ..privateMode = privateMode ?? this.privateMode;
+      ..privateMode = privateMode ?? this.privateMode
+      ..goodNumber = goodNumber ?? this.goodNumber;
   }
 
   @override
@@ -78,6 +82,9 @@ extension V2TimUserFullInfoExt on V2TimGroupInfo {
   // 是否 svip
   bool get isSuperVip => extInfo.higherStatus == 3;
 
+  // 是否 是靓号
+  int get isGoodNum => extInfo.goodNumber == 1 ? 2 : 0;
+
   // 是否禁止私聊
   bool get isPrivate => extInfo.privateMode == 1;
 
@@ -90,6 +97,18 @@ extension V2TimUserFullInfoExt on V2TimGroupInfo {
     }
     return null;
   }
+
+
+  String? get showGoodNumImageStr {
+    if (isGoodNum == 1) {
+      return "assets/liang_fang.png";
+    }
+    if (isGoodNum == 2) {
+      return "assets/liang_quan.png";
+    }
+    return null;
+  }
+
 
   // 已经过期
   bool get isExpireDate => (extInfo.expireDate != null &&

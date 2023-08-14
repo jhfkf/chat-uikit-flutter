@@ -15,6 +15,9 @@ class TIMUIKitSearchItem extends TIMUIKitStatelessWidget {
   final String? lineTwo;
   final VoidCallback? onClick;
 
+  final String? goodStr;
+  final String? vipStr;
+
   TIMUIKitSearchItem(
       {Key? key,
       required this.faceUrl,
@@ -22,7 +25,9 @@ class TIMUIKitSearchItem extends TIMUIKitStatelessWidget {
       required this.lineOne,
       this.lineTwo,
       this.lineOneRight,
-      this.onClick})
+      this.onClick,
+      this.goodStr,
+      this.vipStr})
       : super(key: key);
 
   _renderLineOneRight(String? text, TUITheme theme) {
@@ -108,13 +113,16 @@ class TIMUIKitSearchItem extends TIMUIKitStatelessWidget {
         ),
       ),
       desktopWidget: TIMUIKitSearchWideItem(
-          lineOneRight: lineOneRight,
-          key: key,
-          lineTwo: lineTwo,
-          onClick: onClick,
-          faceUrl: faceUrl,
-          showName: showName,
-          lineOne: lineOne),
+        lineOneRight: lineOneRight,
+        key: key,
+        lineTwo: lineTwo,
+        onClick: onClick,
+        faceUrl: faceUrl,
+        showName: showName,
+        lineOne: lineOne,
+        vipStr: vipStr,
+        goodStr: goodStr,
+      ),
     );
   }
 }

@@ -128,20 +128,29 @@ class _TIMUIKitGroupState extends TIMUIKitState<TIMUIKitGroup> {
                       Text(
                         showName,
                         style: TextStyle(
-                            color: Colors.black,
+                            color: (groupInfo.showGoodNumImageStr?.isNotEmpty ?? false) ? Colors.red : Colors.black,
                             fontSize: isDesktopScreen ? 14 : 18),
                       ),
                       const SizedBox(
                         width: 4,
                       ),
-                      (groupInfo.showIconImageStr?.isNotEmpty ?? false)
-                          ? Image.asset(
-                              groupInfo.showIconImageStr!,
-                              fit: BoxFit.fitWidth,
-                              height: 20,
-                              width: 42,
-                            )
-                          : Container(),
+                      if (groupInfo.showGoodNumImageStr?.isNotEmpty ?? false)
+                        Image.asset(
+                          groupInfo.showGoodNumImageStr!,
+                          fit: BoxFit.fitWidth,
+                          height: 20,
+                          width: 20,
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                      if (groupInfo.showIconImageStr?.isNotEmpty ?? false)
+                        Image.asset(
+                          groupInfo.showIconImageStr!,
+                          fit: BoxFit.fitWidth,
+                          height: 20,
+                          width: 42,
+                        ),
                     ],
                   ),
                 ))
