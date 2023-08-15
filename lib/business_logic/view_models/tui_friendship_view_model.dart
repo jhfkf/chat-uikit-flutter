@@ -101,6 +101,7 @@ class TUIFriendShipViewModel extends ChangeNotifier {
   }
 
   loadData() async {
+    print("tui_friendship_view_model load data");
     loadContactApplicationData();
     loadBlockListData();
     await loadContactListData();
@@ -158,7 +159,6 @@ class TUIFriendShipViewModel extends ChangeNotifier {
             FriendApplicationTypeEnum.V2TIM_FRIEND_APPLICATION_COME_IN.index)
         .toList();
     _friendApplicationAmount = _friendApplicationList?.length ?? 0;
-    // print("xxxxx");
     Future.delayed(const Duration(milliseconds: 500), () {
       notifyListeners();
     });
@@ -169,6 +169,7 @@ class TUIFriendShipViewModel extends ChangeNotifier {
         await _friendshipServices.getFriendList() ?? [];
     final memberList =
         await _contactListLifeCycle?.friendListWillMount(res) ?? res;
+    print("loadContactListData  memberList --> $memberList");
     _friendList = memberList;
     notifyListeners();
     return;

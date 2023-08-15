@@ -114,6 +114,7 @@ class CoreServicesImpl implements CoreServices {
         listener: V2TimSDKListener(
             onConnectFailed: listener.onConnectFailed,
             onConnectSuccess: () {
+              print("V2TimSDKListener onConnectSuccess");
               if (PlatformUtils().isWeb) {
                 didLoginSuccess();
                 if (onWebLoginSuccess != null) {

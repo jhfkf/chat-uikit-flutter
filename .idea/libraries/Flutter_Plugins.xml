@@ -56,6 +56,8 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/url_launcher_linux-3.0.5" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/video_player-2.7.0" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/tencent_cloud_uikit_core-1.0.8" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/system_tray-2.0.3" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/screen_capturer-0.1.6" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
