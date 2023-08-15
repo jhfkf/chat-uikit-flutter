@@ -891,7 +891,7 @@ class _TIMUIKitTextFieldLayoutWideState
               }
             },
             svgPath: "images/svg/send_video.svg"),
-      if (config.showMessageHistoryButton)
+      if (config.showMessageHistoryButton && !PlatformUtils().isWeb)
         DesktopControlBarItem(
             item: "history",
             showName: TIM_t("消息历史"),

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_slidable_for_tencent_im/flutter_slidable.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_state.dart';
@@ -160,6 +161,8 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
   List<V2TimGroupInfo> groupList = [];
   List<V2TimFriendInfo> userList = [];
 
+  Map conversationInfoMap = {};
+
   @override
   void initState() {
     super.initState();
@@ -173,8 +176,21 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
     groupListResult.then((value) {
       if (value.code == 0) {
         List<V2TimGroupInfo> groupList = value.data ?? [];
-        this.groupList = groupList;
-        setState(() {});
+        if (PlatformUtils().isWeb) {
+          TencentImSDKPlugin.v2TIMManager
+              .getGroupManager()
+              .getGroupsInfo(
+                  groupIDList: groupList.map((e) => e.groupID).toList())
+              .then((res) {
+            if (res.code == 0) {
+              this.groupList = (res.data?.where((element) => element.groupInfo != null).map((e) => e.groupInfo!).toList()) ?? [];
+              setState(() {});
+            }
+          });
+        } else {
+          this.groupList = groupList;
+          setState(() {});
+        }
       }
     });
 
@@ -241,26 +257,22 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
     for (var target in filteredConversationList) {
       if (target != null && target.groupID != null) {
         for (var group in groupList) {
+          /// 遍历我的所有群列表
           if (target.groupID == group.groupID) {
             if (group.isSuperVip) {
               target.higherStatus = 2;
+              conversationInfoMap["group_higherStatus_${target.groupID}"] = 2;
             } else if (group.isNormalVip) {
               target.higherStatus = 1;
+              conversationInfoMap["group_higherStatus_${target.groupID}"] = 1;
             } else {
               target.higherStatus = 0;
+              conversationInfoMap["group_higherStatus_${target.groupID}"] = 0;
             }
             if (group.isGoodNum == 2) {
               target.goodStatus = 2;
+              conversationInfoMap["group_goodStatus_${target.groupID}"] = 1;
             }
-            // target.higherStatus =
-            // group.isSuperVip ? 2 : (group.isSuperVip ? 1 : 0);
-            // if (group.isNormalVip || group.isSuperVip) {
-            //   if (group.isNormalVip) {
-            //     target.higherStatus = 1;
-            //   } else {
-            //     target.higherStatus = 2;
-            //   }
-            // }
             break;
           }
         }
@@ -269,10 +281,13 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
         for (var user in userList) {
           if (target.userID == user.userID) {
             target.goodStatus = user.userProfile?.isGoodNum ?? 0;
+            conversationInfoMap["user_goodStatus_${target.userID}"] =
+                user.userProfile?.isGoodNum ?? 0;
           }
         }
       }
     }
+    print("conversationInfoMap -> $conversationInfoMap");
     return filteredConversationList;
   }
 
@@ -404,7 +419,6 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
 
           List<V2TimConversation?> filteredConversationList =
               getFilteredConversation();
-
           if (TencentUtils.checkString(_model.scrollToConversation) != null) {
             _onScrollToConversation(_model.scrollToConversation!);
             _model.clearScrollToConversation();
@@ -472,6 +486,7 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
                               draftTimestamp: conversationItem.draftTimestamp,
                               convType: conversationItem.type,
                               conversation: conversationItem,
+                              conversationInfoMap: conversationInfoMap,
                             ),
                             onTap: () => onTapConvItem(conversationItem),
                           ),
