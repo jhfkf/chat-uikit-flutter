@@ -115,8 +115,8 @@ class TUIGroupProfileModel extends ChangeNotifier {
     if (res.code == 0 && groupMemberListRes != null) {
       final groupMemberListTemp = groupMemberListRes.memberInfoList ?? [];
       // TODO
-      print(
-          "loadGroupMemberListfinish,groupMemberListTemp, ${groupMemberListRes.nextSeq},  ${groupMemberListTemp.length}");
+      // print(
+          // "loadGroupMemberListfinish,groupMemberListTemp, ${groupMemberListRes.nextSeq},  ${groupMemberListTemp.length}");
       _groupMemberList = [...?_groupMemberList, ...groupMemberListTemp];
       _groupMemberListSeq = groupMemberListRes.nextSeq ?? "0";
     }

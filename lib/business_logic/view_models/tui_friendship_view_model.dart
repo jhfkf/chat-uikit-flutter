@@ -101,7 +101,6 @@ class TUIFriendShipViewModel extends ChangeNotifier {
   }
 
   loadData() async {
-    print("tui_friendship_view_model load data");
     loadContactApplicationData();
     loadBlockListData();
     await loadContactListData();
@@ -169,7 +168,6 @@ class TUIFriendShipViewModel extends ChangeNotifier {
         await _friendshipServices.getFriendList() ?? [];
     final memberList =
         await _contactListLifeCycle?.friendListWillMount(res) ?? res;
-    print("loadContactListData  memberList --> $memberList");
     _friendList = memberList;
     notifyListeners();
     return;

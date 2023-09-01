@@ -133,6 +133,7 @@ class GroupProfileMemberListPageState
                           handleSearchGroupMembers(text, context),
                     ),
               memberList: searchMemberList ?? groupProfileModel.groupMemberList,
+              groupInfo: groupProfileModel.groupInfo,
               removeMember: _kickedOffMember,
               touchBottomCallBack: () {},
               onTapMemberItem: (friendInfo, details) {

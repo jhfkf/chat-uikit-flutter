@@ -110,11 +110,10 @@ class CoreServicesImpl implements CoreServices {
     webLoginSuccess = onWebLoginSuccess;
     final result = await TencentImSDKPlugin.v2TIMManager.initSDK(
         sdkAppID: sdkAppID,
-        loglevel: loglevel,
+        loglevel: LogLevelEnum.V2TIM_LOG_ERROR,
         listener: V2TimSDKListener(
             onConnectFailed: listener.onConnectFailed,
             onConnectSuccess: () {
-              print("V2TimSDKListener onConnectSuccess");
               if (PlatformUtils().isWeb) {
                 didLoginSuccess();
                 if (onWebLoginSuccess != null) {
@@ -204,9 +203,7 @@ class CoreServicesImpl implements CoreServices {
         onCallback!(callbackValue);
       });
     } else {
-      print(
-          "TUIKit Callback: ${callbackValue.type} - ${callbackValue
-              .stackTrace}");
+
     }
   }
 

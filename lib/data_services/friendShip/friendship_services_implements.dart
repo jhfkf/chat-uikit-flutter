@@ -130,7 +130,6 @@ class FriendshipServicesImpl implements FriendshipServices {
 
   @override
   Future<List<V2TimFriendInfo>?> getFriendList() async {
-    print("getFriendList");
     final res = await TencentImSDKPlugin.v2TIMManager
         .getFriendshipManager()
         .getFriendList();

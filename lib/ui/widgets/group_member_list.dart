@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable_for_tencent_im/flutter_slidable.dart';
 import 'package:lpinyin/lpinyin.dart';
 import 'package:provider/provider.dart';
+import 'package:tencent_cloud_chat_uikit/extension/v2_tim_group_info_ext_entity.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_state.dart';
@@ -217,8 +218,12 @@ class _GroupProfileMemberListState
                 ],
               ),
               onTap: () async {
-                print("group member tap");
-                print(widget.groupInfo);
+                bool isCanCheck = await GroupUtils.canCheckAuthToFriendInfo(
+                    widget.groupInfo, memberInfo.userID);
+                if (!isCanCheck) {
+                  SnackBarUtils.showNoPrivateChat();
+                  return;
+                }
                 if (widget.onTapMemberItem != null) {
                   bool isCanCheck = await GroupUtils.canCheckAuthToFriendInfo(
                       widget.groupInfo, memberInfo.userID);
@@ -356,9 +361,10 @@ class _GroupProfileMemberListState
                   ],
                 ),
                 onTap: () async {
-                  print("group member tap");
-                  print(widget.groupInfo);
                   if (widget.onTapMemberItem != null) {
+                    if (widget.groupInfo?.extInfo == null) {
+                      return;
+                    }
                     bool isCanCheck = await GroupUtils.canCheckAuthToFriendInfo(
                         widget.groupInfo, memberInfo.userID);
                     if (!isCanCheck) {

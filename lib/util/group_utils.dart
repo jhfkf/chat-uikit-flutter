@@ -11,6 +11,8 @@ class GroupUtils {
     if (res.data! == targetUser) {
       return true;
     }
+    print("groupInfo?.extInfo -----> ");
+    print(groupInfo?.extInfo);
     if (groupInfo?.isPrivate ?? false) {
       // 是否私聊模式
       final isGroupOwner =

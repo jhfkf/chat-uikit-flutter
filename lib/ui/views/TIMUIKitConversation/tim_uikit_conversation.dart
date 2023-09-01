@@ -287,7 +287,6 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
         }
       }
     }
-    print("conversationInfoMap -> $conversationInfoMap");
     return filteredConversationList;
   }
 

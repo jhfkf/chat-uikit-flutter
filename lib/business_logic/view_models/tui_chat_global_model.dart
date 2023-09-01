@@ -141,7 +141,6 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
   }
 
   void addWaitingList(String msgID) {
-    print("add to waiting list success");
     bool contains = false;
     for (Map<String, String> element in _waitingDownloadList) {
       String msgIDItem = element["msgID"] ?? "";
@@ -178,8 +177,6 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
       imageType: 0,
       isSnapshot: false,
     );
-
-    print("start another download");
   }
 
   int getReceived(msgID) {
@@ -451,10 +448,8 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
             _preloadImageMap[msgItem.seq! +
                 msgItem.timestamp.toString() +
                 (msgItem.msgID ?? "")] = tempImg;
-            print("cacheImage ${msgItem.msgID}");
           }));
         } catch (e) {
-          print("cacheImage error ${msgItem.msgID}");
         }
       }
     }
@@ -478,7 +473,6 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
         String msgIDItem = element["msgID"] ?? "";
         if (msgIDItem.isNotEmpty) {
           if (msgID == msgIDItem) {
-            print("remove download");
             return true;
           }
         }
@@ -764,12 +758,11 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
   }
 
   _onSendMessageProgress(V2TimMessage messagae, int progress) {
-    print("message progress: $progress");
+
   }
 
   Future<void> onMessageDownloadProgressCallback(
       V2TimMessageDownloadProgress messageProgress) async {
-    print(messageProgress.toJson());
     final currentProgress = getMessageProgress(messageProgress.msgID);
 
     if (messageProgress.isFinish && currentProgress < 100) {

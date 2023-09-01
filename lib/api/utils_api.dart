@@ -101,7 +101,6 @@ class UtilsApi {
       response = httpManager.dio
           .get(url, queryParameters: resParams, cancelToken: cancelToken);
     }
-    // print(response);
     //链式结果回调
     return response.then((value) {
       if (requestSuccessEvent != null) requestSuccessEvent(value.data);

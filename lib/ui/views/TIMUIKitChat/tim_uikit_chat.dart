@@ -234,7 +234,6 @@ class _TUIChatState extends TIMUIKitState<TIMUIKitChat> {
 
   @override
   void initState() {
-    print("TIMUIKitChat  -->  initState");
     super.initState();
     if (kProfileMode) {
       Frame.init();
@@ -245,7 +244,6 @@ class _TUIChatState extends TIMUIKitState<TIMUIKitChat> {
       if (kProfileMode) {
         widget.endTime = DateTime.now().millisecondsSinceEpoch;
         int timeSpend = widget.endTime - widget.startTime;
-        print("Page render time:$timeSpend ms");
       }
     });
     Future.delayed(const Duration(milliseconds: 500), () {
@@ -260,7 +258,6 @@ class _TUIChatState extends TIMUIKitState<TIMUIKitChat> {
       Frame.destroy();
     }
     model.dispose();
-    print("TIMUIKitChat  -->  dispose");
   }
 
   @override
