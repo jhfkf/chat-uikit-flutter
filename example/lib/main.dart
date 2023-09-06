@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
   CoreServicesImpl timCoreInstance = TIMUIKitCore.getInstance();
 
   int getSDKAPPID() {
-    return 1400798441;
+    return 1400809121;
     // return const int.fromEnvironment('SDK_APPID', defaultValue: 0);
   }
 

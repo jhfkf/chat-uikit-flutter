@@ -25,7 +25,12 @@ class HttpManager {
 
   HttpManager() {
     //cookie管理
-    setDioBaseOptions(baseUrl: 'http://quapi1.e92.cc/user/', headers: {});
+    setDioBaseOptions(baseUrl: 'http://quapi.005c.com/user/', headers: {
+    // "LoginRole": "3",
+    "Access-Control-Allow-Origin": "*"
+    // "mjid": TbrConfig.mjId,
+    });
+    dio.options.headers["Access-Control-Allow-Origin"] = "*";
     // 添加请求拦截器
     dio.interceptors.add(TBRInterceptors());
     SharedPreferences.getInstance().then((prefs) {
@@ -65,7 +70,7 @@ class HttpManager {
     }
 
     dio.options = BaseOptions(
-      baseUrl: baseUrl ?? 'http://quapi1.e92.cc/user/',
+      baseUrl: baseUrl ?? 'http://quapi.005c.com/user/',
       contentType: contentType ?? "application/json",
       responseType: responseType ?? ResponseType.plain,
       headers: headers,
