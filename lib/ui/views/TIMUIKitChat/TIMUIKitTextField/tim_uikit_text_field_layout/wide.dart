@@ -22,11 +22,9 @@ import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/message.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/optimize_utils.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/screen_shot.dart';
-import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/wide_popup.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/platform.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/TIMUIKitTextField/special_text/DefaultSpecialTextSpanBuilder.dart';
-import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_emoji_panel.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/drag_widget.dart';
 import 'package:extended_text_field/extended_text_field.dart';
 import 'package:universal_html/html.dart' as html;
@@ -34,13 +32,10 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:screen_capturer/screen_capturer.dart';
 
 // ignore: unnecessary_import
 import 'dart:typed_data';
-
-import '../../../../../util/event_bus.dart';
-import '../../../../controller/tim_uikit_conversation_controller.dart';
+import 'package:tencent_cloud_chat_uikit/ui/utils/logger.dart';
 
 class DesktopControlBarItem {
   final String item;
@@ -54,16 +49,16 @@ class DesktopControlBarItem {
 
   DesktopControlBarItem(
       {required this.item,
-      this.icon,
-      this.color,
-      this.imgPath,
-      this.svgPath,
-      required this.onClick,
-      this.showName,
-      this.size})
+        this.icon,
+        this.color,
+        this.imgPath,
+        this.svgPath,
+        required this.onClick,
+        this.showName,
+        this.size})
       : assert(icon != null ||
-            TencentUtils.checkString(imgPath) != null ||
-            TencentUtils.checkString(svgPath) != null);
+      TencentUtils.checkString(imgPath) != null ||
+      TencentUtils.checkString(svgPath) != null);
 }
 
 class DesktopControlBarConfig {
@@ -73,16 +68,14 @@ class DesktopControlBarConfig {
   final bool showSendImageButton;
   final bool showSendVideoButton;
   final bool showMessageHistoryButton;
-  final bool showClearMessageHistoryButton;
 
   DesktopControlBarConfig({
     this.showStickerPanel = true,
     this.showScreenshotButton = true,
-    this.showSendFileButton = false,
+    this.showSendFileButton = true,
     this.showSendImageButton = true,
-    this.showSendVideoButton = false,
+    this.showSendVideoButton = true,
     this.showMessageHistoryButton = true,
-    this.showClearMessageHistoryButton = true,
   });
 }
 
@@ -154,46 +147,49 @@ class TIMUIKitTextFieldLayoutWide extends StatefulWidget {
 
   final VoidCallback goDownBottom;
 
-  final List customEmojiStickerList;
+  final List<CustomEmojiFaceData> customEmojiStickerList;
 
   /// Conversation need search
   final V2TimConversation currentConversation;
 
+  final List<CustomStickerPackage> stickerPackageList;
+
   const TIMUIKitTextFieldLayoutWide(
       {Key? key,
-      this.customStickerPanel,
-      required this.onEmojiSubmitted,
-      required this.onCustomEmojiFaceSubmitted,
-      required this.backSpaceText,
-      required this.addStickerToText,
-      required this.isUseDefaultEmoji,
-      required this.languageType,
-      required this.textEditingController,
-      this.morePanelConfig,
-      required this.conversationID,
-      required this.conversationType,
-      required this.focusNode,
-      this.currentCursor,
-      required this.setCurrentCursor,
-      required this.onCursorChange,
-      required this.model,
-      this.backgroundColor,
-      this.onChanged,
-      required this.handleSendEditStatus,
-      required this.handleAtText,
-      this.repliedMessage,
-      this.forbiddenText,
-      required this.onSubmitted,
-      required this.goDownBottom,
-      required this.showSendAudio,
-      required this.showSendEmoji,
-      required this.showMorePanel,
-      this.hintText,
-      required this.customEmojiStickerList,
-      this.controller,
-      required this.currentConversation,
-      required this.theme,
-      required this.chatConfig})
+        this.customStickerPanel,
+        required this.onEmojiSubmitted,
+        required this.onCustomEmojiFaceSubmitted,
+        required this.backSpaceText,
+        required this.addStickerToText,
+        required this.isUseDefaultEmoji,
+        required this.languageType,
+        required this.textEditingController,
+        this.morePanelConfig,
+        required this.conversationID,
+        required this.conversationType,
+        required this.focusNode,
+        this.currentCursor,
+        required this.setCurrentCursor,
+        required this.onCursorChange,
+        required this.model,
+        this.backgroundColor,
+        this.onChanged,
+        required this.handleSendEditStatus,
+        required this.handleAtText,
+        this.repliedMessage,
+        this.forbiddenText,
+        required this.onSubmitted,
+        required this.goDownBottom,
+        required this.showSendAudio,
+        required this.showSendEmoji,
+        required this.showMorePanel,
+        this.hintText,
+        required this.customEmojiStickerList,
+        this.controller,
+        required this.currentConversation,
+        required this.theme,
+        required this.chatConfig,
+        required this.stickerPackageList})
       : super(key: key);
 
   @override
@@ -237,9 +233,9 @@ class _TIMUIKitTextFieldLayoutWideState
       }
     } catch (e) {
       // ignore: avoid_print
-      print(e);
+      outputLogger.i(e);
     }
-    // generateDefaultControlBarItems();
+    generateDefaultControlBarItems();
   }
 
   Future<void> _handlePaste(html.ClipboardEvent event) async {
@@ -250,7 +246,7 @@ class _TIMUIKitTextFieldLayoutWideState
       }
     } catch (e) {
       // ignore: avoid_print
-      print("Paste image failed: ${e.toString()}");
+      outputLogger.i("Paste image failed: ${e.toString()}");
     }
   }
 
@@ -260,9 +256,9 @@ class _TIMUIKitTextFieldLayoutWideState
   }
 
   _debounce(
-    Function(String text) fun, [
-    Duration delay = const Duration(milliseconds: 30),
-  ]) {
+      Function(String text) fun, [
+        Duration delay = const Duration(milliseconds: 30),
+      ]) {
     Timer? timer;
     return (String text) {
       if (timer != null) {
@@ -277,9 +273,9 @@ class _TIMUIKitTextFieldLayoutWideState
 
   String getAbstractMessage(V2TimMessage message) {
     final String? customAbstractMessage =
-        widget.model.abstractMessageBuilder != null
-            ? widget.model.abstractMessageBuilder!(widget.model.repliedMessage!)
-            : null;
+    widget.model.abstractMessageBuilder != null
+        ? widget.model.abstractMessageBuilder!(widget.model.repliedMessage!)
+        : null;
     return customAbstractMessage ??
         MessageUtils.getAbstractMessageAsync(
             widget.model.repliedMessage!, widget.model.groupMemberList ?? []);
@@ -354,7 +350,7 @@ class _TIMUIKitTextFieldLayoutWideState
             initOffset: offset != null
                 ? Offset(offset.dx, max(offset.dy, 16))
                 : Offset(MediaQuery.of(context).size.height * 0.5 + 20,
-                    MediaQuery.of(context).size.height * 0.5 - 100),
+                MediaQuery.of(context).size.height * 0.5 - 100),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -375,44 +371,79 @@ class _TIMUIKitTextFieldLayoutWideState
               child: Container(
                 child: widget.customStickerPanel != null
                     ? widget.customStickerPanel!(
-                        height: widget.chatConfig.desktopStickerPanelHeight,
-                        width: 350,
-                        sendTextMessage: () {
-                          widget.onEmojiSubmitted();
-                        },
-                        sendFaceMessage: widget.onCustomEmojiFaceSubmitted,
-                        deleteText: () {
-                          widget.backSpaceText();
-                        },
-                        addText: (int unicode) {
-                          final newText = String.fromCharCode(unicode);
-                          widget.addStickerToText(newText);
-                          entry?.remove();
-                          entry = null;
-                        },
-                        addCustomEmojiText: ((String singleEmojiName) {
-                          String? emojiName = singleEmojiName.split('.png')[0];
-                          if (widget.isUseDefaultEmoji &&
-                              widget.languageType == 'zh' &&
-                              ConstData.emojiMapList[emojiName] != null &&
-                              ConstData.emojiMapList[emojiName] != '') {
-                            emojiName = ConstData.emojiMapList[emojiName];
-                          }
-                          final newText = '[$emojiName]';
-                          widget.addStickerToText(newText);
-                          entry?.remove();
-                          entry = null;
-                        }),
-                        defaultCustomEmojiStickerList:
-                            widget.isUseDefaultEmoji ? ConstData.emojiList : [])
-                    : EmojiPanel(onTapEmoji: (unicode) {
-                        final newText = String.fromCharCode(unicode);
-                        widget.addStickerToText(newText);
-                      }, onSubmitted: () {
-                        widget.onEmojiSubmitted();
-                      }, delete: () {
-                        widget.backSpaceText();
-                      }),
+                    height: widget.chatConfig.desktopStickerPanelHeight,
+                    width: 350,
+                    sendTextMessage: () {
+                      widget.onEmojiSubmitted();
+                    },
+                    sendFaceMessage: widget.onCustomEmojiFaceSubmitted,
+                    deleteText: () {
+                      widget.backSpaceText();
+                    },
+                    addText: (int unicode) {
+                      final newText = String.fromCharCode(unicode);
+                      widget.addStickerToText(newText);
+                      entry?.remove();
+                      entry = null;
+                    },
+                    addCustomEmojiText: ((String singleEmojiName) {
+                      String? emojiName = singleEmojiName.split('.png')[0];
+                      if (widget.isUseDefaultEmoji &&
+                          widget.languageType == 'zh' &&
+                          TUIKitStickerConstData.emojiMapList[emojiName] !=
+                              null &&
+                          TUIKitStickerConstData.emojiMapList[emojiName] !=
+                              '') {
+                        emojiName =
+                        TUIKitStickerConstData.emojiMapList[emojiName];
+                      }
+                      final newText = '[$emojiName]';
+                      widget.addStickerToText(newText);
+                      entry?.remove();
+                      entry = null;
+                    }),
+                    defaultCustomEmojiStickerList: widget.isUseDefaultEmoji
+                        ? TUIKitStickerConstData.emojiList
+                        : [])
+                    : StickerPanel(
+                    isWideScreen: true,
+                    height: widget.chatConfig.desktopStickerPanelHeight,
+                    width: 350,
+                    sendTextMsg: null,
+                    sendFaceMsg: (_, __){
+                      widget.onCustomEmojiFaceSubmitted(_, __);
+                      entry?.remove();
+                      entry = null;
+                    },
+                    deleteText: () {
+                      widget.backSpaceText();
+                    },
+                    addText: (int unicode) {
+                      final newText = String.fromCharCode(unicode);
+                      widget.addStickerToText(newText);
+                      entry?.remove();
+                      entry = null;
+                    },
+                    addCustomEmojiText: ((String singleEmojiName) {
+                      String? emojiName = singleEmojiName.split('.png')[0];
+                      if (widget.isUseDefaultEmoji &&
+                          widget.languageType == 'zh' &&
+                          TUIKitStickerConstData.emojiMapList[emojiName] !=
+                              null &&
+                          TUIKitStickerConstData.emojiMapList[emojiName] !=
+                              '') {
+                        emojiName =
+                        TUIKitStickerConstData.emojiMapList[emojiName];
+                      }
+                      final newText = '[$emojiName]';
+                      widget.addStickerToText(newText);
+                      entry?.remove();
+                      entry = null;
+                    }),
+                    customStickerPackageList: widget.stickerPackageList,
+                    bottomColor: theme.weakBackgroundColor,
+                    backgroundColor: theme.wideBackgroundColor,
+                    lightPrimaryColor: theme.lightPrimaryColor),
               ),
             ));
       });
@@ -440,9 +471,9 @@ class _TIMUIKitTextFieldLayoutWideState
   }
 
   _sendFile(
-    TUIChatSeparateViewModel model,
-    TUITheme theme,
-  ) async {
+      TUIChatSeparateViewModel model,
+      TUITheme theme,
+      ) async {
     if (!PlatformUtils().isWeb) {
       _addGreyOverlay();
     }
@@ -484,7 +515,7 @@ class _TIMUIKitTextFieldLayoutWideState
       }
     } catch (e) {
       // ignore: avoid_print
-      print("_sendFileErr: ${e.toString()}");
+      outputLogger.i("_sendFileErr: ${e.toString()}");
     }
   }
 
@@ -498,14 +529,14 @@ class _TIMUIKitTextFieldLayoutWideState
         child: InkWell(
           onTap: () {
             final alignBox =
-                key.currentContext?.findRenderObject() as RenderBox?;
+            key.currentContext?.findRenderObject() as RenderBox?;
             var offset = alignBox?.localToGlobal(Offset.zero);
             final double? dx = (offset?.dx != null) ? offset!.dx : null;
             final double? dy =
-                (offset?.dy != null && alignBox?.size.height != null)
-                    ? offset!.dy -
-                        (widget.chatConfig.desktopStickerPanelHeight + 20)
-                    : null;
+            (offset?.dy != null && alignBox?.size.height != null)
+                ? offset!.dy -
+                (widget.chatConfig.desktopStickerPanelHeight + 20)
+                : null;
             e.onClick((dx != null && dy != null) ? Offset(dx, dy) : null);
           },
           child: Tooltip(
@@ -575,7 +606,7 @@ class _TIMUIKitTextFieldLayoutWideState
           context);
     } catch (e) {
       // ignore: avoid_print
-      print("_sendFileErr: ${e.toString()}");
+      outputLogger.i("_sendFileErr: ${e.toString()}");
     }
   }
 
@@ -610,7 +641,7 @@ class _TIMUIKitTextFieldLayoutWideState
           context);
     } catch (e) {
       // ignore: avoid_print
-      print("_sendFileErr: ${e.toString()}");
+      outputLogger.i("_sendFileErr: ${e.toString()}");
     }
   }
 
@@ -695,14 +726,14 @@ class _TIMUIKitTextFieldLayoutWideState
         final plugin = FcNativeVideoThumbnail();
         _addGreyOverlay();
         FilePickerResult? result =
-            await FilePicker.platform.pickFiles(type: fileType);
+        await FilePicker.platform.pickFiles(type: fileType);
         _removeOverlay();
         if (result != null && result.files.isNotEmpty) {
           File file = File(result.files.single.path!);
           final String savePath = file.path;
           final String type = TencentUtils.getFileType(
-                  (savePath.split(".")[savePath.split(".").length - 1])
-                      .toLowerCase())
+              (savePath.split(".")[savePath.split(".").length - 1])
+                  .toLowerCase())
               .split("/")[0];
 
           if (type == "image") {
@@ -737,7 +768,7 @@ class _TIMUIKitTextFieldLayoutWideState
       }
     } catch (err) {
       // ignore: avoid_print
-      print("send media err: $err");
+      outputLogger.i("send media err: $err");
       onTIMCallback(TIMCallback(
           type: TIMCallbackType.INFO,
           infoRecommendText: TIM_t("视频文件异常"),
@@ -759,87 +790,68 @@ class _TIMUIKitTextFieldLayoutWideState
         height: min(500, size.height / 2 + 140),
         title: TIM_t_para("发送给{{option1}}", "发送给$option1")(option1: option1),
         child: (closeFunc) => Container(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                height: min(360, size.height / 2),
+                child: InkWell(
+                  onTap: () {
+                    launchUrl(PlatformUtils().isWeb
+                        ? Uri.parse(filePath)
+                        : Uri.file(filePath));
+                  },
+                  child: PlatformUtils().isWeb
+                      ? Image.network(
+                    filePath,
                     height: min(360, size.height / 2),
-                    child: InkWell(
-                      onTap: () {
-                        launchUrl(PlatformUtils().isWeb
-                            ? Uri.parse(filePath)
-                            : Uri.file(filePath));
-                      },
-                      child: PlatformUtils().isWeb
-                          ? Image.network(
-                              filePath,
-                              height: min(360, size.height / 2),
-                            )
-                          : Image.file(
-                              File(filePath),
-                              height: min(360, size.height / 2),
-                            ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      OutlinedButton(
-                          onPressed: () {
-                            closeFunc();
-                          },
-                          child: Text(TIM_t("取消"))),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      ElevatedButton(
-                          onPressed: () {
-                            MessageUtils.handleMessageError(
-                                widget.model.sendImageMessage(
-                                    imagePath: filePath,
-                                    imageName: fileName,
-                                    convID: widget.conversationID,
-                                    convType: widget.conversationType),
-                                context);
-                            closeFunc();
-                          },
-                          child: Text(TIM_t("发送")))
-                    ],
                   )
-                ],
+                      : Image.file(
+                    File(filePath),
+                    height: min(360, size.height / 2),
+                  ),
+                ),
               ),
-            ));
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  OutlinedButton(
+                      onPressed: () {
+                        closeFunc();
+                      },
+                      child: Text(TIM_t("取消"))),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        MessageUtils.handleMessageError(
+                            widget.model.sendImageMessage(
+                                imagePath: filePath,
+                                imageName: fileName,
+                                convID: widget.conversationID,
+                                convType: widget.conversationType),
+                            context);
+                        closeFunc();
+                      },
+                      child: Text(TIM_t("发送")))
+                ],
+              )
+            ],
+          ),
+        ));
   }
 
   _sendScreenShot() async {
-    Directory directory = await getApplicationDocumentsDirectory();
-    String imageName =
-        'Screenshot-${DateTime.now().millisecondsSinceEpoch}.png';
-    String imagePath =
-        '${directory.path}/screen_capturer_example/Screenshots/$imageName';
-    CapturedData? lastCapturedData = await screenCapturer.capture(
-      imagePath: imagePath,
-      // copyToClipboard: true,
-      silent: true,
-    );
-    if (lastCapturedData != null && lastCapturedData.imagePath != null) {
-      // ignore: avoid_print
-      // print(_lastCapturedData!.toJson());
-      _sendImageWithConfirmation(filePath: lastCapturedData.imagePath!);
-    } else {
-      // ignore: avoid_print
-      print('User canceled capture');
-    }
-
-    // final file = await ScreenshotHelper.captureScreen();
-    // if (file != null) {
-    //   _sendImageWithConfirmation(filePath: file);
-    // } else {}
+    final file = await ScreenshotHelper.captureScreen();
+    if (file != null) {
+      _sendImageWithConfirmation(filePath: file);
+    } else {}
   }
 
-  generateDefaultControlBarItems(BuildContext context, TUIKitBuildValue value) {
+  generateDefaultControlBarItems() {
     final DesktopControlBarConfig config =
         widget.chatConfig.desktopControlBarConfig ?? DesktopControlBarConfig();
     final List<DesktopControlBarItem> itemsList = [
@@ -902,51 +914,24 @@ class _TIMUIKitTextFieldLayoutWideState
                   width: MediaQuery.of(context).size.width * 0.5,
                   height: MediaQuery.of(context).size.width * 0.5,
                   child: (onClose) => TIMUIKitSearchMsgDetail(
-                        currentConversation: widget.currentConversation,
-                        keyword: '',
-                        initMessageList: widget.model
-                            .getOriginMessageList()
-                            .getRange(
-                                0,
-                                min(widget.model.getOriginMessageList().length,
-                                    100))
-                            .toList(),
-                        onTapConversation: (V2TimConversation conversation,
-                            V2TimMessage? message) {},
-                      ),
+                    currentConversation: widget.currentConversation,
+                    keyword: '',
+                    initMessageList: widget.model
+                        .getOriginMessageList()
+                        .getRange(
+                        0,
+                        min(widget.model.getOriginMessageList().length,
+                            100))
+                        .toList(),
+                    onTapConversation: (V2TimConversation conversation,
+                        V2TimMessage? message) {},
+                  ),
                   theme: widget.theme);
             },
             svgPath: "images/svg/message_history.svg"),
-      if (config.showClearMessageHistoryButton)
-        DesktopControlBarItem(
-            item: "clear",
-            showName: TIM_t("清除消息"),
-            onClick: (offset) {
-              TUIKitWidePopup.showSecondaryConfirmDialog(
-                  operationKey:
-                      TUIKitWideModalOperationKey.confirmDeleteMessages,
-                  context: context,
-                  text: TIM_t("确定删除会话所有消息？"),
-                  theme: value.theme,
-                  onCancel: () {},
-                  onConfirm: () async {
-                    bus.emit("ClearHistoryEvent", widget.currentConversation);
-                  });
-            },
-            svgPath: "images/svg/message_clear.svg"),
-
-      // if (config.showClearMessageHistoryButton)
-      //   DesktopControlBarItem(
-      //       item: "userCard",
-      //       showName: TIM_t("名片"),
-      //       onClick: (offset) {
-      //
-      //       },
-      //       svgPath: "images/svg/message_clear.svg"),
     ];
     defaultControlBarItems = itemsList;
   }
-
 
   List<Widget> generateControlBar(
       TUIChatSeparateViewModel model, TUITheme theme) {
@@ -973,7 +958,7 @@ class _TIMUIKitTextFieldLayoutWideState
   Future<void> _handleKeyEvent(RawKeyEvent event) async {
     if (PlatformUtils().isDesktop &&
         ((event.isKeyPressed(LogicalKeyboardKey.controlLeft) &&
-                event.logicalKey == LogicalKeyboardKey.keyV) ||
+            event.logicalKey == LogicalKeyboardKey.keyV) ||
             (event.isMetaPressed &&
                 event.logicalKey == LogicalKeyboardKey.keyV))) {
       final bytes = await Pasteboard.image;
@@ -1009,8 +994,6 @@ class _TIMUIKitTextFieldLayoutWideState
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
     final theme = value.theme;
 
-    generateDefaultControlBarItems(context, value);
-
     setKeyboardHeight ??= OptimizeUtils.debounce((height) {
       settingModel.keyboardHeight = height;
     }, const Duration(seconds: 1));
@@ -1044,7 +1027,7 @@ class _TIMUIKitTextFieldLayoutWideState
               if (widget.forbiddenText == null)
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                  const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: generateControlBar(widget.model, theme),
@@ -1058,29 +1041,29 @@ class _TIMUIKitTextFieldLayoutWideState
                     if (widget.forbiddenText != null)
                       Expanded(
                           child: Container(
-                        height: 35,
-                        color: widget.backgroundColor ??
-                            theme.desktopChatMessageInputBgColor,
-                        alignment: Alignment.center,
-                        child: Text(
-                          TIM_t(widget.forbiddenText!),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: theme.weakTextColor,
-                          ),
-                        ),
-                      )),
+                            height: 35,
+                            color: widget.backgroundColor ??
+                                theme.desktopChatMessageInputBgColor,
+                            alignment: Alignment.center,
+                            child: Text(
+                              TIM_t(widget.forbiddenText!),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: theme.weakTextColor,
+                              ),
+                            ),
+                          )),
                     if (widget.forbiddenText == null)
                       Expanded(
                         child: ExtendedTextField(
                             scrollController: _scrollController,
                             autofocus: true,
                             maxLines:
-                                widget.chatConfig.desktopMessageInputFieldLines,
+                            widget.chatConfig.desktopMessageInputFieldLines,
                             minLines:
-                                widget.chatConfig.desktopMessageInputFieldLines,
+                            widget.chatConfig.desktopMessageInputFieldLines,
                             focusNode: widget.focusNode,
                             onChanged: debounceFunc,
                             keyboardType: TextInputType.multiline,
@@ -1106,11 +1089,23 @@ class _TIMUIKitTextFieldLayoutWideState
                             specialTextSpanBuilder: PlatformUtils().isWeb
                                 ? null
                                 : DefaultSpecialTextSpanBuilder(
-                                    isUseDefaultEmoji: widget.isUseDefaultEmoji,
-                                    customEmojiStickerList:
-                                        widget.customEmojiStickerList,
-                                    showAtBackground: true,
-                                  )),
+                              isUseQQPackage: (widget
+                                  .model
+                                  .chatConfig
+                                  .stickerPanelConfig
+                                  ?.useTencentCloudChatStickerPackage ??
+                                  true) ||
+                                  widget.isUseDefaultEmoji,
+                              isUseTencentCloudChatPackage: widget
+                                  .model
+                                  .chatConfig
+                                  .stickerPanelConfig
+                                  ?.useTencentCloudChatStickerPackage ??
+                                  true,
+                              customEmojiStickerList:
+                              widget.customEmojiStickerList,
+                              showAtBackground: true,
+                            )),
                       ),
                   ],
                 ),

@@ -5,10 +5,15 @@ import 'package:extended_text/extended_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:tencent_cloud_chat_uikit/ui/widgets/link_preview/compiler/md_text.dart';
 import 'package:tencent_im_base/base_widgets/tim_stateless_widget.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/TIMUIKitTextField/special_text/DefaultSpecialTextSpanBuilder.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/link_preview/common/utils.dart';
 import 'package:markdown/markdown.dart' as md;
+import 'package:tim_ui_kit_sticker_plugin/utils/tim_custom_face_data.dart';
+
+typedef ImageBuilder = Widget Function(
+    Uri uri, String? imageDirectory, double? width, double? height);
 
 class LinkTextMarkdown extends TIMStatelessWidget {
   /// Callback for when link is tapped
@@ -22,31 +27,43 @@ class LinkTextMarkdown extends TIMStatelessWidget {
 
   final bool? isEnableTextSelection;
 
+  final bool isUseQQPackage;
+
+  final bool isUseTencentCloudChatPackage;
+
+  final List<CustomEmojiFaceData> customEmojiStickerList;
+
   const LinkTextMarkdown(
       {Key? key,
-      required this.messageText,
-      this.isEnableTextSelection,
-      this.onLinkTap,
-      this.style})
+        required this.messageText,
+        this.isUseQQPackage = false,
+        this.isUseTencentCloudChatPackage = false,
+        this.customEmojiStickerList = const [],
+        this.isEnableTextSelection,
+        this.onLinkTap,
+        this.style})
       : super(key: key);
 
   @override
   Widget timBuild(BuildContext context) {
     return MarkdownBody(
-      data: messageText,
+      data: mdTextCompiler(messageText,
+          isUseQQPackage: isUseQQPackage,
+          isUseTencentCloudChatPackage: isUseTencentCloudChatPackage,
+          customEmojiStickerList: customEmojiStickerList),
       selectable: isEnableTextSelection ?? false,
       styleSheet: MarkdownStyleSheet.fromTheme(ThemeData(
-              textTheme: TextTheme(
-                  bodyText2: style ?? const TextStyle(fontSize: 16.0))))
+          textTheme: TextTheme(
+              bodyText2: style ?? const TextStyle(fontSize: 16.0))))
           .copyWith(
         a: TextStyle(color: LinkUtils.hexToColor("015fff")),
       ),
       extensionSet: md.ExtensionSet.gitHubWeb,
       onTapLink: (
-        String link,
-        String? href,
-        String title,
-      ) {
+          String link,
+          String? href,
+          String title,
+          ) {
         if (onLinkTap != null) {
           onLinkTap!(href ?? "");
         } else {
@@ -67,20 +84,23 @@ class LinkText extends TIMStatelessWidget {
   /// text style for default words
   final TextStyle? style;
 
-  final bool isUseDefaultEmoji;
+  final bool isUseQQPackage;
 
-  final List customEmojiStickerList;
+  final bool isUseTencentCloudChatPackage;
+
+  final List<CustomEmojiFaceData> customEmojiStickerList;
 
   final bool? isEnableTextSelection;
 
   const LinkText(
       {Key? key,
-      required this.messageText,
-      this.onLinkTap,
-      this.isEnableTextSelection,
-      this.style,
-      this.isUseDefaultEmoji = false,
-      this.customEmojiStickerList = const []})
+        required this.messageText,
+        this.onLinkTap,
+        this.isEnableTextSelection,
+        this.style,
+        this.isUseQQPackage = false,
+        this.isUseTencentCloudChatPackage = false,
+        this.customEmojiStickerList = const []})
       : super(key: key);
 
   String _getContentSpan(String text, BuildContext context) {
@@ -140,37 +160,21 @@ class LinkText extends TIMStatelessWidget {
   Widget timBuild(BuildContext context) {
     return ExtendedText(_getContentSpan(messageText, context), softWrap: true,
         onSpecialTextTap: (dynamic parameter) {
-      if (parameter.toString().startsWith('\$')) {
-        if (onLinkTap != null) {
-          onLinkTap!((parameter.toString()).replaceAll('\$', ''));
-        } else {
-          LinkUtils.launchURL(
-              context, (parameter.toString()).replaceAll('\$', ''));
-        }
-      }
-    },
+          if (parameter.toString().startsWith('\$')) {
+            if (onLinkTap != null) {
+              onLinkTap!((parameter.toString()).replaceAll('\$', ''));
+            } else {
+              LinkUtils.launchURL(
+                  context, (parameter.toString()).replaceAll('\$', ''));
+            }
+          }
+        },
         style: style ?? const TextStyle(fontSize: 16.0),
         specialTextSpanBuilder: DefaultSpecialTextSpanBuilder(
-          isUseDefaultEmoji: isUseDefaultEmoji,
+          isUseQQPackage: isUseQQPackage,
+          isUseTencentCloudChatPackage: isUseTencentCloudChatPackage,
           customEmojiStickerList: customEmojiStickerList,
           showAtBackground: true,
         ));
-  }
-}
-
-class TextBuilder extends MarkdownElementBuilder {
-  @override
-  Widget? visitText(md.Text text, TextStyle? preferredStyle) {
-    return Text(text.textContent);
-  }
-}
-
-class RawHtmlSyntax extends md.InlineSyntax {
-  RawHtmlSyntax() : super(r'<.+?>');
-
-  @override
-  bool onMatch(md.InlineParser parser, Match match) {
-    parser.addNode(md.Text(match[0]!));
-    return true;
   }
 }

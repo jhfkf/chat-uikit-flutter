@@ -3,6 +3,7 @@ import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/link_preview/common/utils.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/link_preview/widgets/link_preview.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/link_preview/widgets/link_text.dart';
+import 'package:tim_ui_kit_sticker_plugin/utils/tim_custom_face_data.dart';
 
 import 'models/link_preview_content.dart';
 
@@ -10,24 +11,29 @@ class LinkPreviewEntry {
   /// get the text message with hyperlinks
   static LinkPreviewText? getHyperlinksText(String messageText, bool isMarkdown,
       {Function(String)? onLinkTap,
-      bool isEnableTextSelection = false,
-      bool isUseDefaultEmoji = false,
-      List customEmojiStickerList = const []}) {
+        bool isEnableTextSelection = false,
+        bool isUseQQPackage = false,
+        bool isUseTencentCloudChatPackage = false,
+        List<CustomEmojiFaceData> customEmojiStickerList = const []}) {
     return ({TextStyle? style}) {
       return isMarkdown
           ? LinkTextMarkdown(
-              isEnableTextSelection: isEnableTextSelection,
-              messageText: addSpaceAfterLeftBracket(
-                  addSpaceBeforeHttp(replaceSingleNewlineWithTwo(messageText))),
-              style: style,
-              onLinkTap: onLinkTap)
+          isUseQQPackage: isUseQQPackage,
+          isUseTencentCloudChatPackage: isUseTencentCloudChatPackage,
+          customEmojiStickerList: customEmojiStickerList,
+          isEnableTextSelection: isEnableTextSelection,
+          messageText: addSpaceAfterLeftBracket(
+              addSpaceBeforeHttp(replaceSingleNewlineWithTwo(messageText))),
+          style: style,
+          onLinkTap: onLinkTap)
           : LinkText(
-              isEnableTextSelection: isEnableTextSelection,
-              messageText: messageText,
-              style: style,
-              onLinkTap: onLinkTap,
-              isUseDefaultEmoji: isUseDefaultEmoji,
-              customEmojiStickerList: customEmojiStickerList);
+          isEnableTextSelection: isEnableTextSelection,
+          messageText: messageText,
+          style: style,
+          onLinkTap: onLinkTap,
+          isUseQQPackage: isUseQQPackage,
+          isUseTencentCloudChatPackage: isUseTencentCloudChatPackage,
+          customEmojiStickerList: customEmojiStickerList);
     };
   }
 
@@ -59,7 +65,7 @@ class LinkPreviewEntry {
   /// If you provide `onUpdateMessage(String linkInfoJson)`, it can save the link info to local custom data than call updating the message on UI automatically.
   static Future<LinkPreviewContent?> getFirstLinkPreviewContent(
       {required V2TimMessage message,
-      ValueChanged<V2TimMessage>? onUpdateMessage}) async {
+        ValueChanged<V2TimMessage>? onUpdateMessage}) async {
     final String? messageText = message.textElem?.text;
     if (messageText == null) {
       return null;
@@ -71,7 +77,7 @@ class LinkPreviewEntry {
     }
 
     final List<LocalCustomDataModel?> previewItemList =
-        await LinkUtils.getURLPreview([urlMatches[0]]);
+    await LinkUtils.getURLPreview([urlMatches[0]]);
     if (previewItemList.isNotEmpty) {
       final LocalCustomDataModel previewItem = previewItemList.first!;
       if (onUpdateMessage != null) {
@@ -100,13 +106,13 @@ class LinkPreviewEntry {
     }
 
     final List<LocalCustomDataModel> previewItemList =
-        await LinkUtils.getURLPreview([urlMatches[0]]);
+    await LinkUtils.getURLPreview([urlMatches[0]]);
     if (previewItemList.isNotEmpty) {
       final List<LinkPreviewContent?> resultList = previewItemList
           .map((e) => LinkPreviewContent(
-                linkInfo: e,
-                linkPreviewWidget: LinkPreviewWidget(linkPreview: e),
-              ))
+        linkInfo: e,
+        linkPreviewWidget: LinkPreviewWidget(linkPreview: e),
+      ))
           .toList();
 
       return resultList;

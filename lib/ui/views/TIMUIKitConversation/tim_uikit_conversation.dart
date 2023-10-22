@@ -191,6 +191,15 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
     bus.on("ClearHistoryEvent", (arg) {
       _clearHistory(arg);
     });
+    bus.on("ClearAllHistoryEvent", (arg) {
+      List<V2TimConversation?> filteredConversationList = getFilteredConversation();
+      for (V2TimConversation? conversationItem in filteredConversationList) {
+        if (conversationItem != null) {
+          _clearHistory(conversationItem);
+          _deleteConversation(conversationItem);
+        }
+      }
+    });
   }
 
   TIMUIKitConversationController getController() {
