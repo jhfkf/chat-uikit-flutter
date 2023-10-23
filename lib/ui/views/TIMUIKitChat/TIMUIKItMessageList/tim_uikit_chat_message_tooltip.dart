@@ -5,7 +5,10 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_clipboard/image_clipboard.dart';
+import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
+import 'package:tencent_cloud_chat_uikit/business_logic/view_models/tui_self_info_view_model.dart';
 import 'package:tencent_cloud_chat_uikit/data_services/services_locatar.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/common_utils.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/message.dart';
@@ -19,7 +22,6 @@ import 'package:tencent_cloud_chat_uikit/ui/utils/platform.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_chat_history_message_list_item.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/forward_message_screen.dart';
-import 'package:tencent_open_file/tencent_open_file.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:path/path.dart' as path;
 
@@ -35,7 +37,7 @@ class TIMUIKitMessageTooltip extends StatefulWidget {
 
   /// the callback for long press event, except myself avatar
   final Function(String? userId, String? nickName)?
-      onLongPressForOthersHeadPortrait;
+  onLongPressForOthersHeadPortrait;
 
   final bool isUseMessageReaction;
 
@@ -58,18 +60,18 @@ class TIMUIKitMessageTooltip extends StatefulWidget {
 
   const TIMUIKitMessageTooltip(
       {Key? key,
-      this.toolTipsConfig,
-      this.isUseMessageReaction = false,
-      required this.model,
-      required this.message,
-      required this.allowAtUserWhenReply,
-      this.onLongPressForOthersHeadPortrait,
-      required this.selectEmojiPanelPosition,
-      required this.onCloseTooltip,
-      required this.onSelectSticker,
-      this.isShowMoreSticker = false,
-      this.groupMemberInfo,
-      required this.iSUseDefaultHoverBar})
+        this.toolTipsConfig,
+        this.isUseMessageReaction = true,
+        required this.model,
+        required this.message,
+        required this.allowAtUserWhenReply,
+        this.onLongPressForOthersHeadPortrait,
+        required this.selectEmojiPanelPosition,
+        required this.onCloseTooltip,
+        required this.onSelectSticker,
+        this.isShowMoreSticker = false,
+        this.groupMemberInfo,
+        required this.iSUseDefaultHoverBar})
       : super(key: key);
 
   @override
@@ -79,8 +81,10 @@ class TIMUIKitMessageTooltip extends StatefulWidget {
 class TIMUIKitMessageTooltipState
     extends TIMUIKitState<TIMUIKitMessageTooltip> {
   final TUIChatGlobalModel globalModal = serviceLocator<TUIChatGlobalModel>();
+  final TUISelfInfoViewModel selfInfoViewModel =
+  serviceLocator<TUISelfInfoViewModel>();
   bool isShowMoreSticker = false;
-  bool isShowOpenFile = false;
+  bool fileBeenDownloaded = false;
   String filePath = "";
 
   @override
@@ -95,51 +99,51 @@ class TIMUIKitMessageTooltipState
         (widget.message.fileElem == null &&
             widget.message.imageElem == null &&
             widget.message.videoElem == null)) {
-      isShowOpenFile = false;
+      fileBeenDownloaded = false;
       return;
     }
     if (PlatformUtils().isWeb) {
-      isShowOpenFile = true;
+      fileBeenDownloaded = true;
       return;
     }
     if (PlatformUtils().isDesktop) {
       if (widget.message.fileElem != null) {
         String savePath = TencentUtils.checkString(
-                globalModal.getFileMessageLocation(widget.message.msgID)) ??
+            globalModal.getFileMessageLocation(widget.message.msgID)) ??
             TencentUtils.checkString(widget.message.fileElem!.localUrl) ??
             widget.message.fileElem?.path ??
             "";
         File f = File(savePath);
         if (f.existsSync() && widget.message.msgID != null) {
           filePath = savePath;
-          isShowOpenFile = true;
+          fileBeenDownloaded = true;
           return;
         }
       } else if (widget.message.imageElem != null) {
         if (TencentUtils.checkString(
-                    widget.message.imageElem!.imageList![0]!.localUrl) !=
-                null &&
+            widget.message.imageElem!.imageList![0]!.localUrl) !=
+            null &&
             File(widget.message.imageElem!.imageList![0]!.localUrl!)
                 .existsSync()) {
-          isShowOpenFile = true;
+          fileBeenDownloaded = true;
           return;
         }
       } else if (widget.message.videoElem != null) {
         if (TencentUtils.checkString(widget.message.videoElem!.localVideoUrl) !=
-                null &&
+            null &&
             File(widget.message.videoElem!.localVideoUrl!).existsSync()) {
-          isShowOpenFile = true;
+          fileBeenDownloaded = true;
           return;
         }
       }
     }
-    isShowOpenFile = false;
+    fileBeenDownloaded = false;
   }
 
   bool isRevocable(int timestamp, int upperTimeLimit) =>
       ((DateTime.now().millisecondsSinceEpoch / 1000).ceil() - timestamp <
           upperTimeLimit) &&
-      (widget.message.isSelf ?? true);
+          (widget.message.isSelf ?? true);
 
   Widget ItemInkWell({
     Widget? child,
@@ -179,9 +183,10 @@ class TIMUIKitMessageTooltipState
   }
 
   bool isAdminCanRecall() {
-    if (widget.groupMemberInfo != null &&
-        widget.model.chatConfig.isGroupAdminRecallEnabled) {
-      final selfRole = widget.groupMemberInfo!.role;
+    if (widget.model.chatConfig.isGroupAdminRecallEnabled) {
+      final selfMemberInfo =
+          widget.groupMemberInfo ?? widget.model.selfMemberInfo;
+      final selfRole = selfMemberInfo?.role;
       return selfRole == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_ADMIN ||
           selfRole == GroupMemberRoleType.V2TIM_GROUP_MEMBER_ROLE_OWNER;
     } else {
@@ -202,24 +207,31 @@ class TIMUIKitMessageTooltipState
     final shouldShowForwardAction = !(widget.message.customElem?.data != null &&
         MessageUtils.isCallingData(widget.message.customElem!.data!));
     final tooltipsConfig = widget.toolTipsConfig;
+    final messageCanCopy = widget.message.elemType ==
+        MessageElemType.V2TIM_ELEM_TYPE_TEXT ||
+        (isDesktopScreen &&
+            widget.message.elemType == MessageElemType.V2TIM_ELEM_TYPE_IMAGE &&
+            fileBeenDownloaded);
+
     final List<MessageToolTipItem> defaultTipsList = [
-      if (isShowOpenFile)
+      if (fileBeenDownloaded)
         MessageToolTipItem(
             label: TIM_t("打开"),
             id: "open",
             iconImageAsset: "images/open_in_new.png",
             onClick: () => _onTap("open", model)),
-      if (isShowOpenFile && PlatformUtils().isDesktop)
+      if (fileBeenDownloaded && PlatformUtils().isDesktop)
         MessageToolTipItem(
             label: PlatformUtils().isMacOS ? TIM_t("在访达中打开") : TIM_t("查看文件夹"),
             id: "finder",
             iconImageAsset: "images/folder_open.png",
             onClick: () => _onTap("finder", model)),
-      MessageToolTipItem(
-          label: TIM_t("复制"),
-          id: "copyMessage",
-          iconImageAsset: "images/copy_message.png",
-          onClick: () => _onTap("copyMessage", model)),
+      if (messageCanCopy)
+        MessageToolTipItem(
+            label: TIM_t("复制"),
+            id: "copyMessage",
+            iconImageAsset: "images/copy_message.png",
+            onClick: () => _onTap("copyMessage", model)),
       if (shouldShowForwardAction && !isVoteMessage(widget.message))
         MessageToolTipItem(
             label: TIM_t("转发"),
@@ -260,8 +272,7 @@ class TIMUIKitMessageTooltipState
       defaultFormattedTipsList = defaultTipsList.where((element) {
         final type = element.id;
         if (type == "copyMessage") {
-          return tooltipsConfig.showCopyMessage &&
-              widget.message.elemType == MessageElemType.V2TIM_ELEM_TYPE_TEXT;
+          return tooltipsConfig.showCopyMessage;
         }
         if (type == "forwardMessage") {
           return tooltipsConfig.showForwardMessage &&
@@ -290,10 +301,10 @@ class TIMUIKitMessageTooltipState
     }
 
     final List<MessageToolTipItem>? customList =
-        widget.toolTipsConfig?.additionalMessageToolTips != null
-            ? (widget.toolTipsConfig?.additionalMessageToolTips!(
-                message, widget.onCloseTooltip))
-            : [];
+    widget.toolTipsConfig?.additionalMessageToolTips != null
+        ? (widget.toolTipsConfig?.additionalMessageToolTips!(
+        message, widget.onCloseTooltip))
+        : [];
 
     List<MessageToolTipItem> formattedTipsList = [
       ...defaultFormattedTipsList,
@@ -305,80 +316,80 @@ class TIMUIKitMessageTooltipState
       widgetList = formattedTipsList
           .map(
             (item) => Material(
-              color: Colors.white,
-              child: InkWell(
-                onTap: () {
-                  item.onClick();
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        item.iconImageAsset,
-                        package: defaultTipsIds.contains(item.id)
-                            ? 'tencent_cloud_chat_uikit'
-                            : null,
-                        width: 20,
-                        height: 20,
-                      ),
-                      const SizedBox(
-                        height: 4,
-                        width: 8,
-                      ),
-                      Text(
-                        item.label,
-                        style: TextStyle(
-                          decoration: TextDecoration.none,
-                          color: theme.darkTextColor,
-                          fontSize: 12,
-                        ),
-                      )
-                    ],
+          color: Colors.white,
+          child: InkWell(
+            onTap: () {
+              item.onClick();
+            },
+            child: Container(
+              padding: const EdgeInsets.all(6),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    item.iconImageAsset,
+                    package: defaultTipsIds.contains(item.id)
+                        ? 'tencent_cloud_chat_uikit'
+                        : null,
+                    width: 20,
+                    height: 20,
                   ),
-                ),
+                  const SizedBox(
+                    height: 4,
+                    width: 8,
+                  ),
+                  Text(
+                    item.label,
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      color: theme.darkTextColor,
+                      fontSize: 12,
+                    ),
+                  )
+                ],
               ),
             ),
-          )
+          ),
+        ),
+      )
           .toList();
     } else {
       widgetList = formattedTipsList
           .map(
             (item) => Material(
-              color: Colors.white,
-              child: ItemInkWell(
-                onTap: () {
-                  item.onClick();
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      item.iconImageAsset,
-                      package: defaultTipsIds.contains(item.id)
-                          ? 'tencent_cloud_chat_uikit'
-                          : null,
-                      width: 20,
-                      height: 20,
-                    ),
-                    const SizedBox(
-                      height: 4,
-                      width: 60,
-                    ),
-                    Text(
-                      item.label,
-                      style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: theme.darkTextColor,
-                        fontSize: 10,
-                      ),
-                    )
-                  ],
+          color: Colors.white,
+          child: ItemInkWell(
+            onTap: () {
+              item.onClick();
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  item.iconImageAsset,
+                  package: defaultTipsIds.contains(item.id)
+                      ? 'tencent_cloud_chat_uikit'
+                      : null,
+                  width: 20,
+                  height: 20,
                 ),
-              ),
+                const SizedBox(
+                  height: 4,
+                  width: 60,
+                ),
+                Text(
+                  item.label,
+                  style: TextStyle(
+                    decoration: TextDecoration.none,
+                    color: theme.darkTextColor,
+                    fontSize: 10,
+                  ),
+                )
+              ],
             ),
-          )
+          ),
+        ),
+      )
           .toList();
     }
     if (widgetList.isEmpty && widget.isUseMessageReaction == false) {
@@ -399,6 +410,12 @@ class TIMUIKitMessageTooltipState
     } catch (e) {}
   }
 
+  Future<void> copyImageToClipboard(String imagePath) async {
+    ImageClipboard().copyImage(imagePath);
+    // final DesktopClipboard desktopClipboard = DesktopClipboard();
+    // desktopClipboard.copyImage(imagePath);
+  }
+
   _onTap(String operation, TUIChatSeparateViewModel model) async {
     final messageItem = widget.message;
     final msgID = messageItem.msgID as String;
@@ -406,18 +423,18 @@ class TIMUIKitMessageTooltipState
       case "open":
         if (widget.message.fileElem != null) {
           _onOpenDesktop(TencentUtils.checkString(
-                  globalModal.getFileMessageLocation(widget.message.msgID)) ??
+              globalModal.getFileMessageLocation(widget.message.msgID)) ??
               TencentUtils.checkString(widget.message.fileElem!.localUrl) ??
               widget.message.fileElem?.path ??
               "");
         } else if (widget.message.imageElem != null) {
           _onOpenDesktop(TencentUtils.checkString(
-                  widget.message.imageElem!.imageList?[0]?.localUrl) ??
+              widget.message.imageElem!.imageList?[0]?.localUrl) ??
               TencentUtils.checkString(widget.message.imageElem?.path) ??
               "");
         } else if (widget.message.videoElem != null) {
           _onOpenDesktop(TencentUtils.checkString(
-                  widget.message.videoElem!.localVideoUrl) ??
+              widget.message.videoElem!.localVideoUrl) ??
               TencentUtils.checkString(widget.message.videoElem?.videoPath) ??
               "");
         }
@@ -426,18 +443,18 @@ class TIMUIKitMessageTooltipState
         String savePath = "";
         if (widget.message.fileElem != null) {
           savePath = (TencentUtils.checkString(
-                  globalModal.getFileMessageLocation(widget.message.msgID)) ??
+              globalModal.getFileMessageLocation(widget.message.msgID)) ??
               TencentUtils.checkString(widget.message.fileElem!.localUrl) ??
               widget.message.fileElem?.path ??
               "");
         } else if (widget.message.imageElem != null) {
           savePath = (TencentUtils.checkString(
-                  widget.message.imageElem!.imageList?[0]?.localUrl) ??
+              widget.message.imageElem!.imageList?[0]?.localUrl) ??
               TencentUtils.checkString(widget.message.imageElem?.path) ??
               "");
         } else if (widget.message.videoElem != null) {
           savePath = (TencentUtils.checkString(
-                  widget.message.videoElem!.localVideoUrl) ??
+              widget.message.videoElem!.localVideoUrl) ??
               TencentUtils.checkString(widget.message.videoElem?.videoPath) ??
               "");
         }
@@ -467,9 +484,9 @@ class TIMUIKitMessageTooltipState
             context,
             MaterialPageRoute(
                 builder: (context) => ForwardMessageScreen(
-                      conversationType: ConvType.c2c,
-                      model: model,
-                    )));
+                  conversationType: ConvType.c2c,
+                  model: model,
+                )));
         break;
       case "copyMessage":
         if (widget.message.elemType == MessageElemType.V2TIM_ELEM_TYPE_TEXT) {
@@ -482,6 +499,13 @@ class TIMUIKitMessageTooltipState
                 infoCode: 6660408));
             // ignore: empty_catches
           } catch (e) {}
+        } else if (widget.message.elemType ==
+            MessageElemType.V2TIM_ELEM_TYPE_IMAGE) {
+          final savePath = (TencentUtils.checkString(
+              widget.message.imageElem!.imageList?[0]?.localUrl) ??
+              TencentUtils.checkString(widget.message.imageElem?.path) ??
+              "");
+          copyImageToClipboard(savePath);
         }
         break;
       case "replyMessage":
@@ -519,32 +543,32 @@ class TIMUIKitMessageTooltipState
       ],
       builder: (BuildContext context, Widget? w) {
         final TUIChatSeparateViewModel model =
-            Provider.of<TUIChatSeparateViewModel>(context);
+        Provider.of<TUIChatSeparateViewModel>(context);
         final bool haveExtraTipsConfig = widget.toolTipsConfig != null &&
             widget.toolTipsConfig?.additionalItemBuilder != null;
         Widget? extraTipsActionItem = haveExtraTipsConfig
             ? widget.toolTipsConfig!.additionalItemBuilder!(
-                widget.message, widget.onCloseTooltip, null, context)
+            widget.message, widget.onCloseTooltip, null, context)
             : null;
         final message = widget.message;
         return Container(
             decoration: isDesktopScreen
                 ? BoxDecoration(
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0xCCbebebe),
-                        offset: Offset(2, 2),
-                        blurRadius: 10,
-                        spreadRadius: 1,
-                      ),
-                    ],
-                    border: Border.all(
-                      width: 1,
-                      color: hexToColor("dee0e3"),
-                    ),
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  )
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0xCCbebebe),
+                  offset: Offset(2, 2),
+                  blurRadius: 10,
+                  spreadRadius: 1,
+                ),
+              ],
+              border: Border.all(
+                width: 1,
+                color: hexToColor("dee0e3"),
+              ),
+              color: Colors.white,
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+            )
                 : null,
             color: isDesktopScreen ? null : Colors.white,
             padding: EdgeInsets.symmetric(
@@ -588,20 +612,20 @@ class TIMUIKitMessageTooltipState
                         if (!isDesktopScreen && widget.isUseMessageReaction)
                           Expanded(
                               child: Wrap(
-                            direction: Axis.horizontal,
-                            alignment:
+                                direction: Axis.horizontal,
+                                alignment:
                                 TUIKitScreenUtils.getFormFactor(context) ==
-                                        DeviceType.Mobile
+                                    DeviceType.Mobile
                                     ? WrapAlignment.spaceBetween
                                     : WrapAlignment.start,
-                            spacing: 4,
-                            runSpacing: 8,
-                            children: [
-                              ..._buildLongPressTipItem(theme, model, message),
-                              if (extraTipsActionItem != null)
-                                extraTipsActionItem
-                            ],
-                          )),
+                                spacing: 4,
+                                runSpacing: 8,
+                                children: [
+                                  ..._buildLongPressTipItem(theme, model, message),
+                                  if (extraTipsActionItem != null)
+                                    extraTipsActionItem
+                                ],
+                              )),
                         if (!isDesktopScreen && !widget.isUseMessageReaction)
                           ConstrainedBox(
                             constraints: BoxConstraints(
@@ -612,10 +636,10 @@ class TIMUIKitMessageTooltipState
                             child: Wrap(
                               direction: Axis.horizontal,
                               alignment:
-                                  TUIKitScreenUtils.getFormFactor(context) ==
-                                          DeviceType.Mobile
-                                      ? WrapAlignment.spaceBetween
-                                      : WrapAlignment.start,
+                              TUIKitScreenUtils.getFormFactor(context) ==
+                                  DeviceType.Mobile
+                                  ? WrapAlignment.spaceBetween
+                                  : WrapAlignment.start,
                               spacing: 4,
                               runSpacing: 8,
                               children: [

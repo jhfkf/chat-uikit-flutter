@@ -168,8 +168,13 @@ class _TIMUIKitTextElemState extends TIMUIKitState<TIMUIKitTextElem> {
         widget.message.textElem?.text ?? "",
         widget.chatModel.chatConfig.isSupportMarkdownForTextMessage,
         onLinkTap: widget.chatModel.chatConfig.onTapLink,
-        isUseDefaultEmoji: widget.isUseDefaultEmoji,
-        customEmojiStickerList: widget.customEmojiStickerList,
+        isUseQQPackage: (widget.chatModel.chatConfig.stickerPanelConfig
+            ?.useTencentCloudChatStickerPackage ??
+            true) ||
+            widget.isUseDefaultEmoji,
+        isUseTencentCloudChatPackage: widget.chatModel.chatConfig
+            .stickerPanelConfig?.useTencentCloudChatStickerPackage ??
+            true,
         isEnableTextSelection:
             widget.chatModel.chatConfig.isEnableTextSelection ?? false);
     final borderRadius = widget.isFromSelf
@@ -233,8 +238,19 @@ class _TIMUIKitTextElemState extends TIMUIKitState<TIMUIKitTextElem> {
                           fontSize: isDesktopScreen ? 14 : 16,
                           height: widget.chatModel.chatConfig.textHeight),
                   specialTextSpanBuilder: DefaultSpecialTextSpanBuilder(
-                    isUseDefaultEmoji: widget.isUseDefaultEmoji,
-                    customEmojiStickerList: widget.customEmojiStickerList,
+                    isUseQQPackage: (widget
+                        .chatModel
+                        .chatConfig
+                        .stickerPanelConfig
+                        ?.useTencentCloudChatStickerPackage ??
+                        true) ||
+                        widget.isUseDefaultEmoji,
+                    isUseTencentCloudChatPackage: widget
+                        .chatModel
+                        .chatConfig
+                        .stickerPanelConfig
+                        ?.useTencentCloudChatStickerPackage ??
+                        true,
                     showAtBackground: true,
                   )),
           // If the link preview info is available, render the preview card.

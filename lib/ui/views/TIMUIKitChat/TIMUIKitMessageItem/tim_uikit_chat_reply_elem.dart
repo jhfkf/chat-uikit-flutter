@@ -7,7 +7,6 @@ import 'package:tencent_cloud_chat_uikit/business_logic/separate_models/tui_chat
 import 'package:tencent_cloud_chat_uikit/extension/custom_message_ext_entity.dart';
 import 'package:tencent_cloud_chat_uikit/extension/custom_message_ext_entity_extension.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/common_utils.dart';
-import 'package:tencent_cloud_chat_uikit/ui/utils/message.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/TIMUIKitTextField/special_text/DefaultSpecialTextSpanBuilder.dart';
 import 'package:extended_text/extended_text.dart';
@@ -26,6 +25,8 @@ import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/tim_uikit_cloud_c
 import 'package:tencent_cloud_chat_uikit/ui/widgets/link_preview/link_preview_entry.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/link_preview/models/link_preview_content.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/link_preview/widgets/link_preview.dart';
+import 'package:tencent_cloud_chat_uikit/ui/utils/logger.dart';
+import 'package:tim_ui_kit_sticker_plugin/utils/tim_custom_face_data.dart';
 
 class TIMUIKitReplyElem extends StatefulWidget {
   final V2TimMessage message;
@@ -39,7 +40,7 @@ class TIMUIKitReplyElem extends StatefulWidget {
   final TUIChatSeparateViewModel chatModel;
   final bool? isShowMessageReaction;
   final bool isUseDefaultEmoji;
-  final List customEmojiStickerList;
+  final List<CustomEmojiFaceData> customEmojiStickerList;
 
   const TIMUIKitReplyElem({
     Key? key,
@@ -110,7 +111,7 @@ class _TIMUIKitReplyElemState extends TIMUIKitState<TIMUIKitReplyElem> {
           }
         } catch (e) {
           // ignore: avoid_print
-          print(e.toString());
+          outputLogger.i(e.toString());
         }
       }
       if (message != null) {
@@ -181,8 +182,7 @@ class _TIMUIKitReplyElemState extends TIMUIKitState<TIMUIKitReplyElem> {
 
     if (isRevokedMsg) {
       return _defaultRawMessageText(
-          isAdminRevoke ? TIM_t("[消息被管理员撤回]") : TIM_t("[消息被撤回]"),
-          theme);
+          isAdminRevoke ? TIM_t("[消息被管理员撤回]") : TIM_t("[消息被撤回]"), theme);
     }
 
     final messageType = message.elemType;
@@ -199,11 +199,12 @@ class _TIMUIKitReplyElemState extends TIMUIKitState<TIMUIKitReplyElem> {
     }
     switch (messageType) {
       case MessageElemType.V2TIM_ELEM_TYPE_CUSTOM:
+        String messageSummary = TIM_t("自定义消息");
         CustomMessageExtEntity? extEntity = CustomMessageUtils.messageCustomExt(message);
         if (extEntity != null) {
-          return  _defaultRawMessageText(extEntity.customLastMsgShow(), theme);
+          messageSummary = extEntity.customLastMsgShow();
         }
-        return _defaultRawMessageText(TIM_t("[自定义]"), theme);
+        return _defaultRawMessageText(messageSummary, theme);
       case MessageElemType.V2TIM_ELEM_TYPE_SOUND:
         return _defaultRawMessageText(TIM_t("[语音消息]"), theme);
       case MessageElemType.V2TIM_ELEM_TYPE_TEXT:
@@ -374,7 +375,13 @@ class _TIMUIKitReplyElemState extends TIMUIKitState<TIMUIKitReplyElem> {
         widget.message.textElem?.text ?? "",
         widget.chatModel.chatConfig.isSupportMarkdownForTextMessage,
         onLinkTap: widget.chatModel.chatConfig.onTapLink,
-        isUseDefaultEmoji: widget.isUseDefaultEmoji,
+        isUseQQPackage: (widget.chatModel.chatConfig.stickerPanelConfig
+            ?.useTencentCloudChatStickerPackage ??
+            true) ||
+            widget.isUseDefaultEmoji,
+        isUseTencentCloudChatPackage: widget.chatModel.chatConfig
+            .stickerPanelConfig?.useTencentCloudChatStickerPackage ??
+            true,
         customEmojiStickerList: widget.customEmojiStickerList,
         isEnableTextSelection:
         widget.chatModel.chatConfig.isEnableTextSelection ?? false);
@@ -385,10 +392,7 @@ class _TIMUIKitReplyElemState extends TIMUIKitState<TIMUIKitReplyElem> {
         borderRadius: widget.borderRadius ?? borderRadius,
       ),
       constraints:
-      BoxConstraints(maxWidth: MediaQuery
-          .of(context)
-          .size
-          .width * 0.6),
+      BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.6),
       child: GestureDetector(
         onTap: _jumpToRawMsg,
         child: Column(
@@ -441,7 +445,19 @@ class _TIMUIKitReplyElemState extends TIMUIKitState<TIMUIKitReplyElem> {
                         fontSize: isDesktopScreen ? 14 : 16,
                         height: widget.chatModel.chatConfig.textHeight),
                 specialTextSpanBuilder: DefaultSpecialTextSpanBuilder(
-                  isUseDefaultEmoji: widget.isUseDefaultEmoji,
+                  isUseQQPackage: (widget
+                      .chatModel
+                      .chatConfig
+                      .stickerPanelConfig
+                      ?.useTencentCloudChatStickerPackage ??
+                      true) ||
+                      widget.isUseDefaultEmoji,
+                  isUseTencentCloudChatPackage: widget
+                      .chatModel
+                      .chatConfig
+                      .stickerPanelConfig
+                      ?.useTencentCloudChatStickerPackage ??
+                      true,
                   customEmojiStickerList: widget.customEmojiStickerList,
                   showAtBackground: true,
                 )),

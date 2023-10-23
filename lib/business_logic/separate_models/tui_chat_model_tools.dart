@@ -74,7 +74,6 @@ class TUIChatModelTools {
         break;
       case MessageElemType.V2TIM_ELEM_TYPE_TEXT:
         messageSummary = message.textElem!.text!;
-        messageSummary = "您有一条新的消息";
         break;
       case MessageElemType.V2TIM_ELEM_TYPE_VIDEO:
         messageSummary = TIM_t("视频消息");
@@ -90,7 +89,7 @@ class TUIChatModelTools {
     }
 
     return OfflinePushInfo.fromJson({
-      "title": desc,
+      "title": title,
       "desc": desc,
       "disablePush": false,
       "ext": ext,
