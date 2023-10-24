@@ -281,7 +281,7 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
             }
             if (group.isGoodNum == 2) {
               target.goodStatus = 2;
-              conversationInfoMap["group_goodStatus_${target.groupID}"] = 1;
+              conversationInfoMap["group_goodStatus_${target.groupID}"] = 2;
             }
             break;
           }
