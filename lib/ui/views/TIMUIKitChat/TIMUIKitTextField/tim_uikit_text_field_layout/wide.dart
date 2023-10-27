@@ -37,6 +37,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:typed_data';
 import 'package:tencent_cloud_chat_uikit/ui/utils/logger.dart';
 
+import 'package:screen_capturer/screen_capturer.dart';
+
 class DesktopControlBarItem {
   final String item;
   final IconData? icon;
@@ -845,10 +847,29 @@ class _TIMUIKitTextFieldLayoutWideState
   }
 
   _sendScreenShot() async {
-    final file = await ScreenshotHelper.captureScreen();
-    if (file != null) {
-      _sendImageWithConfirmation(filePath: file);
-    } else {}
+    Directory directory = await getApplicationDocumentsDirectory();
+    String imageName =
+        'Screenshot-${DateTime.now().millisecondsSinceEpoch}.png';
+    String imagePath =
+        '${directory.path}/screen_capturer_example/Screenshots/$imageName';
+    CapturedData? lastCapturedData = await screenCapturer.capture(
+      imagePath: imagePath,
+      // copyToClipboard: true,
+      silent: true,
+    );
+    if (lastCapturedData != null && lastCapturedData.imagePath != null) {
+      // ignore: avoid_print
+      // print(_lastCapturedData!.toJson());
+      _sendImageWithConfirmation(filePath: lastCapturedData.imagePath!);
+    } else {
+      // ignore: avoid_print
+      print('User canceled capture');
+    }
+
+    // final file = await ScreenshotHelper.captureScreen();
+    // if (file != null) {
+    //   _sendImageWithConfirmation(filePath: file);
+    // } else {}
   }
 
   generateDefaultControlBarItems() {
