@@ -32,6 +32,7 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
   final int? convType;
   final bool isCurrent;
   final V2TimConversation? conversation;
+  final Map? conversationInfoMap;
 
   /// Control if shows the identifier that the conversation has a draft text, inputted in previous.
   /// Also, you'd better specifying the `draftText` field for `TIMUIKitChat`, from the `draftText` in `V2TimConversation`,
@@ -55,6 +56,7 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
     this.lastMessageBuilder,
     this.convType,
     this.conversation,
+    this.conversationInfoMap,
   }) : super(key: key);
 
   Widget _getShowMsgWidget(BuildContext context) {
@@ -172,7 +174,7 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
                         child: Row(
                       children: [
                         Container(
-                            constraints: const BoxConstraints(maxWidth: 70),
+                            constraints: BoxConstraints(maxWidth: isDesktopScreen ? 70 : MediaQuery.of(context).size.width - 70),
                             child: Text(
                               nickName,
                               softWrap: true,
@@ -182,8 +184,8 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
                               style: TextStyle(
                                 height: 1,
                                 color: (conversation
-                                            ?.showGoodImageStr?.isNotEmpty ??
-                                        false)
+                                    ?.showGoodImageStrByMap(conversationInfoMap)?.isNotEmpty ??
+                                    false)
                                     ? Colors.red
                                     : theme.conversationItemTitleTextColor,
                                 fontSize: isDesktopScreen ? 14 : 18,
@@ -193,9 +195,11 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
                         const SizedBox(
                           width: 6,
                         ),
-                        if (conversation?.showGoodImageStr?.isNotEmpty ?? false)
+                        if (conversation
+                            ?.showGoodImageStrByMap(conversationInfoMap)?.isNotEmpty ?? false)
                           Image.asset(
-                            conversation!.showGoodImageStr!,
+                            conversation
+                            !.showGoodImageStrByMap(conversationInfoMap)!,
                             fit: BoxFit.fitWidth,
                             height: 20,
                             width: 20,
@@ -203,9 +207,9 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
                         const SizedBox(
                           width: 6,
                         ),
-                        if (conversation?.showIconImageStr?.isNotEmpty ?? false)
+                        if (conversation?.showIconImageStrByMap(conversationInfoMap)?.isNotEmpty ?? false)
                           Image.asset(
-                            conversation!.showIconImageStr!,
+                            conversation!.showIconImageStrByMap(conversationInfoMap)!,
                             fit: BoxFit.fitWidth,
                             height: 20,
                             width: 42,

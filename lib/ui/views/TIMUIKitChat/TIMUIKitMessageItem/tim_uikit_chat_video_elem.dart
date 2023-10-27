@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:open_file/open_file.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_state.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
@@ -14,7 +15,6 @@ import 'package:tencent_cloud_chat_uikit/ui/utils/platform.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/TIMUIKitMessageItem/TIMUIKitMessageReaction/tim_uikit_message_reaction_wrapper.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/video_screen.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/wide_popup.dart';
-import 'package:tencent_open_file/tencent_open_file.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TIMUIKitVideoElem extends StatefulWidget {
@@ -27,11 +27,11 @@ class TIMUIKitVideoElem extends StatefulWidget {
 
   const TIMUIKitVideoElem(this.message,
       {Key? key,
-      this.isShowJump = false,
-      this.clearJump,
-      this.isFrom,
-      this.isShowMessageReaction,
-      required this.chatModel})
+        this.isShowJump = false,
+        this.clearJump,
+        this.isFrom,
+        this.isShowMessageReaction,
+        required this.chatModel})
       : super(key: key);
 
   @override
@@ -46,9 +46,9 @@ class _TIMUIKitVideoElemState extends TIMUIKitState<TIMUIKitVideoElem> {
     return Container(
       decoration: BoxDecoration(
           border: Border.all(
-        width: 1,
-        color: Colors.black12,
-      )),
+            width: 1,
+            color: Colors.black12,
+          )),
       height: 100,
       child: Center(
         child: Row(
@@ -111,17 +111,17 @@ class _TIMUIKitVideoElemState extends TIMUIKitState<TIMUIKitVideoElem> {
       );
     }
     return (!PlatformUtils().isWeb && stateElement.snapshotUrl == null ||
-            widget.message.status == MessageStatus.V2TIM_MSG_STATUS_SENDING)
+        widget.message.status == MessageStatus.V2TIM_MSG_STATUS_SENDING)
         ? (stateElement.snapshotPath!.isNotEmpty
-            ? Image.file(File(stateElement.snapshotPath!), fit: BoxFit.fitWidth)
-            : Image.file(File(stateElement.localSnapshotUrl!),
-                fit: BoxFit.fitWidth))
+        ? Image.file(File(stateElement.snapshotPath!), fit: BoxFit.fitWidth)
+        : Image.file(File(stateElement.localSnapshotUrl!),
+        fit: BoxFit.fitWidth))
         : (PlatformUtils().isWeb ||
-                stateElement.localSnapshotUrl == null ||
-                stateElement.localSnapshotUrl == "")
-            ? Image.network(stateElement.snapshotUrl!, fit: BoxFit.fitWidth)
-            : Image.file(File(stateElement.localSnapshotUrl!),
-                fit: BoxFit.fitWidth);
+        stateElement.localSnapshotUrl == null ||
+        stateElement.localSnapshotUrl == "")
+        ? Image.network(stateElement.snapshotUrl!, fit: BoxFit.fitWidth)
+        : Image.file(File(stateElement.localSnapshotUrl!),
+        fit: BoxFit.fitWidth);
   }
 
   downloadMessageDetailAndSave() async {
@@ -139,7 +139,7 @@ class _TIMUIKitVideoElemState extends TIMUIKitState<TIMUIKitVideoElem> {
       }
       if (!PlatformUtils().isWeb) {
         if (TencentUtils.checkString(widget.message.videoElem!.localVideoUrl) ==
-                null ||
+            null ||
             !File(widget.message.videoElem!.localVideoUrl!).existsSync()) {
           _messageService.downloadMessage(
               msgID: widget.message.msgID!,
@@ -148,8 +148,8 @@ class _TIMUIKitVideoElemState extends TIMUIKitState<TIMUIKitVideoElem> {
               isSnapshot: false);
         }
         if (TencentUtils.checkString(
-                    widget.message.videoElem!.localSnapshotUrl) ==
-                null ||
+            widget.message.videoElem!.localSnapshotUrl) ==
+            null ||
             !File(widget.message.videoElem!.localSnapshotUrl!).existsSync()) {
           _messageService.downloadMessage(
               msgID: widget.message.msgID!,
@@ -199,7 +199,7 @@ class _TIMUIKitVideoElemState extends TIMUIKitState<TIMUIKitVideoElem> {
           final videoElem = widget.message.videoElem;
           if (videoElem != null) {
             final localVideoUrl =
-                TencentUtils.checkString(videoElem.localVideoUrl);
+            TencentUtils.checkString(videoElem.localVideoUrl);
             final videoPath = TencentUtils.checkString(videoElem.videoPath);
             final videoUrl = videoElem.videoUrl;
             if (localVideoUrl != null) {
@@ -285,10 +285,10 @@ class _TIMUIKitVideoElemState extends TIMUIKitState<TIMUIKitVideoElem> {
                             ],
                           ),
                           if (widget.message.status !=
-                                      MessageStatus.V2TIM_MSG_STATUS_SENDING &&
-                                  (stateElement.snapshotUrl != null ||
-                                      stateElement.snapshotPath != null) &&
-                                  stateElement.videoPath != null ||
+                              MessageStatus.V2TIM_MSG_STATUS_SENDING &&
+                              (stateElement.snapshotUrl != null ||
+                                  stateElement.snapshotPath != null) &&
+                              stateElement.videoPath != null ||
                               stateElement.videoUrl != null)
                             Positioned.fill(
                               // alignment: Alignment.center,
@@ -304,7 +304,7 @@ class _TIMUIKitVideoElemState extends TIMUIKitState<TIMUIKitVideoElem> {
                                 bottom: 10,
                                 child: Text(
                                     MessageUtils.formatVideoTime(widget
-                                                .message.videoElem!.duration!)
+                                        .message.videoElem!.duration!)
                                         .toString(),
                                     style: const TextStyle(
                                         color: Colors.white, fontSize: 12))),

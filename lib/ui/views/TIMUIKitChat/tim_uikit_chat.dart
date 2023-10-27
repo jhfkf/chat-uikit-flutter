@@ -138,7 +138,8 @@ class TIMUIKitChat extends StatefulWidget {
   /// The top fixed widget.
   final Widget? topFixWidget;
 
-  final List customEmojiStickerList;
+  /// Specify the custom small png emoji packages.
+  final List<CustomEmojiFaceData> customEmojiStickerList;
 
   final Widget? customAppBar;
 
@@ -418,6 +419,27 @@ class _TUIChatState extends TIMUIKitState<TIMUIKitChat> {
             }
           }
 
+          List<CustomEmojiFaceData> customImageSmallPngEmojiPackages = [];
+          if (widget.config?.stickerPanelConfig?.customStickerPackages !=
+                  null &&
+              widget.config!.stickerPanelConfig!.customStickerPackages
+                  .isNotEmpty) {
+            customImageSmallPngEmojiPackages = widget
+                .config!.stickerPanelConfig!.customStickerPackages
+                .where((element) => element.isEmoji == true)
+                .map((e) {
+              return CustomEmojiFaceData(
+                  name: e.name,
+                  isEmoji: true,
+                  icon: e.menuItem.url ?? "",
+                  list: e.stickerList.map((e) => e.url ?? "").toList());
+            }).toList();
+          }
+          if (customImageSmallPngEmojiPackages.isEmpty) {
+            customImageSmallPngEmojiPackages
+                .addAll(widget.customEmojiStickerList);
+          }
+
           return GestureDetector(
             onTap: () {
               textFieldController.hideAllPanel();
@@ -544,7 +566,7 @@ class _TUIChatState extends TIMUIKitState<TIMUIKitChat> {
                                           model: model,
                                           controller: textFieldController,
                                           customEmojiStickerList:
-                                              widget.customEmojiStickerList,
+                                              customImageSmallPngEmojiPackages,
                                           isUseDefaultEmoji:
                                               widget.config!.isUseDefaultEmoji,
                                           customStickerPanel:

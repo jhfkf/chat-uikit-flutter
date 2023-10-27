@@ -1,8 +1,9 @@
 
 import 'dart:async';
 import 'dart:math';
-import 'package:audioplayers/audioplayers.dart';
+// import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_state.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/separate_models/tui_chat_separate_view_model.dart';
@@ -32,19 +33,19 @@ class TIMUIKitSoundElem extends StatefulWidget {
 
   const TIMUIKitSoundElem(
       {Key? key,
-      required this.soundElem,
-      required this.msgID,
-      required this.isFromSelf,
-      this.isShowJump = false,
-      this.clearJump,
-      this.localCustomInt,
-      this.fontStyle,
-      this.borderRadius,
-      this.backgroundColor,
-      this.textPadding,
-      required this.message,
-      this.isShowMessageReaction,
-      required this.chatModel})
+        required this.soundElem,
+        required this.msgID,
+        required this.isFromSelf,
+        this.isShowJump = false,
+        this.clearJump,
+        this.localCustomInt,
+        this.fontStyle,
+        this.borderRadius,
+        this.backgroundColor,
+        this.textPadding,
+        required this.message,
+        this.isShowMessageReaction,
+        required this.chatModel})
       : super(key: key);
 
   @override
@@ -119,11 +120,12 @@ class _TIMUIKitSoundElemState extends TIMUIKitState<TIMUIKitSoundElem> {
     super.initState();
 
     subscription =
-    SoundPlayer.playStateListener(listener: (PlayerState state) {
-      if(state == PlayerState.completed){
-        widget.chatModel.currentPlayedMsgId = "";
-      }
-    });
+        SoundPlayer.playStateListener(listener: (PlayerState state) {
+          if(state.processingState == ProcessingState.completed){
+            widget.chatModel.currentPlayedMsgId = "";
+          }
+        });
+
 
     downloadMessageDetailAndSave();
   }
@@ -191,15 +193,15 @@ class _TIMUIKitSoundElemState extends TIMUIKitState<TIMUIKitSoundElem> {
 
     final borderRadius = widget.isFromSelf
         ? const BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(2),
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10))
+        topLeft: Radius.circular(10),
+        topRight: Radius.circular(2),
+        bottomLeft: Radius.circular(10),
+        bottomRight: Radius.circular(10))
         : const BorderRadius.only(
-            topLeft: Radius.circular(2),
-            topRight: Radius.circular(10),
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10));
+        topLeft: Radius.circular(2),
+        topRight: Radius.circular(10),
+        bottomLeft: Radius.circular(10),
+        bottomRight: Radius.circular(10));
     if (widget.isShowJump) {
       if (!isShining) {
         Future.delayed(Duration.zero, () {
@@ -229,45 +231,45 @@ class _TIMUIKitSoundElemState extends TIMUIKitState<TIMUIKitSoundElem> {
               mainAxisSize: MainAxisSize.min,
               children: widget.isFromSelf
                   ? [
-                      Container(width: _getSoundLen()),
-                      Text(
-                        "''${stateElement.duration} ",
-                        style: widget.fontStyle,
-                      ),
-                      isPlaying
-                          ? Image.asset(
-                              'images/play_voice_send.gif',
-                              package: 'tencent_cloud_chat_uikit',
-                              width: 16,
-                              height: 16,
-                            )
-                          : Image.asset(
-                              'images/voice_send.png',
-                              package: 'tencent_cloud_chat_uikit',
-                              width: 16,
-                              height: 16,
-                            ),
-                    ]
+                Container(width: _getSoundLen()),
+                Text(
+                  "''${stateElement.duration} ",
+                  style: widget.fontStyle,
+                ),
+                isPlaying
+                    ? Image.asset(
+                  'images/play_voice_send.gif',
+                  package: 'tencent_cloud_chat_uikit',
+                  width: 16,
+                  height: 16,
+                )
+                    : Image.asset(
+                  'images/voice_send.png',
+                  package: 'tencent_cloud_chat_uikit',
+                  width: 16,
+                  height: 16,
+                ),
+              ]
                   : [
-                      isPlaying
-                          ? Image.asset(
-                              'images/play_voice_receive.gif',
-                              package: 'tencent_cloud_chat_uikit',
-                              width: 16,
-                              height: 16,
-                            )
-                          : Image.asset(
-                              'images/voice_receive.png',
-                              width: 16,
-                              height: 16,
-                              package: 'tencent_cloud_chat_uikit',
-                            ),
-                      Text(
-                        " ${stateElement.duration}''",
-                        style: widget.fontStyle,
-                      ),
-                      Container(width: _getSoundLen()),
-                    ],
+                isPlaying
+                    ? Image.asset(
+                  'images/play_voice_receive.gif',
+                  package: 'tencent_cloud_chat_uikit',
+                  width: 16,
+                  height: 16,
+                )
+                    : Image.asset(
+                  'images/voice_receive.png',
+                  width: 16,
+                  height: 16,
+                  package: 'tencent_cloud_chat_uikit',
+                ),
+                Text(
+                  " ${stateElement.duration}''",
+                  style: widget.fontStyle,
+                ),
+                Container(width: _getSoundLen()),
+              ],
             ),
             if (widget.isShowMessageReaction ?? true)
               TIMUIKitMessageReactionShowPanel(

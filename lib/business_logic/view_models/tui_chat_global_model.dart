@@ -18,9 +18,11 @@ import 'package:tencent_cloud_chat_uikit/ui/utils/message.dart';
 import 'package:tencent_cloud_chat_uikit/util/event_bus.dart';
 import 'package:tencent_cloud_chat_uikit/util/user_utils.dart';
 
+import 'package:audioplayers/audioplayers.dart';
 import '../../data_services/message/aes.dart';
 import '../../ui/utils/sound_record.dart';
 import '../../util/disturb_check_helper.dart';
+import '../../util/utils_audio_player.dart';
 
 enum ConvType { none, c2c, group }
 
@@ -96,7 +98,8 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
         String key = (newMsg.groupID != null  && newMsg.groupID!.isNotEmpty) ? newMsg.groupID! : newMsg.userID!;
         var disturb = await DisturbCheckHelper.check(key, (newMsg.userID != null && newMsg.userID!.isNotEmpty));
         if (!disturb) {
-          SoundPlayer.playAssets('audio/news_message.mp3');
+          print("xxxxxx");
+          UtilsAudioPlayer.playAssets('audio/news_message.mp3');
         }
       },
       onSendMessageProgress: (V2TimMessage messagae, int progress) {
@@ -1219,3 +1222,6 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
     }
   }
 }
+
+
+

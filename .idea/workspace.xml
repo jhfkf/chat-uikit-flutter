@@ -4,7 +4,50 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b113e354-2ef8-4eec-ab66-9ad96e9ffb8f" name="Changes" comment="" />
+    <list default="true" id="b113e354-2ef8-4eec-ab66-9ad96e9ffb8f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/lib/ui/utils/logger.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/util/utils_audio_player.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config_subset" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config_subset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/version" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/version" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/linux/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/example/linux/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/linux/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/example/linux/flutter/generated_plugins.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/example/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/example/windows/flutter/generated_plugins.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/svg/message_history.svg" beforeDir="false" afterPath="$PROJECT_DIR$/images/svg/message_history.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/business_logic/view_models/tui_chat_global_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/business_logic/view_models/tui_chat_global_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/utils/sound_record.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/utils/sound_record.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_chat_history_message_list_item.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_chat_history_message_list_item.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_chat_message_tooltip.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_chat_message_tooltip.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_history_message_list_container.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_history_message_list_container.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_file_elem.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_file_elem.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_image_elem.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_image_elem.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_reply_elem.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_reply_elem.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_sound_elem.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_sound_elem.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_text_elem.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_text_elem.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_text_translate_elem.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_text_translate_elem.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_video_elem.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitMessageItem/tim_uikit_chat_video_elem.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/special_text/DefaultSpecialTextSpanBuilder.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/special_text/DefaultSpecialTextSpanBuilder.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/special_text/emoji_text.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/special_text/emoji_text.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_text_field.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_text_field.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_text_field_layout/narrow.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_text_field_layout/narrow.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_text_field_layout/wide.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/TIMUIKitTextField/tim_uikit_text_field_layout/wide.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/tim_uikit_chat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/tim_uikit_chat.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/tim_uikit_chat_config.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/views/TIMUIKitChat/tim_uikit_chat_config.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/widgets/link_preview/common/utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/widgets/link_preview/common/utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/widgets/link_preview/link_preview_entry.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/widgets/link_preview/link_preview_entry.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/widgets/link_preview/widgets/link_text.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/widgets/link_preview/widgets/link_text.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/widgets/recent_conversation_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/widgets/recent_conversation_list.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,18 +64,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/jihaifeng/flutter_workspace/flutter_tencent_im/plugins/chat-uikit-flutter/lib/ui/widgets&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;AndroidSdkUpdater&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "io.flutter.reload.alreadyRun": "true",
+    "last_opened_file_path": "/Users/jihaifeng/flutter_workspace/flutter_tencent_im/plugins/chat-uikit-flutter",
+    "settings.editor.selected.configurable": "AndroidSdkUpdater",
+    "show.migrate.to.gradle.popup": "false"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/lib/ui/widgets" />

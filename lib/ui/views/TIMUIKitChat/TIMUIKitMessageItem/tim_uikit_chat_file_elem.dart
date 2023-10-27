@@ -6,9 +6,9 @@ import 'dart:math';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:open_file/open_file.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/permission.dart';
-import 'package:tencent_open_file/tencent_open_file.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_state.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/separate_models/tui_chat_separate_view_model.dart';
@@ -34,14 +34,14 @@ class TIMUIKitFileElem extends StatefulWidget {
 
   const TIMUIKitFileElem(
       {Key? key,
-      required this.chatModel,
-      required this.messageID,
-      required this.fileElem,
-      required this.isSelf,
-      required this.isShowJump,
-      this.clearJump,
-      required this.message,
-      this.isShowMessageReaction})
+        required this.chatModel,
+        required this.messageID,
+        required this.fileElem,
+        required this.isSelf,
+        required this.isShowJump,
+        this.clearJump,
+        required this.message,
+        this.isShowMessageReaction})
       : super(key: key);
 
   @override
@@ -85,8 +85,8 @@ class _TIMUIKitFileElemState extends TIMUIKitState<TIMUIKitFileElem> {
             }
           } else {
             final currentProgress =
-                (messageProgress.currentSize / messageProgress.totalSize * 100)
-                    .floor();
+            (messageProgress.currentSize / messageProgress.totalSize * 100)
+                .floor();
             if (mounted && currentProgress > downloadProgress) {
               setState(() {
                 downloadProgress = currentProgress;
@@ -114,7 +114,7 @@ class _TIMUIKitFileElemState extends TIMUIKitState<TIMUIKitFileElem> {
       return true;
     }
     String savePath = TencentUtils.checkString(
-            model.getFileMessageLocation(widget.messageID)) ??
+        model.getFileMessageLocation(widget.messageID)) ??
         TencentUtils.checkString(widget.message.fileElem!.localUrl) ??
         widget.message.fileElem?.path ??
         '';
@@ -240,7 +240,9 @@ class _TIMUIKitFileElemState extends TIMUIKitState<TIMUIKitFileElem> {
         OpenFile.open(filePath);
       }
       // ignore: empty_catches
-    } catch (e) {}
+    } catch (e) {
+      OpenFile.open(filePath);
+    }
   }
 
   void downloadWebFile(String fileUrl) async {
@@ -257,7 +259,7 @@ class _TIMUIKitFileElemState extends TIMUIKitState<TIMUIKitFileElem> {
       );
 
       final html.AnchorElement downloadAnchor =
-          html.document.createElement('a') as html.AnchorElement;
+      html.document.createElement('a') as html.AnchorElement;
 
       final html.Blob blob = html.Blob([response.bodyBytes]);
 
@@ -290,15 +292,15 @@ class _TIMUIKitFileElemState extends TIMUIKitState<TIMUIKitFileElem> {
     final fileSize = widget.fileElem!.fileSize;
     final borderRadius = widget.isSelf
         ? const BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(2),
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10))
+        topLeft: Radius.circular(10),
+        topRight: Radius.circular(2),
+        bottomLeft: Radius.circular(10),
+        bottomRight: Radius.circular(10))
         : const BorderRadius.only(
-            topLeft: Radius.circular(2),
-            topRight: Radius.circular(10),
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10));
+        topLeft: Radius.circular(2),
+        topRight: Radius.circular(10),
+        bottomLeft: Radius.circular(10),
+        bottomRight: Radius.circular(10));
     String? fileFormat;
     if (widget.fileElem?.fileName != null &&
         widget.fileElem!.fileName!.isNotEmpty) {
@@ -306,7 +308,7 @@ class _TIMUIKitFileElemState extends TIMUIKitState<TIMUIKitFileElem> {
       fileFormat = fileName.split(".")[max(fileName.split(".").length - 1, 0)];
     }
     final RenderBox? containerRenderBox =
-        containerKey.currentContext?.findRenderObject() as RenderBox?;
+    containerKey.currentContext?.findRenderObject() as RenderBox?;
     if (containerRenderBox != null) {
       containerHeight = containerRenderBox.size.height;
     }
@@ -401,33 +403,33 @@ class _TIMUIKitFileElemState extends TIMUIKitState<TIMUIKitFileElem> {
                             children: [
                               Expanded(
                                   child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    constraints:
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        constraints:
                                         const BoxConstraints(maxWidth: 160),
-                                    child: LayoutBuilder(
-                                      builder: (buildContext, boxConstraints) {
-                                        return CustomText(
-                                          fileName,
-                                          width: boxConstraints.maxWidth,
+                                        child: LayoutBuilder(
+                                          builder: (buildContext, boxConstraints) {
+                                            return CustomText(
+                                              fileName,
+                                              width: boxConstraints.maxWidth,
+                                              style: TextStyle(
+                                                color: theme.darkTextColor,
+                                                fontSize: 16,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      if (fileSize != null)
+                                        Text(
+                                          showFileSize(fileSize),
                                           style: TextStyle(
-                                            color: theme.darkTextColor,
-                                            fontSize: 16,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  if (fileSize != null)
-                                    Text(
-                                      showFileSize(fileSize),
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: theme.weakTextColor),
-                                    )
-                                ],
-                              )),
+                                              fontSize: 14,
+                                              color: theme.weakTextColor),
+                                        )
+                                    ],
+                                  )),
                               TIMUIKitFileIcon(
                                 fileFormat: fileFormat,
                               ),

@@ -160,6 +160,8 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
   List<V2TimGroupInfo> groupList = [];
   List<V2TimFriendInfo> userList = [];
 
+  Map conversationInfoMap = {};
+
   @override
   void initState() {
     super.initState();
@@ -185,6 +187,16 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
         List<V2TimFriendInfo> userList = value.data ?? [];
         this.userList = userList;
         setState(() {});
+      }
+    });
+
+    bus.on("ClearAllHistoryEvent", (arg) {
+      List<V2TimConversation?> filteredConversationList = getFilteredConversation();
+      for (V2TimConversation? conversationItem in filteredConversationList) {
+        if (conversationItem != null) {
+          _clearHistory(conversationItem);
+          _deleteConversation(conversationItem);
+        }
       }
     });
 
@@ -241,26 +253,22 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
     for (var target in filteredConversationList) {
       if (target != null && target.groupID != null) {
         for (var group in groupList) {
+          /// 遍历我的所有群列表
           if (target.groupID == group.groupID) {
             if (group.isSuperVip) {
               target.higherStatus = 2;
+              conversationInfoMap["group_higherStatus_${target.groupID}"] = 2;
             } else if (group.isNormalVip) {
               target.higherStatus = 1;
+              conversationInfoMap["group_higherStatus_${target.groupID}"] = 1;
             } else {
               target.higherStatus = 0;
+              conversationInfoMap["group_higherStatus_${target.groupID}"] = 0;
             }
             if (group.isGoodNum == 2) {
               target.goodStatus = 2;
+              conversationInfoMap["group_goodStatus_${target.groupID}"] = 2;
             }
-            // target.higherStatus =
-            // group.isSuperVip ? 2 : (group.isSuperVip ? 1 : 0);
-            // if (group.isNormalVip || group.isSuperVip) {
-            //   if (group.isNormalVip) {
-            //     target.higherStatus = 1;
-            //   } else {
-            //     target.higherStatus = 2;
-            //   }
-            // }
             break;
           }
         }
@@ -269,6 +277,8 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
         for (var user in userList) {
           if (target.userID == user.userID) {
             target.goodStatus = user.userProfile?.isGoodNum ?? 0;
+            conversationInfoMap["user_goodStatus_${target.userID}"] =
+                user.userProfile?.isGoodNum ?? 0;
           }
         }
       }
@@ -472,6 +482,7 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
                               draftTimestamp: conversationItem.draftTimestamp,
                               convType: conversationItem.type,
                               conversation: conversationItem,
+                              conversationInfoMap: conversationInfoMap,
                             ),
                             onTap: () => onTapConvItem(conversationItem),
                           ),
