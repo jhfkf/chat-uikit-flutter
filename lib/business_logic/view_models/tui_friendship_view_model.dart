@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/life_cycle/block_list_life_cycle.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/life_cycle/friend_list_life_cycle.dart';
@@ -169,7 +171,20 @@ class TUIFriendShipViewModel extends ChangeNotifier {
         await _friendshipServices.getFriendList() ?? [];
     final memberList =
         await _contactListLifeCycle?.friendListWillMount(res) ?? res;
+
+    /// 处理web用户资料不显示问题
+    if (GetPlatform.isWeb) {
+      List<String> userIDs = memberList.map((e) => e.userID).toList();
+      List<V2TimUserFullInfo> infos = await _friendshipServices.getUsersInfo(userIDList: userIDs) ?? [];
+
+      infos.forEach((info) {
+        V2TimFriendInfo? friendInfo = memberList.firstWhereOrNull((element) => element.userID == info.userID);
+        friendInfo?.userProfile = info;
+      });
+    }
+
     _friendList = memberList;
+
     notifyListeners();
     return;
   }
