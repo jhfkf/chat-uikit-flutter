@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tencent_cloud_chat_uikit/api/api.dart';
+import 'package:tencent_cloud_chat_uikit/api/utils_api.dart';
+import 'package:tencent_cloud_chat_uikit/util/user_utils.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_statelesswidget.dart';
 
 import 'package:tencent_cloud_chat_uikit/ui/widgets/avatar.dart';
 import 'package:tencent_cloud_chat_uikit/extension/v2_tim_user_full_info_ext_entity.dart';
+
 
 class TIMUIKitProfileUserInfoCardNarrow extends TIMUIKitStatelessWidget {
   /// User info
@@ -23,6 +28,24 @@ class TIMUIKitProfileUserInfoCardNarrow extends TIMUIKitStatelessWidget {
           this.isJumpToPersonalProfile = false,
       this.showArrowRightIcon = false})
       : super(key: key);
+
+  Future uniqueId() async {
+    String loginUser = await UserUtils.loginUser();
+    if (userInfo?.userID == loginUser) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      return prefs.getString("uniqueId") ?? "";
+    }
+    Map<String, dynamic> params = {
+      "accid": userInfo?.userID ?? ""
+    };
+    DataResult result = await UtilsApi.baseQueryPost(
+        url: Api.appUserQueryUserId, params: params, isLongAwaitShow: false);
+    Map resultMap = result.data;
+    if (resultMap.keys.contains("uniqueId")) {
+      return "${resultMap['uniqueId']}";
+    }
+    return "";
+  }
 
   @override
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
@@ -79,11 +102,25 @@ class TIMUIKitProfileUserInfoCardNarrow extends TIMUIKitStatelessWidget {
                         style:
                             TextStyle(fontSize: 13, color: theme.weakTextColor),
                       ),
-                      SelectableText(
-                        userInfo?.userID ?? "",
-                        style:
-                            TextStyle(fontSize: 13, color: theme.weakTextColor),
+                      FutureBuilder(
+                        future: uniqueId(),
+                        builder: (ctx, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.done) {
+                            return SelectableText(
+                              snapshot.data,
+                              style: TextStyle(
+                                  fontSize: 13, color: theme.weakTextColor),
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
                       ),
+                      // SelectableText(
+                      //   userInfo?.userID ?? "",
+                      //   style:
+                      //       TextStyle(fontSize: 13, color: theme.weakTextColor),
+                      // ),
                     ],
                   ),
                 ),
