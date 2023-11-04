@@ -172,7 +172,7 @@ class TUIFriendShipViewModel extends ChangeNotifier {
         await _contactListLifeCycle?.friendListWillMount(res) ?? res;
 
     /// 处理web用户资料不显示问题
-    if (GetPlatform.isWeb) {
+    // if (GetPlatform.isWeb) {
       List<String> userIDs = memberList.map((e) => e.userID).toList();
       List<V2TimUserFullInfo> infos = await _friendshipServices.getUsersInfo(userIDList: userIDs) ?? [];
 
@@ -180,7 +180,7 @@ class TUIFriendShipViewModel extends ChangeNotifier {
         V2TimFriendInfo? friendInfo = memberList.firstWhereOrNull((element) => element.userID == info.userID);
         friendInfo?.userProfile = info;
       });
-    }
+    // }
 
     _friendList = memberList;
     notifyListeners();
