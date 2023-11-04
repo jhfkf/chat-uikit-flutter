@@ -108,12 +108,12 @@ class _TIMUIKitNewContactState extends TIMUIKitState<TIMUIKitNewContact> {
                             const SizedBox(
                               height: 4,
                             ),
-                          if (applicationText.isNotEmpty && isDesktopScreen)
-                            Text(
-                              applicationText,
-                              style: TextStyle(
-                                  color: theme.weakTextColor, fontSize: 12),
-                            ),
+                          // if (applicationText.isNotEmpty && isDesktopScreen)
+                          //   Text(
+                          //     applicationText,
+                          //     style: TextStyle(
+                          //         color: theme.weakTextColor, fontSize: 12),
+                          //   ),
                         ],
                       ),
                     ),

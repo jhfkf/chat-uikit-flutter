@@ -65,7 +65,15 @@ class _TIMUIKitContactState extends TIMUIKitState<TIMUIKitContact> {
           final model = Provider.of<TUIFriendShipViewModel>(context);
           model.contactListLifeCycle = widget.lifeCycle;
           final memberList = model.friendList ?? [];
+          if (memberList.isEmpty) {
+            model.loadContactListData().then((value) {
+              if (model.friendList?.isNotEmpty ?? false) {
+                setState(() {
 
+                });
+              }
+            });
+          }
           return ContactList(
             currentItem: currentItem,
             emptyBuilder: widget.emptyBuilder,
