@@ -36,6 +36,14 @@ class TBRInterceptors extends InterceptorsWrapper {
     if (prefs.get('token') != null && needAuthorization(options)) {
       options.headers["Authorization"] = prefs.get('token');
     }
+    if (options.path.endsWith("app/user/queryUserId")) {
+      options.contentType = 'application/x-www-form-urlencoded';
+    }else {
+      options.contentType = "application/json";
+    }
+    //调式环境下打印请求信息
+    debugPrint(
+        '====================接口请求====================\n请求时间=>${DateTime.now()}\n请求token=>${prefs.get('token')}\n接口类型=>${options.method}\n接口路径=>${options.baseUrl}${options.path}\n接口参数=>${options.method == 'POST' ? options.data.toString() : options.queryParameters.toString()}');
     super.onRequest(options, handler);
   }
 
@@ -43,7 +51,8 @@ class TBRInterceptors extends InterceptorsWrapper {
   void onResponse(Response response, ResponseInterceptorHandler handler) async {
     // TODO: implement onResponse
     RequestOptions option = response.requestOptions;
-
+    debugPrint(
+        '====================接口响应====================\n响应时间=>${DateTime.now()}\n接口类型=>${option.method}\n接口路径=>${option.path}\n接口参数=>${option.method == 'POST' ? option.data.toString() : option.queryParameters.toString()}\n接口返回=>${response.data}');
     try {
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         if (option.data is! Map) {

@@ -18,4 +18,7 @@ class Api {
   /// 邀请通讯录进入群
   static const appInviteNewUser = "app/wahuhighgroup/inviteNewUser";
 
+  /// 查询用户ID
+  static const appUserQueryUserId = "app/user/queryUserId";
+
 }
