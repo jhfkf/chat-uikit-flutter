@@ -65,7 +65,7 @@ class _TIMUIKitAddFriendState extends TIMUIKitState<TIMUIKitAddFriend> {
         TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
 
     final faceUrl = friendInfo.faceUrl ?? "";
-    final userID = friendInfo.accid ?? "";
+    final userID = friendInfo.extInfo.uniqueId ?? "";
     final String showName =
         ((friendInfo.nickName != null && friendInfo.nickName!.isNotEmpty)
             ? friendInfo.nickName
@@ -78,7 +78,7 @@ class _TIMUIKitAddFriendState extends TIMUIKitState<TIMUIKitAddFriend> {
         final checkFriend = await _friendshipServices.checkFriend(
             userIDList: userIDList,
             checkType: FriendTypeEnum.V2TIM_FRIEND_TYPE_SINGLE);
-        if (checkFriend != null) {
+        if (checkFriend != null && checkFriend.isNotEmpty) {
           final res = checkFriend.first;
           if (res.resultCode == 0 && res.resultType != 0) {
             onTIMCallback(TIMCallback(
@@ -213,16 +213,30 @@ class _TIMUIKitAddFriendState extends TIMUIKitState<TIMUIKitAddFriend> {
       return false;
     }
     if (result.data is List) {
-      List<String> ids = [];
+      List<String> userIds = [];
+      List<String> accids = [];
+      List<String> keys = [];
       for (var item in result.data) {
-        if ((item is Map) && item.keys.contains('accid')) {
-          ids.add(item['accid']);
+        if ((item is Map) && item.keys.contains('userId')) {
+          userIds.add(item['userId']);
+          accids.add(item['accid']);
+          keys.add(item['key']);
         }
       }
-      if (ids.isNotEmpty) {
-        final response = await _coreServicesImpl.getUsersInfo(userIDList: ids);
+      if (userIds.isNotEmpty) {
+        final V2TimValueCallback<List<V2TimUserFullInfo>> response = await _coreServicesImpl.getUsersInfo(userIDList: userIds);
         if (response.code == 0) {
+          response.data?.forEach((element) {
+            if (element.customInfo != null) {
+              int index = userIds.indexOf(element.userID ?? "");
+              if(index >= 0) {
+                element.customInfo!["uniqueId"] = accids[index];
+                element.customInfo!["key"] = keys[index];
+              }
+            }
+          });
           setState(() {
+
             searchResult = response.data;
           });
         } else {

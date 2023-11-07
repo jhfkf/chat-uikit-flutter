@@ -40,6 +40,14 @@ V2TimUserFullInfoExtEntity $V2TimUserFullInfoExtEntityFromJson(Map<String, dynam
 	if (num != null) {
 		v2TimUserFullInfoExtEntity.num = num;
 	}
+	final String? uniqueId = jsonConvert.convert<String>(json['uniqueId']);
+	if (uniqueId != null) {
+		v2TimUserFullInfoExtEntity.uniqueId = uniqueId;
+	}
+	final String? key = jsonConvert.convert<String>(json['key']);
+	if (key != null) {
+		v2TimUserFullInfoExtEntity.key = key;
+	}
 	final int? tagProfileCustomNum = jsonConvert.convert<int>(json['Tag_Profile_Custom_num']);
 	if (tagProfileCustomNum != null) {
 		v2TimUserFullInfoExtEntity.tagProfileCustomNum = tagProfileCustomNum;
@@ -59,5 +67,7 @@ Map<String, dynamic> $V2TimUserFullInfoExtEntityToJson(V2TimUserFullInfoExtEntit
 	data['sphone'] = entity.sphone;
 	data['userid'] = entity.userid;
 	data['num'] = entity.num;
+	data['uniqueId'] = entity.uniqueId;
+	data['key'] = entity.key;
 	return data;
 }

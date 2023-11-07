@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:tencent_cloud_chat_uikit/extension/v2_tim_user_full_info_ext_entity.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
@@ -38,7 +40,19 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
     super.initState();
     final showName =
         widget.model.loginInfo?.nickName ?? widget.model.loginInfo?.accid;
-    _verficationController.text = "我是: $showName";
+    Map param = {
+      "Tag": "Key",
+      "Value": widget.friendInfo.extInfo.uniqueId ?? ""
+    };
+    // if (widget.groupInfo) {
+    //   param = {
+    //         "Tag": "GroupId",
+    //     "Value": widget.friendInfo.extInfo.uniqueId ?? ""
+    //   };
+    //     param = @{ @"Tag" : @"GroupId", @"Value": self.groupInfo.groupID ?: @""};
+    // }
+    // _verficationController.text = "我是: $showName";
+    _verficationController.text = jsonEncode(param);
   }
 
   @override
@@ -48,7 +62,7 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
         serviceLocator<FriendshipServices>();
 
     final faceUrl = widget.friendInfo.faceUrl ?? "";
-    final userID = widget.friendInfo.accid ?? "";
+    final userID = widget.friendInfo.extInfo.uniqueId ?? "";
     final String showName = ((widget.friendInfo.nickName != null &&
                 widget.friendInfo.nickName!.isNotEmpty)
             ? widget.friendInfo.nickName
@@ -105,29 +119,29 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Text(
-                TIM_t("填写验证信息"),
-                style: TextStyle(fontSize: 16, color: theme.weakTextColor),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 6, bottom: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              color: theme.white,
-              child: TextField(
-                // minLines: 1,
-                maxLines: 4,
-                controller: _verficationController,
-                keyboardType: TextInputType.multiline,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(color: theme.textgrey),
-                  hintText: '',
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 16.0),
+            //   child: Text(
+            //     TIM_t("填写验证信息"),
+            //     style: TextStyle(fontSize: 16, color: theme.weakTextColor),
+            //   ),
+            // ),
+            // Container(
+            //   margin: const EdgeInsets.only(top: 6, bottom: 12),
+            //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            //   color: theme.white,
+            //   child: TextField(
+            //     // minLines: 1,
+            //     maxLines: 4,
+            //     controller: _verficationController,
+            //     keyboardType: TextInputType.multiline,
+            //     decoration: InputDecoration(
+            //       border: InputBorder.none,
+            //       hintStyle: TextStyle(color: theme.textgrey),
+            //       hintText: '',
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: Text(
