@@ -42,7 +42,7 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
         widget.model.loginInfo?.nickName ?? widget.model.loginInfo?.accid;
     Map param = {
       "Tag": "Key",
-      "Value": widget.friendInfo.extInfo.uniqueId ?? ""
+      "Value": widget.friendInfo.extInfo.key ?? ""
     };
     // if (widget.groupInfo) {
     //   param = {
