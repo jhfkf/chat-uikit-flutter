@@ -24,6 +24,7 @@ typedef ProfileBuilder = Widget Function(
 class TIMUIKitProfile extends StatefulWidget {
   /// user ID
   final String userID;
+  final String groupID;
 
   /// [Deprecated:] the builder for custom operation list.
   /// [operationListBuilder] and [bottomOperationBuilder] merged into [builder], please use it instead.
@@ -86,6 +87,7 @@ class TIMUIKitProfile extends StatefulWidget {
   const TIMUIKitProfile(
       {Key? key,
       required this.userID,
+      required this.groupID,
       @Deprecated(
           "[operationListBuilder] and [bottomOperationBuilder] merged into [builder], please use it instead")
       this.operationListBuilder,
@@ -240,7 +242,7 @@ class _TIMUIKitProfileState extends TIMUIKitState<TIMUIKitProfile> {
           }
 
           void handleAddFriend() async {
-            model.addFriend(userInfo.userID).then((res) {
+            model.addFriend(userInfo.userID, widget.groupID).then((res) {
               if (res == null) {
                 throw Error();
               }

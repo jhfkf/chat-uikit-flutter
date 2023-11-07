@@ -10,6 +10,7 @@ class TIMUIKitProfileExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TIMUIKitProfile(
+      groupID: "",
       userID: userID ?? "10040818", // Please fill in here according to the actual cleaning
     );
   }
