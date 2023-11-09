@@ -77,7 +77,7 @@ class TIMUIKitProfileController {
 
   /// Add a user as friend or contact
   Future<V2TimFriendOperationResult?> addFriend(String userID) {
-    return model.addFriend(userID);
+    return model.addFriend(userID, "");
   }
 
   Future<V2TimCallback> updateSelfSignature(String selfSignature) {

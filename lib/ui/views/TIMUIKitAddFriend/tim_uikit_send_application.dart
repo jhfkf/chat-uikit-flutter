@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:tencent_cloud_chat_uikit/extension/v2_tim_user_full_info_ext_entity.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
@@ -38,7 +40,12 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
     super.initState();
     final showName =
         widget.model.loginInfo?.nickName ?? widget.model.loginInfo?.accid;
-    _verficationController.text = "我是: $showName";
+    Map param = {
+      "Tag": "Key",
+      "Value": widget.friendInfo.extInfo.key ?? ""
+    };
+    // _verficationController.text = "我是: $showName";
+    _verficationController.text = jsonEncode(param);
   }
 
   @override
@@ -48,7 +55,8 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
         serviceLocator<FriendshipServices>();
 
     final faceUrl = widget.friendInfo.faceUrl ?? "";
-    final userID = widget.friendInfo.accid ?? "";
+    // final userID = widget.friendInfo.accid ?? "";
+    final userID = widget.friendInfo.extInfo.uniqueId ?? "";
     final String showName = ((widget.friendInfo.nickName != null &&
                 widget.friendInfo.nickName!.isNotEmpty)
             ? widget.friendInfo.nickName
@@ -105,29 +113,29 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Text(
-                TIM_t("填写验证信息"),
-                style: TextStyle(fontSize: 16, color: theme.weakTextColor),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 6, bottom: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              color: theme.white,
-              child: TextField(
-                // minLines: 1,
-                maxLines: 4,
-                controller: _verficationController,
-                keyboardType: TextInputType.multiline,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(color: theme.textgrey),
-                  hintText: '',
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 16.0),
+            //   child: Text(
+            //     TIM_t("填写验证信息"),
+            //     style: TextStyle(fontSize: 16, color: theme.weakTextColor),
+            //   ),
+            // ),
+            // Container(
+            //   margin: const EdgeInsets.only(top: 6, bottom: 12),
+            //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            //   color: theme.white,
+            //   child: TextField(
+            //     // minLines: 1,
+            //     maxLines: 4,
+            //     controller: _verficationController,
+            //     keyboardType: TextInputType.multiline,
+            //     decoration: InputDecoration(
+            //       border: InputBorder.none,
+            //       hintStyle: TextStyle(color: theme.textgrey),
+            //       hintText: '',
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: Text(
@@ -228,6 +236,23 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
                           type: TIMCallbackType.INFO,
                           infoRecommendText: TIM_t("当前用户在黑名单"),
                           infoCode: 6661204));
+                    } else if (res.code == 0) {
+                      String errorInfo = res.data?.resultInfo ?? "";
+                      if ("Err_SNS_FriendAdd_Friend_Exist" == res.data?.resultInfo){
+                        errorInfo = "对方已是您的好友";
+                      }else {
+                        RegExp exp = RegExp(r"[\u4e00-\u9fa5]");
+                        if(exp.hasMatch(errorInfo)) {
+                          // 字符串中含有中文字符
+                        } else {
+                          // 字符串中不含有中文字符
+                          errorInfo = "添加好友过快，请稍后再试";
+                        }
+                      }
+                      onTIMCallback(TIMCallback(
+                          type: TIMCallbackType.INFO,
+                          infoRecommendText: errorInfo,
+                          infoCode: 6661202));
                     }
                   },
                   child: Text(TIM_t("发送"))),

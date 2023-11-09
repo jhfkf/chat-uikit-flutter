@@ -1,5 +1,5 @@
 // ignore_for_file: avoid_print
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/life_cycle/profile_life_cycle.dart';
@@ -216,13 +216,21 @@ class TUIProfileViewModel extends ChangeNotifier {
     return res;
   }
 
-  Future<V2TimFriendOperationResult?> addFriend(String userID) async {
+  Future<V2TimFriendOperationResult?> addFriend(String userID, String groupID) async {
     if (_lifeCycle?.shouldAddFriend != null &&
         await _lifeCycle!.shouldAddFriend(userID) == false) {
       return null;
     }
+    Map param = {
+      "Tag": "GroupId",
+      "Value": groupID
+    };
     final res = await _friendshipServices.addFriend(
-        userID: userID, addType: FriendTypeEnum.V2TIM_FRIEND_TYPE_BOTH);
+        userID: userID,
+        addType: FriendTypeEnum.V2TIM_FRIEND_TYPE_BOTH,
+        addWording: groupID.isNotEmpty ? jsonEncode(param) : "",
+        friendGroup: TIM_t("我的好友"),
+        addSource: "AddSource_Type_isPhone");
     if (res.code == 0) {
       loadData(userID: userID);
       return res.data;

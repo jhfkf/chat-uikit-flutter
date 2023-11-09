@@ -14,13 +14,15 @@ class V2TimUserFullInfoExtEntity {
   int? tagProfileCustomSphone;
   @JSONField(name: "Tag_Profile_Custom_userid")
   String? tagProfileCustomUserid;
-	@JSONField(name: "Tag_Profile_Custom_num")
-	int? tagProfileCustomNum;
+  @JSONField(name: "Tag_Profile_Custom_num")
+  int? tagProfileCustomNum;
   int? lock;
   int? sappid;
   int? sphone;
   int? num;
   String? userid;
+  String? uniqueId;
+  String? key;
 
   V2TimUserFullInfoExtEntity();
 
@@ -38,7 +40,10 @@ class V2TimUserFullInfoExtEntity {
       int? lock,
       int? sappid,
       int? sphone,
-      String? userid}) {
+      String? userid,
+      int? num,
+      String? uniqueId,
+      String? key}) {
     return V2TimUserFullInfoExtEntity()
       ..tagProfileCustomLock = tagProfileCustomLock ?? this.tagProfileCustomLock
       ..tagProfileCustomSappid =
@@ -52,7 +57,9 @@ class V2TimUserFullInfoExtEntity {
       ..sappid = sappid ?? this.sappid
       ..sphone = sphone ?? this.sphone
       ..userid = userid ?? this.userid
-      ..num = num ?? this.num;
+      ..num = num ?? this.num
+      ..key = key ?? this.key
+      ..uniqueId = uniqueId ?? this.uniqueId;
   }
 
   @override
@@ -98,5 +105,4 @@ extension V2TimUserFullInfoExt on V2TimUserFullInfo {
     }
     return null;
   }
-
 }
