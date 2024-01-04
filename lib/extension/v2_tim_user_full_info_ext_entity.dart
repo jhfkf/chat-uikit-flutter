@@ -16,6 +16,12 @@ class V2TimUserFullInfoExtEntity {
   String? tagProfileCustomUserid;
   @JSONField(name: "Tag_Profile_Custom_num")
   int? tagProfileCustomNum;
+
+  @JSONField(name: "Tag_Profile_Custom_color")
+  String? tagProfileCustomColor;
+  @JSONField(name: "Tag_Profile_Custom_icon")
+  String? tagProfileCustomIcon;
+
   int? lock;
   int? sappid;
   int? sphone;
@@ -37,6 +43,8 @@ class V2TimUserFullInfoExtEntity {
       int? tagProfileCustomSphone,
       String? tagProfileCustomUserid,
       int? tagProfileCustomNum,
+      String? tagProfileCustomColor,
+      String? tagProfileCustomIcon,
       int? lock,
       int? sappid,
       int? sphone,
@@ -53,6 +61,9 @@ class V2TimUserFullInfoExtEntity {
       ..tagProfileCustomUserid =
           tagProfileCustomUserid ?? this.tagProfileCustomUserid
       ..tagProfileCustomNum = tagProfileCustomNum ?? this.tagProfileCustomNum
+      ..tagProfileCustomColor =
+          tagProfileCustomColor ?? this.tagProfileCustomColor
+      ..tagProfileCustomIcon = tagProfileCustomIcon ?? this.tagProfileCustomIcon
       ..lock = lock ?? this.lock
       ..sappid = sappid ?? this.sappid
       ..sphone = sphone ?? this.sphone
@@ -70,8 +81,10 @@ class V2TimUserFullInfoExtEntity {
 
 // {"Tag_Profile_Custom_lock": 0,"Tag_Profile_Custom_sappid": 1,"Tag_Profile_Custom_sphone": 0,"Tag_Profile_Custom_userid":"a6666678", "lock": 0,"sappid": 1,"sphone": 0,"userid":"a6666678"}
 extension V2TimUserFullInfoExt on V2TimUserFullInfo {
-  V2TimUserFullInfoExtEntity get extInfo =>
-      V2TimUserFullInfoExtEntity.fromJson(customInfo ?? {});
+  V2TimUserFullInfoExtEntity get extInfo {
+    print('other user customInfo --> $customInfo');
+    return V2TimUserFullInfoExtEntity.fromJson(customInfo ?? {});
+  }
 
   bool get isEnabledPhoneSearch =>
       (extInfo.sphone == 1 || extInfo.tagProfileCustomSphone == 1);
@@ -96,13 +109,38 @@ extension V2TimUserFullInfoExt on V2TimUserFullInfo {
   bool get isEnabledDeviceLock =>
       (extInfo.lock == 1 || extInfo.tagProfileCustomLock == 1);
 
-  String? get showGoodNumImageStr {
+  String get nameColorHex {
     if (isGoodNum == 1) {
+      String tagProfileCustomColor = extInfo.tagProfileCustomColor ?? "";
+      if (tagProfileCustomColor.isNotEmpty) {
+        return tagProfileCustomColor;
+      }
+      return "ff0000";
+    }
+    return "";
+  }
+
+  String get showGoodNumImageStr {
+    if (isGoodNum == 1) {
+      String tagProfileCustomIcon = extInfo.tagProfileCustomIcon ?? "";
+      if (tagProfileCustomIcon.isNotEmpty) {
+        return tagProfileCustomIcon;
+      }
       return "assets/liang_fang.png";
     }
-    if (isGoodNum == 2) {
-      return "assets/liang_quan.png";
-    }
-    return null;
+    return "";
   }
+
+  /// 是否需要展示连接的good图标
+  bool get showGoodNumImageStrByUrl {
+    return showGoodNumImageStr.isNotEmpty &&
+        showGoodNumImageStr.startsWith('http');
+  }
+
+  /// 是否需要展示连接的本地图标
+  bool get showGoodNumImageStrByAssets {
+    return showGoodNumImageStr.isNotEmpty &&
+        !showGoodNumImageStr.startsWith('http');
+  }
+
 }

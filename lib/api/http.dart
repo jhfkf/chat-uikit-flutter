@@ -25,7 +25,7 @@ class HttpManager {
 
   HttpManager() {
     //cookie管理
-    setDioBaseOptions(baseUrl: 'http://xkqapi.e92.cc/', headers: {});
+    setDioBaseOptions(baseUrl: 'https://s.sqapi.com/user/', headers: {});
     // 添加请求拦截器
     dio.interceptors.add(TBRInterceptors());
     SharedPreferences.getInstance().then((prefs) {
@@ -65,7 +65,7 @@ class HttpManager {
     }
 
     dio.options = BaseOptions(
-      baseUrl: baseUrl ?? 'http://xkqapi.e92.cc/',
+      baseUrl: baseUrl ?? 'https://s.sqapi.com/user/',
       contentType: contentType ?? "application/json",
       responseType: responseType ?? ResponseType.plain,
       headers: headers,

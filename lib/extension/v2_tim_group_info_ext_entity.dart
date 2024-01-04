@@ -20,6 +20,10 @@ class V2TimGroupInfoExtEntity {
   int? privateMode;
   @JSONField(name: "good_number")
   int? goodNumber;
+  @JSONField(name: "name_colour")
+  String? nameColour;
+  @JSONField(name: "icon_url")
+  String? iconUrl;
 
   V2TimGroupInfoExtEntity();
 
@@ -30,6 +34,8 @@ class V2TimGroupInfoExtEntity {
 
   V2TimGroupInfoExtEntity copyWith(
       {String? expireDate,
+      String? nameColour,
+      String? iconUrl,
       int? forbidBack,
       int? higherStatus,
       int? noticeMode,
@@ -37,6 +43,8 @@ class V2TimGroupInfoExtEntity {
       int? goodNumber}) {
     return V2TimGroupInfoExtEntity()
       ..expireDate = expireDate ?? this.expireDate
+      ..nameColour = nameColour ?? this.nameColour
+      ..iconUrl = iconUrl ?? this.iconUrl
       ..forbidBack = forbidBack ?? this.forbidBack
       ..higherStatus = higherStatus ?? this.higherStatus
       ..noticeMode = noticeMode ?? this.noticeMode
@@ -50,6 +58,7 @@ class V2TimGroupInfoExtEntity {
   }
 }
 
+// {expire_date: 2024-06-21 00:00:00, forbid_back: 1, good_number: 1, higher_status: 3, icon_url: http://appapi.sxpan.com/a/01.png, name_colour: 9b59b6, notice_mode: 0, private_mode: 1}
 // {"expire_date":"2024-07-20 00:00:01","forbid_back":0,"higher_status":2,"notice_mode":0,"private_mode":1}
 //// 公告提示（参数：0或1）（权限：可读/可写）
 //@property (nonatomic, copy) NSString *notice_mode;
@@ -66,8 +75,10 @@ class V2TimGroupInfoExtEntity {
 //// 禁止私聊（参数：0或1）（权限：可读/可写）
 //@property (nonatomic, copy) NSString *private_mode;
 extension V2TimUserFullInfoExt on V2TimGroupInfo {
-  V2TimGroupInfoExtEntity get extInfo =>
-      V2TimGroupInfoExtEntity.fromJson(customInfo ?? {});
+  V2TimGroupInfoExtEntity get extInfo {
+    print("group extInfo ---> $customInfo");
+    return V2TimGroupInfoExtEntity.fromJson(customInfo ?? {});
+  }
 
   // 是否开启通知
   bool get isEnabledNoticeMode => extInfo.noticeMode == 1;
@@ -83,7 +94,7 @@ extension V2TimUserFullInfoExt on V2TimGroupInfo {
   bool get isSuperVip => extInfo.higherStatus == 3;
 
   // 是否 是靓号
-  int get isGoodNum => extInfo.goodNumber == 1 ? 2 : 0;
+  int get isGoodNum => extInfo.goodNumber == 1 ? 1 : 0;
 
   // 是否禁止私聊
   bool get isPrivate => extInfo.privateMode == 1;
@@ -98,17 +109,39 @@ extension V2TimUserFullInfoExt on V2TimGroupInfo {
     return null;
   }
 
-
-  String? get showGoodNumImageStr {
+  String get nameColorHex {
     if (isGoodNum == 1) {
-      return "assets/liang_fang.png";
+      String nameColour = extInfo.nameColour ?? "";
+      if (nameColour.isNotEmpty) {
+        return nameColour;
+      }
+      return "ff0000";
     }
-    if (isGoodNum == 2) {
-      return "assets/liang_quan.png";
-    }
-    return null;
+    return "";
   }
 
+  String get showGoodNumImageStr {
+    if (isGoodNum == 1) {
+      String iconUrl = extInfo.iconUrl ?? "";
+      if (iconUrl.isNotEmpty) {
+        return iconUrl;
+      }
+      return "assets/liang_quan.png";
+    }
+    return "";
+  }
+
+  /// 是否需要展示连接的good图标
+  bool get showGoodNumImageStrByUrl {
+    return showGoodNumImageStr.isNotEmpty &&
+        showGoodNumImageStr.startsWith('http');
+  }
+
+  /// 是否需要展示连接的本地图标
+  bool get showGoodNumImageStrByAssets {
+    return showGoodNumImageStr.isNotEmpty &&
+        !showGoodNumImageStr.startsWith('http');
+  }
 
   // 已经过期
   bool get isExpireDate => (extInfo.expireDate != null &&

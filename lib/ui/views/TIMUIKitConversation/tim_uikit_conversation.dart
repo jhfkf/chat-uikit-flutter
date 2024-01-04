@@ -159,9 +159,9 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
   late AutoScrollController _autoScrollController;
 
   List<V2TimGroupInfo> groupList = [];
-  List<V2TimFriendInfo> userList = [];
+  List<V2TimFriendInfo> friendList = [];
 
-  Map conversationInfoMap = {};
+  // Map conversationInfoMap = {};
 
   @override
   void initState() {
@@ -183,7 +183,11 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
                   groupIDList: groupList.map((e) => e.groupID).toList())
               .then((res) {
             if (res.code == 0) {
-              this.groupList = (res.data?.where((element) => element.groupInfo != null).map((e) => e.groupInfo!).toList()) ?? [];
+              this.groupList = (res.data
+                      ?.where((element) => element.groupInfo != null)
+                      .map((e) => e.groupInfo!)
+                      .toList()) ??
+                  [];
               setState(() {});
             }
           });
@@ -198,14 +202,15 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
         TencentImSDKPlugin.v2TIMManager.getFriendshipManager().getFriendList();
     friendListResult.then((value) {
       if (value.code == 0) {
-        List<V2TimFriendInfo> userList = value.data ?? [];
-        this.userList = userList;
+        List<V2TimFriendInfo> friendList = value.data ?? [];
+        this.friendList = friendList;
         setState(() {});
       }
     });
 
     bus.on("ClearAllHistoryEvent", (arg) {
-      List<V2TimConversation?> filteredConversationList = getFilteredConversation();
+      List<V2TimConversation?> filteredConversationList =
+          getFilteredConversation();
       for (V2TimConversation? conversationItem in filteredConversationList) {
         if (conversationItem != null) {
           _clearHistory(conversationItem);
@@ -264,39 +269,39 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
           .toList();
     }
     // vip
-    for (var target in filteredConversationList) {
-      if (target != null && target.groupID != null) {
-        for (var group in groupList) {
-          /// 遍历我的所有群列表
-          if (target.groupID == group.groupID) {
-            if (group.isSuperVip) {
-              target.higherStatus = 2;
-              conversationInfoMap["group_higherStatus_${target.groupID}"] = 2;
-            } else if (group.isNormalVip) {
-              target.higherStatus = 1;
-              conversationInfoMap["group_higherStatus_${target.groupID}"] = 1;
-            } else {
-              target.higherStatus = 0;
-              conversationInfoMap["group_higherStatus_${target.groupID}"] = 0;
-            }
-            if (group.isGoodNum == 2) {
-              target.goodStatus = 2;
-              conversationInfoMap["group_goodStatus_${target.groupID}"] = 2;
-            }
-            break;
-          }
-        }
-      }
-      if (target != null && target.userID != null) {
-        for (var user in userList) {
-          if (target.userID == user.userID) {
-            target.goodStatus = user.userProfile?.isGoodNum ?? 0;
-            conversationInfoMap["user_goodStatus_${target.userID}"] =
-                user.userProfile?.isGoodNum ?? 0;
-          }
-        }
-      }
-    }
+    // for (var target in filteredConversationList) {
+    //   if (target != null && target.groupID != null) {
+    //     for (var group in groupList) {
+    //       /// 遍历我的所有群列表
+    //       if (target.groupID == group.groupID) {
+    //         if (group.isSuperVip) {
+    //           target.higherStatus = 2;
+    //           conversationInfoMap["group_higherStatus_${target.groupID}"] = 2;
+    //         } else if (group.isNormalVip) {
+    //           target.higherStatus = 1;
+    //           conversationInfoMap["group_higherStatus_${target.groupID}"] = 1;
+    //         } else {
+    //           target.higherStatus = 0;
+    //           conversationInfoMap["group_higherStatus_${target.groupID}"] = 0;
+    //         }
+    //         if (group.isGoodNum == 2) {
+    //           target.goodStatus = 2;
+    //           conversationInfoMap["group_goodStatus_${target.groupID}"] = 2;
+    //         }
+    //         break;
+    //       }
+    //     }
+    //   }
+    //   if (target != null && target.userID != null) {
+    //     for (var user in friendList) {
+    //       if (target.userID == user.userID) {
+    //         target.goodStatus = user.userProfile?.isGoodNum ?? 0;
+    //         conversationInfoMap["user_goodStatus_${target.userID}"] =
+    //             user.userProfile?.isGoodNum ?? 0;
+    //       }
+    //     }
+    //   }
+    // }
     return filteredConversationList;
   }
 
@@ -495,7 +500,16 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
                               draftTimestamp: conversationItem.draftTimestamp,
                               convType: conversationItem.type,
                               conversation: conversationItem,
-                              conversationInfoMap: conversationInfoMap,
+                              groupInfo: conversationItem.type == 2
+                                  ? groupList.firstWhereOrNull((element) =>
+                                      element.groupID ==
+                                      conversationItem.groupID)
+                                  : null,
+                              friendInfo: conversationItem.type == 1
+                                  ? friendList.firstWhereOrNull((element) =>
+                                      element.userID == conversationItem.userID)
+                                  : null,
+                              // conversationInfoMap: conversationInfoMap,
                             ),
                             onTap: () => onTapConvItem(conversationItem),
                           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_statelesswidget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class TIMUIKitSearchNotSupport extends TIMUIKitStatelessWidget {
@@ -33,13 +34,23 @@ class TIMUIKitSearchNotSupport extends TIMUIKitStatelessWidget {
                     ),
                   ),
                   Text(
-                    TIM_t("暂时仅限 Android/iOS 端"),
+                    TIM_t("请使用 Android/iOS 或 PC 端体验"),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
                       color: theme.darkTextColor,
                     ),
                   ),
+                  const SizedBox(height: 12,),
+                  ElevatedButton(
+                      onPressed: () {
+                        launchUrl(
+                          Uri.parse("http://www.suapp.cc"),
+                          mode: LaunchMode
+                              .externalApplication,
+                        );
+                      },
+                      child: Text(TIM_t("立即下载")))
                 ],
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -9,6 +9,14 @@ V2TimGroupInfoExtEntity $V2TimGroupInfoExtEntityFromJson(Map<String, dynamic> js
 	if (expireDate != null) {
 		v2TimGroupInfoExtEntity.expireDate = expireDate;
 	}
+	final String? nameColour = jsonConvert.convert<String>(json['name_colour']);
+	if (nameColour != null) {
+		v2TimGroupInfoExtEntity.nameColour = nameColour;
+	}
+	final String? iconUrl = jsonConvert.convert<String>(json['icon_url']);
+	if (iconUrl != null) {
+		v2TimGroupInfoExtEntity.iconUrl = iconUrl;
+	}
 	final int? forbidBack = jsonConvert.convert<int>(json['forbid_back']);
 	if (forbidBack != null) {
 		v2TimGroupInfoExtEntity.forbidBack = forbidBack;
@@ -40,5 +48,7 @@ Map<String, dynamic> $V2TimGroupInfoExtEntityToJson(V2TimGroupInfoExtEntity enti
 	data['notice_mode'] = entity.noticeMode;
 	data['private_mode'] = entity.privateMode;
 	data['good_number'] = entity.goodNumber;
+	data['name_colour'] = entity.nameColour;
+	data['icon_url'] = entity.iconUrl;
 	return data;
 }
