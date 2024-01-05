@@ -1,30 +1,71 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/route_manager.dart';
 
 // import 'commonUtils.dart';
 
 class ToastUtils {
   static FToast? fToast;
 
-  static void init(BuildContext context){
-    if(fToast == null){
+  static void init(BuildContext context) {
+    if (fToast == null) {
       fToast = FToast();
       fToast!.init(context);
     }
   }
 
+  static double calculateTextWidth(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    return textPainter.width;
+  }
+
+  static double calculateTextHeight(String text, TextStyle style, double maxWidth) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      textDirection: TextDirection.ltr,
+      maxLines: 1,
+      ellipsis: '...',
+    )..layout(maxWidth: maxWidth);
+    return textPainter.height;
+  }
+
+  static Size calculateTextSize(String text, TextStyle style) {
+    double width = 414;
+    double height = 40;
+    double textWidth = calculateTextWidth(text, style) + 60;
+    width = min(width, textWidth);
+    double textHeight = calculateTextHeight(text, style, width) + 30;
+    height = min(height, textHeight);
+    return Size(width, height);
+  }
+
   static void toast(String msg) {
+    TextStyle textStyle = const TextStyle(color: Colors.white);
+    Size size = calculateTextSize(msg, textStyle);
     Widget toastItem = Container(
+      width: size.width,
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0),
+        borderRadius: BorderRadius.circular(8.0),
         color: Colors.black45,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(child: Text(msg, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white),),)
+          Expanded(
+            child: Text(
+              msg,
+              textAlign: TextAlign.center,
+              style: textStyle,
+            ),
+          )
         ],
       ),
     );
