@@ -101,13 +101,14 @@ class TUIKitWidePopup {
     final Widget contentWidget = Container(
       width: width,
       height: height,
+      clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         borderRadius:
             borderRadius ?? const BorderRadius.all(Radius.circular(16)),
         color: theme?.wideBackgroundColor ?? const Color(0xFFffffff),
         border: isDarkBackground
             ? Border.all(
-                width: 2,
+                width: 1,
                 color: theme?.weakBackgroundColor ?? const Color(0xFFbebebe),
               )
             : null,
