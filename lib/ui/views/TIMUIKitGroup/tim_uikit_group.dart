@@ -54,6 +54,9 @@ class _TIMUIKitGroupState extends TIMUIKitState<TIMUIKitGroup> {
       final item = groupList[i];
 
       final showName = item.groupName ?? item.groupID;
+      if (showName.isEmpty) {
+        continue;
+      }
       String pinyin = PinyinHelper.getPinyinE(showName);
       String tag = pinyin.substring(0, 1).toUpperCase();
       if (RegExp("[A-Z]").hasMatch(tag)) {
