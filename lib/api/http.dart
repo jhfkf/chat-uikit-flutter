@@ -29,7 +29,7 @@ class HttpManager {
     // 添加请求拦截器
     dio.interceptors.add(TBRInterceptors());
     SharedPreferences.getInstance().then((prefs) {
-      String? baseUrl = prefs.getString('SuBaseUrl');
+      String? baseUrl = prefs.getString('TUIBaseUrl');
       if (baseUrl != null) {
         setDioBaseOptions(baseUrl: baseUrl, headers: {});
       }

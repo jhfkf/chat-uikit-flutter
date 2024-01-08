@@ -82,7 +82,6 @@ class V2TimUserFullInfoExtEntity {
 // {"Tag_Profile_Custom_lock": 0,"Tag_Profile_Custom_sappid": 1,"Tag_Profile_Custom_sphone": 0,"Tag_Profile_Custom_userid":"a6666678", "lock": 0,"sappid": 1,"sphone": 0,"userid":"a6666678"}
 extension V2TimUserFullInfoExt on V2TimUserFullInfo {
   V2TimUserFullInfoExtEntity get extInfo {
-    print('other user customInfo --> $customInfo');
     return V2TimUserFullInfoExtEntity.fromJson(customInfo ?? {});
   }
 
