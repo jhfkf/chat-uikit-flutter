@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
@@ -183,6 +184,7 @@ class TUIFriendShipViewModel extends ChangeNotifier {
     // }
 
     _friendList = memberList;
+
     notifyListeners();
     return;
   }

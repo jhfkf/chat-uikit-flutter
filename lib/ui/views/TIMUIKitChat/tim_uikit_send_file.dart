@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:tencent_cloud_chat_uikit/api/tbr_toast.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_statelesswidget.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/separate_models/tui_chat_separate_view_model.dart';
@@ -14,6 +15,7 @@ import 'package:tencent_cloud_chat_uikit/ui/widgets/wide_popup.dart';
 import 'package:path/path.dart' as path;
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../util/toast.dart';
 import 'TIMUIKitMessageItem/tim_uikit_chat_file_icon.dart';
 
 String _getConvID(V2TimConversation conversation) {
@@ -63,6 +65,22 @@ sendFileWithConfirmation({required List<XFile> files,
     return;
   }
 
+  List<XFile> realFiles = [];
+  List supportFiles = [".jpg", ".jpeg", ".png", ".gif", ".mp4", ".avi", ".mov", ".flv"];
+  for (XFile file in files) {
+    if (supportFiles.contains(path.extension(file.path ?? '').toLowerCase())) {
+      realFiles.add(file);
+    }
+  }
+  if (realFiles.isEmpty) {
+    TUIKitWidePopup.showSecondaryConfirmDialog(
+        text: TIM_t("无法发送，不支持该类型"),
+        onConfirm: () {},
+        operationKey: TUIKitWideModalOperationKey.unableToSendDueToFolders,
+        context: context,
+        theme: theme);
+    return;
+  }
   final option1 = conversation.showName ??
       (conversationType == ConvType.group ? TIM_t("群聊") : TIM_t("对方"));
   TUIKitWidePopup.showPopupWindow(
@@ -187,13 +205,15 @@ Future<void> sendFiles(List<XFile> files,
           context);
       await Future.delayed(const Duration(seconds: 1));
     } else {
-      await MessageUtils.handleMessageError(
-          model.sendFileMessage(
-              fileName: fileName,
-              filePath: filePath,
-              convID: _getConvID(conversation),
-              convType: conversationType),
-          context);
+      ToastUtils.toast("暂不支持该类型文件！");
+      // TBRToast.center("暂不支持该文件！");
+      // await MessageUtils.handleMessageError(
+      //     model.sendFileMessage(
+      //         fileName: fileName,
+      //         filePath: filePath,
+      //         convID: _getConvID(conversation),
+      //         convType: conversationType),
+      //     context);
       await Future.delayed(const Duration(microseconds: 500));
     }
   }

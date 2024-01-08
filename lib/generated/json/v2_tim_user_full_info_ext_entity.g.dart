@@ -20,6 +20,14 @@ V2TimUserFullInfoExtEntity $V2TimUserFullInfoExtEntityFromJson(Map<String, dynam
 	if (tagProfileCustomUserid != null) {
 		v2TimUserFullInfoExtEntity.tagProfileCustomUserid = tagProfileCustomUserid;
 	}
+	final String? tagProfileCustomColor = jsonConvert.convert<String>(json['Tag_Profile_Custom_color']);
+	if (tagProfileCustomColor != null) {
+		v2TimUserFullInfoExtEntity.tagProfileCustomColor = tagProfileCustomColor;
+	}
+	final String? tagProfileCustomIcon = jsonConvert.convert<String>(json['Tag_Profile_Custom_icon']);
+	if (tagProfileCustomIcon != null) {
+		v2TimUserFullInfoExtEntity.tagProfileCustomIcon = tagProfileCustomIcon;
+	}
 	final int? lock = jsonConvert.convert<int>(json['lock']);
 	if (lock != null) {
 		v2TimUserFullInfoExtEntity.lock = lock;
@@ -62,6 +70,8 @@ Map<String, dynamic> $V2TimUserFullInfoExtEntityToJson(V2TimUserFullInfoExtEntit
 	data['Tag_Profile_Custom_sphone'] = entity.tagProfileCustomSphone;
 	data['Tag_Profile_Custom_userid'] = entity.tagProfileCustomUserid;
 	data['Tag_Profile_Custom_num'] = entity.tagProfileCustomNum;
+	data['Tag_Profile_Custom_icon'] = entity.tagProfileCustomIcon;
+	data['Tag_Profile_Custom_color'] = entity.tagProfileCustomColor;
 	data['lock'] = entity.lock;
 	data['sappid'] = entity.sappid;
 	data['sphone'] = entity.sphone;

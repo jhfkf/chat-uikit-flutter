@@ -1,4 +1,5 @@
 import 'package:azlistview_all_platforms/azlistview_all_platforms.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lpinyin/lpinyin.dart';
 import 'package:provider/provider.dart';
@@ -53,6 +54,9 @@ class _TIMUIKitGroupState extends TIMUIKitState<TIMUIKitGroup> {
       final item = groupList[i];
 
       final showName = item.groupName ?? item.groupID;
+      if (showName.isEmpty) {
+        continue;
+      }
       String pinyin = PinyinHelper.getPinyinE(showName);
       String tag = pinyin.substring(0, 1).toUpperCase();
       if (RegExp("[A-Z]").hasMatch(tag)) {
@@ -128,26 +132,43 @@ class _TIMUIKitGroupState extends TIMUIKitState<TIMUIKitGroup> {
                       Text(
                         showName,
                         style: TextStyle(
-                            color: (groupInfo.showGoodNumImageStr?.isNotEmpty ?? false) ? Colors.red : Colors.black,
+                            color: groupInfo.nameColorHex.isNotEmpty
+                                ? hexToColor(groupInfo.nameColorHex)
+                                : Colors.black,
                             fontSize: isDesktopScreen ? 14 : 18),
                       ),
                       const SizedBox(
                         width: 4,
                       ),
-                      if (groupInfo.showGoodNumImageStr?.isNotEmpty ?? false)
+                      if (groupInfo.showGoodNumImageStrByUrl)
+                        CachedNetworkImage(
+                          imageUrl: groupInfo.showGoodNumImageStr,
+                          width: 20,
+                          height: 20,
+                          fit: BoxFit.contain,
+                          errorWidget: (ctx, url, error) {
+                            return Image.asset(
+                              "assets/liang_quan.png",
+                              fit: BoxFit.contain,
+                              height: 20,
+                              width: 20,
+                            );
+                          },
+                        ),
+                      if (groupInfo.showGoodNumImageStrByAssets)
                         Image.asset(
-                          groupInfo.showGoodNumImageStr!,
-                          fit: BoxFit.fitWidth,
+                          groupInfo.showGoodNumImageStr,
+                          fit: BoxFit.contain,
                           height: 20,
                           width: 20,
                         ),
-                        const SizedBox(
-                          width: 4,
-                        ),
+                      const SizedBox(
+                        width: 4,
+                      ),
                       if (groupInfo.showIconImageStr?.isNotEmpty ?? false)
                         Image.asset(
                           groupInfo.showIconImageStr!,
-                          fit: BoxFit.fitWidth,
+                          fit: BoxFit.contain,
                           height: 20,
                           width: 42,
                         ),

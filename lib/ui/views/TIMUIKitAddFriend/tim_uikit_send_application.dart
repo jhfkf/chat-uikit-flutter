@@ -44,6 +44,13 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
       "Tag": "Key",
       "Value": widget.friendInfo.extInfo.key ?? ""
     };
+    // if (widget.groupInfo) {
+    //   param = {
+    //         "Tag": "GroupId",
+    //     "Value": widget.friendInfo.extInfo.uniqueId ?? ""
+    //   };
+    //     param = @{ @"Tag" : @"GroupId", @"Value": self.groupInfo.groupID ?: @""};
+    // }
     // _verficationController.text = "我是: $showName";
     _verficationController.text = jsonEncode(param);
   }
@@ -55,7 +62,6 @@ class _SendApplicationState extends TIMUIKitState<SendApplication> {
         serviceLocator<FriendshipServices>();
 
     final faceUrl = widget.friendInfo.faceUrl ?? "";
-    // final userID = widget.friendInfo.accid ?? "";
     final userID = widget.friendInfo.extInfo.uniqueId ?? "";
     final String showName = ((widget.friendInfo.nickName != null &&
                 widget.friendInfo.nickName!.isNotEmpty)

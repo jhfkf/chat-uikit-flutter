@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 import '../tencent_cloud_chat_uikit.dart';
 
 extension V2TimConversationExt on V2TimConversation {
@@ -11,6 +13,9 @@ extension V2TimConversationExt on V2TimConversation {
   static Map conversationGoodMap = {};
 
   int get goodStatus {
+    if (GetPlatform.isWeb){
+      return _goodStatus;
+    }
     if (conversationGoodMap.keys.contains(groupID)) {
       return conversationGoodMap[groupID];
     }
@@ -52,7 +57,7 @@ extension V2TimConversationExt on V2TimConversation {
   }
 
   String? get showGoodImageStr {
-    if (groupID == null || userID != null) {
+    if (groupID == null || userID == null) {
       return null;
     }
     if (goodStatus == 1) {
@@ -88,6 +93,7 @@ extension V2TimConversationExt on V2TimConversation {
     }
     return null;
   }
+
 
   String? showIconImageStrByMap(Map? info) {
     if (info == null) return null;

@@ -43,4 +43,5 @@ enum TUIKitWideModalOperationKey{
   modifyPhone,
   verifyPhone,
   showGroupNotice,
+  redPacketDetail,
 }

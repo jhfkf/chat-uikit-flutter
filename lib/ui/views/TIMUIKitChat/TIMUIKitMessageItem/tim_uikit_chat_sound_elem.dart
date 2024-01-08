@@ -126,7 +126,6 @@ class _TIMUIKitSoundElemState extends TIMUIKitState<TIMUIKitSoundElem> {
           }
         });
 
-
     downloadMessageDetailAndSave();
   }
 

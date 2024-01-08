@@ -37,9 +37,11 @@ class TIMUIKitProfileUserInfoCardWide extends TIMUIKitStatelessWidget {
       return prefs.getString("uniqueId") ?? "";
     }
     // 搜索好友
-    Map<String, dynamic> params = {"accid": userInfo?.userID ?? ""};
+    Map<String, dynamic> params = {
+      "accid": userInfo?.userID ?? ""
+    };
     DataResult result = await UtilsApi.baseQueryPost(
-        url: Api.appUserQueryUserId, params: params, isLongAwaitShow: false);
+        url: Api.appUserQueryUserId, params: params,  isLongAwaitShow: false);
     Map resultMap = result.data;
     if (resultMap.keys.contains("uniqueId")) {
       return "${resultMap['uniqueId']}";

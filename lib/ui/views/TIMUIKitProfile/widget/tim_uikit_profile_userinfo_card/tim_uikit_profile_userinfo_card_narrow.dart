@@ -10,6 +10,7 @@ import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_statelesswidget
 import 'package:tencent_cloud_chat_uikit/ui/widgets/avatar.dart';
 import 'package:tencent_cloud_chat_uikit/extension/v2_tim_user_full_info_ext_entity.dart';
 
+
 class TIMUIKitProfileUserInfoCardNarrow extends TIMUIKitStatelessWidget {
   /// User info
   final V2TimUserFullInfo? userInfo;

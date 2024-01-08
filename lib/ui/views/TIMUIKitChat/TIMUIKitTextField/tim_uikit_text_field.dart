@@ -808,16 +808,7 @@ class _InputTextFieldState extends TIMUIKitState<TIMUIKitInputTextField> {
         });
       }
     }
-
     if (widget.conversationType == ConvType.group && willNotBeenMuted) {
-      Future.delayed(const Duration(seconds: 0), () {
-        setState(() {
-          muteStatus = MuteStatus.none;
-        });
-      });
-    }
-
-    if (widget.conversationType != ConvType.group){
       Future.delayed(const Duration(seconds: 0), () {
         setState(() {
           muteStatus = MuteStatus.none;

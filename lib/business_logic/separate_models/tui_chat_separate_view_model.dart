@@ -1345,13 +1345,13 @@ class TUIChatSeparateViewModel extends ChangeNotifier {
         globalModel.setMessageList(conversationID, currentHistoryMsgList);
         notifyListeners();
       }
-
+      OfflinePushInfo pushInfo = tools.buildMessagePushInfo(
+          textMessageInfo.messageInfo!, convID, convType);
       return _sendMessage(
           convID: convID,
           id: textMessageInfo.id as String,
           convType: convType,
-          offlinePushInfo: tools.buildMessagePushInfo(
-              textMessageInfo.messageInfo!, convID, convType));
+          offlinePushInfo: pushInfo);
     }
     return null;
   }

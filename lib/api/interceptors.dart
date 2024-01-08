@@ -51,8 +51,10 @@ class TBRInterceptors extends InterceptorsWrapper {
   void onResponse(Response response, ResponseInterceptorHandler handler) async {
     // TODO: implement onResponse
     RequestOptions option = response.requestOptions;
+
     debugPrint(
         '====================接口响应====================\n响应时间=>${DateTime.now()}\n接口类型=>${option.method}\n接口路径=>${option.path}\n接口参数=>${option.method == 'POST' ? option.data.toString() : option.queryParameters.toString()}\n接口返回=>${response.data}');
+
     try {
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         if (option.data is! Map) {

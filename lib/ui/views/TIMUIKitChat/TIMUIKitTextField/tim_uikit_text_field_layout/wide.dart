@@ -865,7 +865,6 @@ class _TIMUIKitTextFieldLayoutWideState
       // ignore: avoid_print
       print('User canceled capture');
     }
-
     // final file = await ScreenshotHelper.captureScreen();
     // if (file != null) {
     //   _sendImageWithConfirmation(filePath: file);

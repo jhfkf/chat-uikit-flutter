@@ -1,4 +1,5 @@
 import 'package:azlistview_all_platforms/azlistview_all_platforms.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lpinyin/lpinyin.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
@@ -176,20 +177,46 @@ class _ContactListState extends TIMUIKitState<ContactList> {
             child: Text(
               showName,
               style: TextStyle(
-                  color: (item.userProfile?.showGoodNumImageStr?.isNotEmpty ??
-                          false)
-                      ? Colors.red
+                  // color: (item.userProfile?.showGoodNumImageStr?.isNotEmpty ??
+                  //         false)
+                  //     ? Colors.red
+                  //     : Colors.black,
+                  color: (item.userProfile?.nameColorHex.isNotEmpty ?? false)
+                      ? hexToColor(item.userProfile!.nameColorHex)
                       : Colors.black,
                   fontSize: isDesktopScreen ? 14 : 18),
             ),
           ),
-          if (item.userProfile?.showGoodNumImageStr?.isNotEmpty ?? false)
-            Image.asset(
-              item.userProfile!.showGoodNumImageStr!,
-              fit: BoxFit.fitWidth,
-              height: 18,
-              width: 18,
+
+          if (item.userProfile?.showGoodNumImageStrByUrl ?? false)
+            CachedNetworkImage(
+              imageUrl: item.userProfile!.showGoodNumImageStr,
+              width: 20,
+              height: 20,
+              fit: BoxFit.contain,
+              errorWidget: (ctx, url, error) {
+                return Image.asset(
+                  "assets/liang_fang.png",
+                  fit: BoxFit.contain,
+                  height: 20,
+                  width: 20,
+                );
+              },
             ),
+          if (item.userProfile?.showGoodNumImageStrByAssets ?? false)
+            Image.asset(
+              item.userProfile!.showGoodNumImageStr,
+              fit: BoxFit.contain,
+              height: 20,
+              width: 20,
+            ),
+          // if (item.userProfile?.showGoodNumImageStr.isNotEmpty ?? false)
+          //   Image.asset(
+          //     item.userProfile!.showGoodNumImageStr!,
+          //     fit: BoxFit.fitWidth,
+          //     height: 18,
+          //     width: 18,
+          //   ),
         ],
       ),
     );

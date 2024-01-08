@@ -1,7 +1,10 @@
 // ignore_for_file: empty_catches
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tencent_cloud_chat_uikit/extension/v2_tim_conversation_ext.dart';
+import 'package:tencent_cloud_chat_uikit/extension/v2_tim_group_info_ext_entity.dart';
+import 'package:tencent_cloud_chat_uikit/extension/v2_tim_user_full_info_ext_entity.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_statelesswidget.dart';
@@ -32,8 +35,12 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
   final int? convType;
   final bool isCurrent;
   final V2TimConversation? conversation;
-  final Map? conversationInfoMap;
 
+  final V2TimGroupInfo? groupInfo;
+
+  final V2TimFriendInfo? friendInfo;
+
+  // final Map? conversationInfoMap;
   /// Control if shows the identifier that the conversation has a draft text, inputted in previous.
   /// Also, you'd better specifying the `draftText` field for `TIMUIKitChat`, from the `draftText` in `V2TimConversation`,
   /// to meet the identifier shows here.
@@ -56,7 +63,9 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
     this.lastMessageBuilder,
     this.convType,
     this.conversation,
-    this.conversationInfoMap,
+    this.groupInfo,
+    this.friendInfo,
+    // this.conversationInfoMap,
   }) : super(key: key);
 
   Widget _getShowMsgWidget(BuildContext context) {
@@ -174,7 +183,10 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
                         child: Row(
                       children: [
                         Container(
-                            constraints: BoxConstraints(maxWidth: isDesktopScreen ? 70 : MediaQuery.of(context).size.width - 70),
+                            constraints: BoxConstraints(
+                                maxWidth: isDesktopScreen
+                                    ? 70
+                                    : MediaQuery.of(context).size.width - 70),
                             child: Text(
                               nickName,
                               softWrap: true,
@@ -183,11 +195,7 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
                               maxLines: 1,
                               style: TextStyle(
                                 height: 1,
-                                color: (conversation
-                                    ?.showGoodImageStrByMap(conversationInfoMap)?.isNotEmpty ??
-                                    false)
-                                    ? Colors.red
-                                    : theme.conversationItemTitleTextColor,
+                                color: nameTextColor(theme),
                                 fontSize: isDesktopScreen ? 14 : 18,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -195,26 +203,8 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
                         const SizedBox(
                           width: 6,
                         ),
-                        if (conversation
-                            ?.showGoodImageStrByMap(conversationInfoMap)?.isNotEmpty ?? false)
-                          Image.asset(
-                            conversation
-                            !.showGoodImageStrByMap(conversationInfoMap)!,
-                            fit: BoxFit.fitWidth,
-                            height: 20,
-                            width: 20,
-                          ),
-                        const SizedBox(
-                          width: 6,
-                        ),
-                        if (conversation?.showIconImageStrByMap(conversationInfoMap)?.isNotEmpty ?? false)
-                          Image.asset(
-                            conversation!.showIconImageStrByMap(conversationInfoMap)!,
-                            fit: BoxFit.fitWidth,
-                            height: 20,
-                            width: 42,
-                          ),
-                        Spacer(),
+                        showGoodWidget(theme),
+                        showVipWidget(theme),
                       ],
                     )),
                     _getTimeStringForChatWidget(context, theme),
@@ -245,5 +235,98 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget showVipWidget(TUITheme theme) {
+    if (groupInfo != null && groupInfo!.showIconImageStr != null) {
+      return Image.asset(
+        groupInfo!.showIconImageStr!,
+        fit: BoxFit.contain,
+        height: 20,
+        width: 42,
+      );
+    }
+    return Container();
+  }
+
+  Widget showGoodWidget(TUITheme theme) {
+    Widget? iconWidget;
+    if (friendInfo != null) {
+      if (friendInfo!.userProfile?.showGoodNumImageStrByUrl ?? false) {
+        iconWidget = CachedNetworkImage(
+          imageUrl: friendInfo!.userProfile!.showGoodNumImageStr,
+          width: 20,
+          height: 20,
+          fit: BoxFit.contain,
+          errorWidget: (ctx, url, error) {
+            return Image.asset(
+              "assets/liang_fang.png",
+              fit: BoxFit.contain,
+              height: 20,
+              width: 20,
+            );
+          },
+        );
+      }
+      if (friendInfo!.userProfile?.showGoodNumImageStrByAssets ?? false) {
+        iconWidget = Image.asset(
+          friendInfo!.userProfile!.showGoodNumImageStr,
+          fit: BoxFit.contain,
+          height: 20,
+          width: 20,
+        );
+      }
+    }
+    if (groupInfo != null) {
+      if (groupInfo!.showGoodNumImageStrByUrl) {
+        iconWidget = CachedNetworkImage(
+          imageUrl: groupInfo!.showGoodNumImageStr,
+          width: 20,
+          height: 20,
+          fit: BoxFit.contain,
+          errorWidget: (ctx, url, error) {
+            return Image.asset(
+              "assets/liang_quan.png",
+              fit: BoxFit.contain,
+              height: 20,
+              width: 20,
+            );
+          },
+        );
+      }
+      if (groupInfo!.showGoodNumImageStrByAssets) {
+        iconWidget = Image.asset(
+          groupInfo!.showGoodNumImageStr,
+          fit: BoxFit.contain,
+          height: 20,
+          width: 20,
+        );
+      }
+    }
+    if (iconWidget != null) {
+      return Container(
+        margin: const EdgeInsets.only(right: 6),
+        child: iconWidget,
+      );
+    }
+    return Container();
+  }
+
+  Color? nameTextColor(TUITheme theme) {
+    if (friendInfo != null && friendInfo!.userProfile != null) {
+      if (friendInfo!.userProfile!.isGoodNum == 1) {
+        String friendHex = friendInfo!.userProfile!.nameColorHex;
+        if (friendHex.isNotEmpty) {
+          return hexToColor(friendHex);
+        }
+      }
+    }
+    if (groupInfo != null) {
+      String groupHex = groupInfo!.nameColorHex;
+      if (groupHex.isNotEmpty) {
+        return hexToColor(groupHex);
+      }
+    }
+    return theme.conversationItemTitleTextColor;
   }
 }
