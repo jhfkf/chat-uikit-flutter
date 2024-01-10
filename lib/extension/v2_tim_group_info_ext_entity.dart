@@ -76,7 +76,6 @@ class V2TimGroupInfoExtEntity {
 //@property (nonatomic, copy) NSString *private_mode;
 extension V2TimUserFullInfoExt on V2TimGroupInfo {
   V2TimGroupInfoExtEntity get extInfo {
-    print("group extInfo ---> $customInfo");
     return V2TimGroupInfoExtEntity.fromJson(customInfo ?? {});
   }
 

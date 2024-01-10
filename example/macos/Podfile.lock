@@ -1,68 +1,130 @@
 PODS:
+  - audio_session (0.0.1):
+    - FlutterMacOS
+  - audioplayers_darwin (0.0.1):
+    - FlutterMacOS
+  - desktop_drop (0.0.1):
+    - FlutterMacOS
+  - device_info_plus (0.0.1):
+    - FlutterMacOS
+  - fc_native_video_thumbnail (0.0.1):
+    - FlutterMacOS
+  - file_selector_macos (0.0.1):
+    - FlutterMacOS
   - FlutterMacOS (1.0.0)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - package_info_plus_macos (0.0.1):
+  - image_clipboard (0.0.1):
     - FlutterMacOS
-  - path_provider_macos (0.0.1):
+  - just_audio (0.0.1):
+    - FlutterMacOS
+  - package_info_plus (0.0.1):
+    - FlutterMacOS
+  - pasteboard (0.0.1):
+    - FlutterMacOS
+  - path_provider_foundation (0.0.1):
+    - Flutter
     - FlutterMacOS
   - photo_manager (2.0.0):
     - Flutter
     - FlutterMacOS
-  - shared_preferences_macos (0.0.1):
+  - screen_capturer (0.1.0):
+    - FlutterMacOS
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
     - FlutterMacOS
   - sqflite (0.0.2):
     - FlutterMacOS
     - FMDB (>= 2.7.5)
-  - url_launcher_macos (0.0.1):
+  - system_tray (0.0.1):
     - FlutterMacOS
-  - wakelock_macos (0.0.1):
+  - url_launcher_macos (0.0.1):
     - FlutterMacOS
 
 DEPENDENCIES:
+  - audio_session (from `Flutter/ephemeral/.symlinks/plugins/audio_session/macos`)
+  - audioplayers_darwin (from `Flutter/ephemeral/.symlinks/plugins/audioplayers_darwin/macos`)
+  - desktop_drop (from `Flutter/ephemeral/.symlinks/plugins/desktop_drop/macos`)
+  - device_info_plus (from `Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos`)
+  - fc_native_video_thumbnail (from `Flutter/ephemeral/.symlinks/plugins/fc_native_video_thumbnail/macos`)
+  - file_selector_macos (from `Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
-  - package_info_plus_macos (from `Flutter/ephemeral/.symlinks/plugins/package_info_plus_macos/macos`)
-  - path_provider_macos (from `Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos`)
+  - image_clipboard (from `Flutter/ephemeral/.symlinks/plugins/image_clipboard/macos`)
+  - just_audio (from `Flutter/ephemeral/.symlinks/plugins/just_audio/macos`)
+  - package_info_plus (from `Flutter/ephemeral/.symlinks/plugins/package_info_plus/macos`)
+  - pasteboard (from `Flutter/ephemeral/.symlinks/plugins/pasteboard/macos`)
+  - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
   - photo_manager (from `Flutter/ephemeral/.symlinks/plugins/photo_manager/macos`)
-  - shared_preferences_macos (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_macos/macos`)
+  - screen_capturer (from `Flutter/ephemeral/.symlinks/plugins/screen_capturer/macos`)
+  - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite (from `Flutter/ephemeral/.symlinks/plugins/sqflite/macos`)
+  - system_tray (from `Flutter/ephemeral/.symlinks/plugins/system_tray/macos`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
-  - wakelock_macos (from `Flutter/ephemeral/.symlinks/plugins/wakelock_macos/macos`)
 
 SPEC REPOS:
   trunk:
     - FMDB
 
 EXTERNAL SOURCES:
+  audio_session:
+    :path: Flutter/ephemeral/.symlinks/plugins/audio_session/macos
+  audioplayers_darwin:
+    :path: Flutter/ephemeral/.symlinks/plugins/audioplayers_darwin/macos
+  desktop_drop:
+    :path: Flutter/ephemeral/.symlinks/plugins/desktop_drop/macos
+  device_info_plus:
+    :path: Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos
+  fc_native_video_thumbnail:
+    :path: Flutter/ephemeral/.symlinks/plugins/fc_native_video_thumbnail/macos
+  file_selector_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
-  package_info_plus_macos:
-    :path: Flutter/ephemeral/.symlinks/plugins/package_info_plus_macos/macos
-  path_provider_macos:
-    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos
+  image_clipboard:
+    :path: Flutter/ephemeral/.symlinks/plugins/image_clipboard/macos
+  just_audio:
+    :path: Flutter/ephemeral/.symlinks/plugins/just_audio/macos
+  package_info_plus:
+    :path: Flutter/ephemeral/.symlinks/plugins/package_info_plus/macos
+  pasteboard:
+    :path: Flutter/ephemeral/.symlinks/plugins/pasteboard/macos
+  path_provider_foundation:
+    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
   photo_manager:
     :path: Flutter/ephemeral/.symlinks/plugins/photo_manager/macos
-  shared_preferences_macos:
-    :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_macos/macos
+  screen_capturer:
+    :path: Flutter/ephemeral/.symlinks/plugins/screen_capturer/macos
+  shared_preferences_foundation:
+    :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin
   sqflite:
     :path: Flutter/ephemeral/.symlinks/plugins/sqflite/macos
+  system_tray:
+    :path: Flutter/ephemeral/.symlinks/plugins/system_tray/macos
   url_launcher_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
-  wakelock_macos:
-    :path: Flutter/ephemeral/.symlinks/plugins/wakelock_macos/macos
 
 SPEC CHECKSUMS:
-  FlutterMacOS: ae6af50a8ea7d6103d888583d46bd8328a7e9811
+  audio_session: dea1f41890dbf1718f04a56f1d6150fd50039b72
+  audioplayers_darwin: dcad41de4fbd0099cb3749f7ab3b0cb8f70b810c
+  desktop_drop: 69eeff437544aa619c8db7f4481b3a65f7696898
+  device_info_plus: 5401765fde0b8d062a2f8eb65510fb17e77cf07f
+  fc_native_video_thumbnail: 828487c6e1509b0ba74f6741b2788ac47aa0285b
+  file_selector_macos: 468fb6b81fac7c0e88d71317f3eec34c3b008ff9
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  package_info_plus_macos: f010621b07802a241d96d01876d6705f15e77c1c
-  path_provider_macos: 3c0c3b4b0d4a76d2bf989a913c2de869c5641a19
+  image_clipboard: 09a15b2a0ee0b0a6d3d7f2e033f41b2bade1c495
+  just_audio: 9b67ca7b97c61cfc9784ea23cd8cc55eb226d489
+  package_info_plus: 02d7a575e80f194102bef286361c6c326e4c29ce
+  pasteboard: 9b69dba6fedbb04866be632205d532fe2f6b1d99
+  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   photo_manager: 4f6810b7dfc4feb03b461ac1a70dacf91fba7604
-  shared_preferences_macos: a64dc611287ed6cbe28fd1297898db1336975727
+  screen_capturer: 835bdb791b6e54d01257961c2e6ccd20a57ddc17
+  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   sqflite: a5789cceda41d54d23f31d6de539d65bb14100ea
-  url_launcher_macos: 597e05b8e514239626bcf4a850fcf9ef5c856ec3
-  wakelock_macos: bc3f2a9bd8d2e6c89fee1e1822e7ddac3bd004a9
+  system_tray: e53c972838c69589ff2e77d6d3abfd71332f9e5d
+  url_launcher_macos: d2691c7dd33ed713bf3544850a623080ec693d95
 
-PODFILE CHECKSUM: 0d3963a09fc94f580682bd88480486da345dc3f0
+PODFILE CHECKSUM: 8d40c19d3cbdb380d870685c3a564c989f1efa52
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.14.3

@@ -79,6 +79,8 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
 
   bool needAudioNotice = false;
 
+  String lastMsgID = "";
+
   TUIChatGlobalModel() {
     advancedMsgListener = V2TimAdvancedMsgListener(
       onRecvC2CReadReceipt: (List<V2TimMessageReceipt> receiptList) {
@@ -88,19 +90,27 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
         onMessageRevoked(msgID);
       },
       onRecvNewMessage: (V2TimMessage newMsg) async {
+        if (newMsg.msgID == lastMsgID) {
+          return;
+        }
+        lastMsgID = newMsg.msgID ?? "";
         _onReceiveNewMsg(newMsg);
         if (newMsg.isSelf ?? false) {
           return;
         }
-        if (!needAudioNotice){
+        if (!needAudioNotice) {
           return;
         }
-        String key = (newMsg.groupID != null  && newMsg.groupID!.isNotEmpty) ? newMsg.groupID! : newMsg.userID!;
-        var disturb = await DisturbCheckHelper.check(key, (newMsg.userID != null && newMsg.userID!.isNotEmpty));
-        if (!disturb) {
-          print("xxxxxx");
-          UtilsAudioPlayer.playAssets('audio/news_message.mp3');
-        }
+        String key = (newMsg.groupID != null && newMsg.groupID!.isNotEmpty)
+            ? newMsg.groupID!
+            : newMsg.userID!;
+        await DisturbCheckHelper.check(
+                key, (newMsg.userID != null && newMsg.userID!.isNotEmpty))
+            .then((disturb) {
+          if (!disturb) {
+            UtilsAudioPlayer.playAssets('audio/news_message.mp3');
+          }
+        });
       },
       onSendMessageProgress: (V2TimMessage messagae, int progress) {
         _onSendMessageProgress(messagae, progress);
@@ -1222,6 +1232,3 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
     }
   }
 }
-
-
-

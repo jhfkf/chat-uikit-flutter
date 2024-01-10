@@ -95,53 +95,55 @@ class TIMUIKitOperationItem extends TIMUIKitStatelessWidget {
               ],
             )
           : Row(
-              mainAxisAlignment: isDesktopScreen
-                  ? MainAxisAlignment.start
-                  : MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisAlignment: isDesktopScreen
+              //     ? MainAxisAlignment.start
+              //     : MainAxisAlignment.spaceBetween,
               children: [
-                if (isDesktopScreen)
-                  SizedBox(
-                    width: 130,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                // if (isDesktopScreen)
+                //   SizedBox(
+                //     width: 130,
+                //     child: Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         Text(
+                //           operationName,
+                //           style: TextStyle(
+                //               color: isDesktopScreen
+                //                   ? hexToColor("7f7f7f")
+                //                   : null),
+                //         ),
+                //         if (operationDescription != null)
+                //           Text(
+                //             operationDescription!,
+                //             style: TextStyle(
+                //                 color: theme.weakTextColor, fontSize: 12),
+                //           )
+                //       ],
+                //     ),
+                //   ),
+                // if (!isDesktopScreen)
+                Expanded(
+                    child: SizedBox(
+                  width: 130,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        operationName,
+                        style: TextStyle(
+                            color:
+                                isDesktopScreen ? hexToColor("7f7f7f") : null),
+                      ),
+                      if (operationDescription != null)
                         Text(
-                          operationName,
+                          operationDescription!,
                           style: TextStyle(
-                              color:
-                                  isDesktopScreen ? hexToColor("7f7f7f") : null),
-                        ),
-                        if (operationDescription != null)
-                          Text(
-                            operationDescription!,
-                            style: TextStyle(
-                                color: theme.weakTextColor, fontSize: 12),
-                          )
-                      ],
-                    ),
+                              color: theme.weakTextColor, fontSize: 12),
+                        )
+                    ],
                   ),
-                if (!isDesktopScreen)
-                  Expanded(
-                      child: SizedBox(
-                    width: 130,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          operationName,
-                          style: TextStyle(
-                              color:
-                                  isDesktopScreen ? hexToColor("7f7f7f") : null),
-                        ),
-                        if (operationDescription != null)
-                          Text(
-                            operationDescription!,
-                            style: TextStyle(
-                                color: theme.weakTextColor, fontSize: 12),
-                          )
-                      ],
-                    ),
-                  )),
+                )),
                 if (type == "switch")
                   Transform.scale(
                     key: itemBoxKey,
@@ -180,7 +182,9 @@ class TIMUIKitOperationItem extends TIMUIKitStatelessWidget {
                     mainAxisAlignment: isDesktopScreen
                         ? MainAxisAlignment.start
                         : MainAxisAlignment.end,
-                    children: [Expanded(child: operationRightWidget ?? const Text(""))],
+                    children: [
+                      Expanded(child: operationRightWidget ?? const Text(""))
+                    ],
                   )),
                 (type != "switch" && !isDesktopScreen && showAllowEditStatus)
                     ? const Icon(Icons.keyboard_arrow_right)
