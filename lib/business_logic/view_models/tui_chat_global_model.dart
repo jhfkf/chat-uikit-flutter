@@ -125,13 +125,16 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
         onMessageRevoked(msgID);
       },
       onRecvNewMessage: (V2TimMessage newMsg) async {
-        if (newMsg.msgID == lastMsgID) {
-          /// 防止windows端重复消息
-          return;
-        }
+        // if (newMsg.msgID == lastMsgID) {
+        //   /// 防止windows端重复消息
+        //   return;
+        // }
         lastMsgID = newMsg.msgID ?? "";
         // 接受新的信息
         _onReceiveNewMsg(newMsg);
+        // if (Platform.isWindows) {
+        //   bus.emit("RefreshConversationEvent");
+        // }
         // 检查播放声音
         _checkAndPlaySounds(newMsg);
       },

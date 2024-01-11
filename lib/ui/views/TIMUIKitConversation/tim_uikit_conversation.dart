@@ -222,6 +222,13 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
     bus.on("ClearHistoryEvent", (arg) {
       _clearHistory(arg);
     });
+
+    bus.on("RefreshConversationEvent", (arg) {
+      print("xxxxxxxxxxxxxxxxxx");
+      setState(() {
+        _timuiKitConversationController.reloadData();
+      });
+    });
   }
 
   TIMUIKitConversationController getController() {
