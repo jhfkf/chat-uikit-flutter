@@ -88,7 +88,7 @@ dependencies:
 
   get: 4.6.5 #GetX状态管理
   encrypt: 5.0.1 # AES、RSA、Salsa20、Fernet 加密
-  dio: ^4.0.0
+  dio: 5.4.0
   audioplayers: ^5.2.0
   fluttertoast: ^8.2.1
   flutter_screenutil: ^5.6.1

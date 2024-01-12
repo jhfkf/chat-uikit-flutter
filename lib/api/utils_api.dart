@@ -107,8 +107,7 @@ class UtilsApi {
       if (requestSuccessEvent != null) requestSuccessEvent(value.data);
       return DataResult(value.data, true, code: value.statusCode);
     }).timeout(
-      timeoutTime ??
-          Duration(milliseconds: httpManager.dio.options.receiveTimeout),
+      timeoutTime ?? httpManager.dio.options.receiveTimeout!,
 
       /// 超时时间
       onTimeout: () async {
@@ -239,8 +238,7 @@ class UtilsApi {
       if (requestSuccessEvent != null) requestSuccessEvent(value.data);
       return DataResult(value.data, true, code: value.statusCode);
     }).timeout(
-      timeoutTime ??
-          Duration(milliseconds: httpManager.dio.options.receiveTimeout),
+      timeoutTime ??  httpManager.dio.options.receiveTimeout!,
 
       /// 超时时间
       onTimeout: () async {
@@ -370,8 +368,7 @@ class UtilsApi {
       if (requestSuccessEvent != null) requestSuccessEvent(value.data);
       return DataResult(value.data, true, code: value.statusCode);
     }).timeout(
-      timeoutTime ??
-          Duration(milliseconds: httpManager.dio.options.receiveTimeout),
+      timeoutTime ??  httpManager.dio.options.receiveTimeout!,
 
       /// 超时时间
       onTimeout: () async {

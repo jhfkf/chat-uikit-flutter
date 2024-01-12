@@ -1,9 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/route_manager.dart';
+import 'package:tencent_cloud_chat_uikit/ui/utils/platform.dart';
 
 // import 'commonUtils.dart';
 
@@ -46,6 +48,11 @@ class ToastUtils {
   }
 
   static void toast(String msg) {
+    if (PlatformUtils().isWindows) {
+      EasyLoading.showToast(
+          msg, toastPosition: EasyLoadingToastPosition.center);
+      return;
+    }
     TextStyle textStyle = const TextStyle(color: Colors.white);
     Size size = calculateTextSize(msg, textStyle);
     Widget toastItem = Container(
