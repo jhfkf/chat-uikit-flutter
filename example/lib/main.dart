@@ -58,6 +58,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   CoreServicesImpl timCoreInstance = TIMUIKitCore.getInstance();
 
+  /// 1400798441 - suchat
+  /// 1400809121 - QuChat
   int getSDKAPPID() {
     return 1400809121;
     // return const int.fromEnvironment('SDK_APPID', defaultValue: 0);

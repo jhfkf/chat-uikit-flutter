@@ -13,6 +13,8 @@ extension CustomMessageExtEntityExtension on CustomMessageExtEntity {
 
   String get showName => AESUtil.decryptAESECB(name ?? "", "666888");
 
+  bool get needNoticePlaySound => ['16', '17'].contains(type);
+
   String customLastMsgShow() {
     String msgShow = "";
     if (isUserCard) {

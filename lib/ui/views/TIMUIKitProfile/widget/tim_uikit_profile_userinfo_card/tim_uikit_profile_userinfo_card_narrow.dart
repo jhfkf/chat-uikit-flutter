@@ -107,7 +107,7 @@ class TIMUIKitProfileUserInfoCardNarrow extends TIMUIKitStatelessWidget {
                         builder: (ctx, snapshot) {
                           if (snapshot.connectionState == ConnectionState.done) {
                             return SelectableText(
-                              snapshot.data,
+                              snapshot.data ?? "",
                               style: TextStyle(
                                   fontSize: 13, color: theme.weakTextColor),
                             );

@@ -42,8 +42,9 @@ class TBRInterceptors extends InterceptorsWrapper {
       options.contentType = "application/json";
     }
     //调式环境下打印请求信息
-    debugPrint(
+   debugPrint(
         '====================接口请求====================\n请求时间=>${DateTime.now()}\n请求token=>${prefs.get('token')}\n接口类型=>${options.method}\n接口路径=>${options.baseUrl}${options.path}\n接口参数=>${options.method == 'POST' ? options.data.toString() : options.queryParameters.toString()}');
+
     super.onRequest(options, handler);
   }
 

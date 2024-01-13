@@ -12,15 +12,15 @@ import 'package:tencent_cloud_chat_uikit/business_logic/separate_models/tui_chat
 import 'package:tencent_cloud_chat_uikit/data_services/group/group_services.dart';
 import 'package:tencent_cloud_chat_uikit/data_services/message/message_services.dart';
 import 'package:tencent_cloud_chat_uikit/data_services/services_locatar.dart';
+import 'package:tencent_cloud_chat_uikit/extension/custom_message_ext_entity.dart';
+import 'package:tencent_cloud_chat_uikit/extension/custom_message_ext_entity_extension.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
 import 'package:tencent_cloud_chat_uikit/ui/constants/history_message_constant.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/message.dart';
+import 'package:tencent_cloud_chat_uikit/util/custom_message_utils.dart';
 import 'package:tencent_cloud_chat_uikit/util/event_bus.dart';
-import 'package:tencent_cloud_chat_uikit/util/user_utils.dart';
 
-import 'package:audioplayers/audioplayers.dart';
 import '../../data_services/message/aes.dart';
-import '../../ui/utils/sound_record.dart';
 import '../../util/disturb_check_helper.dart';
 import '../../util/utils_audio_player.dart';
 
@@ -79,6 +79,43 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
 
   bool needAudioNotice = false;
 
+  String lastMsgID = "";
+
+  /// 检查和是否播放声音
+  _checkAndPlaySounds(V2TimMessage newMsg) {
+    if (newMsg.isSelf ?? false) {
+      return;
+    }
+    if ([
+      MessageElemType.V2TIM_ELEM_TYPE_NONE,
+      MessageElemType.V2TIM_ELEM_TYPE_GROUP_TIPS,
+    ].contains(newMsg.elemType)) {
+      // 特殊消息不走
+      return;
+    }
+    if (newMsg.elemType == MessageElemType.V2TIM_ELEM_TYPE_CUSTOM) {
+      // 固定几个自定义需要播放声音
+      CustomMessageExtEntity? extEntity =
+          CustomMessageUtils.messageCustomExt(newMsg);
+      if ((extEntity?.needNoticePlaySound ?? false)) {
+        return;
+      }
+    }
+    if (!needAudioNotice) {
+      return;
+    }
+    String key = (newMsg.groupID != null && newMsg.groupID!.isNotEmpty)
+        ? newMsg.groupID!
+        : newMsg.userID!;
+    DisturbCheckHelper.check(
+            key, (newMsg.userID != null && newMsg.userID!.isNotEmpty))
+        .then((disturb) {
+      if (!disturb) {
+        UtilsAudioPlayer.playAssets('audio/news_message.mp3');
+      }
+    });
+  }
+
   TUIChatGlobalModel() {
     advancedMsgListener = V2TimAdvancedMsgListener(
       onRecvC2CReadReceipt: (List<V2TimMessageReceipt> receiptList) {
@@ -88,19 +125,18 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
         onMessageRevoked(msgID);
       },
       onRecvNewMessage: (V2TimMessage newMsg) async {
+        // if (newMsg.msgID == lastMsgID) {
+        //   /// 防止windows端重复消息
+        //   return;
+        // }
+        lastMsgID = newMsg.msgID ?? "";
+        // 接受新的信息
         _onReceiveNewMsg(newMsg);
-        if (newMsg.isSelf ?? false) {
-          return;
-        }
-        if (!needAudioNotice){
-          return;
-        }
-        String key = (newMsg.groupID != null  && newMsg.groupID!.isNotEmpty) ? newMsg.groupID! : newMsg.userID!;
-        var disturb = await DisturbCheckHelper.check(key, (newMsg.userID != null && newMsg.userID!.isNotEmpty));
-        if (!disturb) {
-          print("xxxxxx");
-          UtilsAudioPlayer.playAssets('audio/news_message.mp3');
-        }
+        // if (Platform.isWindows) {
+        //   bus.emit("RefreshConversationEvent");
+        // }
+        // 检查播放声音
+        _checkAndPlaySounds(newMsg);
       },
       onSendMessageProgress: (V2TimMessage messagae, int progress) {
         _onSendMessageProgress(messagae, progress);
@@ -1222,6 +1258,3 @@ class TUIChatGlobalModel extends ChangeNotifier implements TIMUIKitClass {
     }
   }
 }
-
-
-

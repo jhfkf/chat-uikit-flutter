@@ -40,7 +40,6 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
 
   final V2TimFriendInfo? friendInfo;
 
-  // final Map? conversationInfoMap;
   /// Control if shows the identifier that the conversation has a draft text, inputted in previous.
   /// Also, you'd better specifying the `draftText` field for `TIMUIKitChat`, from the `draftText` in `V2TimConversation`,
   /// to meet the identifier shows here.

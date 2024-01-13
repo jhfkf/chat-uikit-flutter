@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_state.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/life_cycle/profile_life_cycle.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/separate_models/tui_profile_view_model.dart';
+import 'package:tencent_cloud_chat_uikit/business_logic/view_models/tui_conversation_view_model.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/view_models/tui_self_info_view_model.dart';
 import 'package:tencent_cloud_chat_uikit/data_services/services_locatar.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
@@ -236,6 +237,8 @@ class _TIMUIKitProfileState extends TIMUIKitState<TIMUIKitProfile> {
                       await _controller.updateRemarks(widget.userID, remark);
                   if (res.code == 0) {
                     widget.lifeCycle?.didRemarkUpdated(remark);
+                    final TUIConversationViewModel tuiConversationViewModel = serviceLocator<TUIConversationViewModel>();
+                    tuiConversationViewModel.refresh();
                   }
                 },
                 theme: theme);

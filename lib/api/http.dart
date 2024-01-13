@@ -71,10 +71,10 @@ class HttpManager {
       headers: headers,
 
       /// 链接超时
-      connectTimeout: connectTimeout ?? 60 * 1000,
+      connectTimeout: Duration(milliseconds: connectTimeout ?? 60 * 1000),
 
       /// 响应超时
-      receiveTimeout: receiveTimeout ?? 60 * 1000,
+      receiveTimeout: Duration(milliseconds: receiveTimeout ?? 60 * 1000),
     );
   }
 }
