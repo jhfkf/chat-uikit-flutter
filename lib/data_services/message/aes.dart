@@ -42,6 +42,7 @@ class AESUtil {
 
   //加密方法，先进行加密后再使用base64对加密字符串进行编码
   static String generateAESECB(String data, String keyStr) {
+    return data;
     final plainText = data;
     var keyList = Uint8List.fromList(convert.utf8.encode(keyStr));
     var key = Key(Uint8List.fromList(keyList));

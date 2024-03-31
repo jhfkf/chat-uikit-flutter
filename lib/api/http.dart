@@ -8,6 +8,7 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'api.dart';
 import 'interceptors.dart';
 
 class HttpManager {
@@ -25,7 +26,7 @@ class HttpManager {
 
   HttpManager() {
     //cookie管理
-    setDioBaseOptions(baseUrl: 'https://s.sqapi.com/user/', headers: {});
+    setDioBaseOptions(baseUrl: Api.TUIXDefaultBaseUrl, headers: {});
     // 添加请求拦截器
     dio.interceptors.add(TBRInterceptors());
     SharedPreferences.getInstance().then((prefs) {
@@ -65,7 +66,7 @@ class HttpManager {
     }
 
     dio.options = BaseOptions(
-      baseUrl: baseUrl ?? 'https://s.sqapi.com/user/',
+      baseUrl: baseUrl ?? Api.TUIXDefaultBaseUrl,
       contentType: contentType ?? "application/json",
       responseType: responseType ?? ResponseType.plain,
       headers: headers,
