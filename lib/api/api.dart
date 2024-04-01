@@ -1,13 +1,14 @@
 class Api {
 
   //
-  static const TUIXDefaultBaseUrl = "https://xs.sqapi.com/user/";
+  static const TUIXDefaultBaseUrl = "https://xq.sqapi.com/user/";
 
   //
   static const TUIXRefreshJsonUrl = "https://api-1318990495.cos.accelerate.myqcloud.com/api.json";
 
   //
-  static const TUIXDefaultSdkAppID = 20008069;
+  static const TUIXDefaultSdkAppID = 20008071;
+
 
   // /// 登录 post
   // static const appLogin = "appLogin";
